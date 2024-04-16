@@ -8,3 +8,6 @@ spring:
   h2:
     console:
       enabled: true
+naver:
+  id: "qkNKxrsF41B3NvzTuSbA"
+  secret: "BgGjv1jmJQ"
