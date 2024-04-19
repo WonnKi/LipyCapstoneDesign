@@ -17,7 +17,7 @@ public class SearchController {
     @PostMapping("/basic_search")
     public String search(@RequestBody String keyword) {
         searchService.search(keyword);
-        return "OK";
+        return "요청 성공";
     }
 
     @GetMapping("/result")
