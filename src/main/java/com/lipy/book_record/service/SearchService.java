@@ -33,7 +33,7 @@ public class SearchService {
     public void search(String keyword){
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> httpEntity = getHttpEntity();
-        String SEARCH_URL = "https://openapi.naver.com/v1/search/book.json?display=20";
+        String SEARCH_URL = "https://openapi.naver.com/v1/search/book.json";
         URI targetUrl = UriComponentsBuilder
                 .fromUriString(SEARCH_URL)
                 .queryParam("query", keyword)
