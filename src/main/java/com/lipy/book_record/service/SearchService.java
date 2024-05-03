@@ -20,12 +20,10 @@ import java.util.List;
 @NoArgsConstructor
 @RequestMapping("test")
 public class SearchService {
-
-
-    @Value("${naver.id}")
+    @Value("${naver.id}")   // API 요청 ID 값
     private String id;
 
-    @Value("${naver.secret}")
+    @Value("${naver.secret}")   // API 요청 SECRET 값
     private String secret;
 
     private static final List<SearchDto> searchResults = new ArrayList<>();
@@ -48,7 +46,13 @@ public class SearchService {
                 SearchDto.class
         ).getBody();
 
-        searchResults.add(response);
+        if (searchResults.isEmpty()) { // DTO Refresh
+            searchResults.add(response);
+        }
+            else {
+            searchResults.clear();
+            searchResults.add(response);
+        }
 
     }
     private HttpEntity<String> getHttpEntity() { //헤더에 인증 정보 추가
