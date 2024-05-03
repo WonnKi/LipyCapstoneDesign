@@ -28,7 +28,7 @@ public class SearchService {
     @Value("${naver.secret}")
     private String secret;
 
-    private static List<SearchDto> searchResults = new ArrayList<>();
+    private static final List<SearchDto> searchResults = new ArrayList<>();
 
     public void search(String keyword){
         RestTemplate restTemplate = new RestTemplate();

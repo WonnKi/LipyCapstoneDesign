@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+naver:
+  id: "qkNKxrsF41B3NvzTuSbA"
+  secret: "BgGjv1jmJQ"
