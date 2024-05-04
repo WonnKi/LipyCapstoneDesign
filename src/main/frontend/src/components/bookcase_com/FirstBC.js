@@ -11,7 +11,7 @@ const FirstBC = () => {
         height:"40%",
         width:"30%",
         margin:20}}>
-        <a href="/Bookcase"
+        <a href="/firstBookCase"
            style={{color:"black",
                textDecorationLine:"none"}}>
             읽은책

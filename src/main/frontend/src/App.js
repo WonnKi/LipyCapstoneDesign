@@ -5,8 +5,10 @@ import Home from "./screens/Home";
 import Bookcase from "./screens/Bookcase";
 import Community from "./screens/Community";
 import Socialing from "./screens/Socialing";
-import Offcanvas from "./components/Offcanvas";
 import NevBar from "./components/NevBar";
+import FirstBookCase from "./screens/firstBookCase";
+import SecondBookCase from "./screens/secondBookCase";
+import ThirdBookCase from "./screens/thirdBookCase";
 
 
 function App() {
@@ -18,6 +20,9 @@ function App() {
             <Route path = "/Bookcase" element={ <Bookcase /> } />
             <Route path = "/Community" element={ <Community /> } />
             <Route path = "/Socialing" element={ <Socialing /> } />
+            <Route path = "/FirstBookCase" element={ <FirstBookCase /> } />
+            <Route path = "/SecondBookCase" element={ <SecondBookCase /> } />
+            <Route path = "/ThirdBookCase" element={ <ThirdBookCase /> } />
         </Routes>
       </BrowserRouter>
 

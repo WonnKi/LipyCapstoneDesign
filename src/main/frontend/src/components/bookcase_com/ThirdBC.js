@@ -1,5 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
+import ThirdBookCase from "../../screens/thirdBookCase";
 
 
 const ThirdBC = () => {
@@ -11,7 +12,7 @@ const ThirdBC = () => {
         height:"40%",
         width:"30%",
         margin:20}}>
-        <a href="/Bookcase"
+        <a href="/thirdBookCase"
            style={{color:"black",
                textDecorationLine:"none"}}>
             읽을책
