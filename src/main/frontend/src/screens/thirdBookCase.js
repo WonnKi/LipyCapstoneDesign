@@ -4,7 +4,14 @@ import Tab from "../components/BC/Tab";
 const ThirdBookCase = () => {
     return <div>
         <Tab/>
-        <h1>읽은책 넣을곳</h1>
+        <div style={{
+            backgroundColor: "gray",
+            position: "absolute",
+            top: "20%",
+            height: "70%",
+            width: "100%"
+        }}>
+        </div>
     </div>
 };
 

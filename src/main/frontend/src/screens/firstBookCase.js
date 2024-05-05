@@ -1,10 +1,27 @@
 import React from "react";
 import Tab from "../components/BC/Tab";
+import CaseModal from "../components/BC/CaseModal";
 
 const FirstBookCase = () => {
     return <div>
         <Tab/>
-        <h1>읽을책 넣을곳</h1>
+        <div style={{
+            backgroundColor: "gray",
+            position: "absolute",
+            top: "20%",
+            height: "70%",
+            width: "100%"
+        }}>
+            <div style={{
+                position: "absolute",
+                top: "15%",
+                left:"5%",
+
+            }}>
+                <CaseModal/>
+            </div>
+
+        </div>
     </div>
 };
 
