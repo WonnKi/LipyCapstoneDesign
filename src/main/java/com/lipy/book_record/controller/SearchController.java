@@ -5,6 +5,7 @@ import com.lipy.book_record.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 @RestController
@@ -16,12 +17,12 @@ public class SearchController {
 
     @PostMapping("/basic_search")
     public String search(@RequestBody String keyword) {
-        searchService.search(keyword);
-        return "요청 성공";
+        return searchService.search(keyword);
     }
 
     @GetMapping("/result")
     public List<SearchDto> result(){
         return SearchService.result();
     }
+
 }

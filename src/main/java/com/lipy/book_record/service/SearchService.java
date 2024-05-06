@@ -1,22 +1,26 @@
 package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.SearchDto;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Getter
 @NoArgsConstructor
 @RequestMapping("test")
 public class SearchService {
@@ -28,7 +32,7 @@ public class SearchService {
 
     private static final List<SearchDto> searchResults = new ArrayList<>();
 
-    public void search(String keyword){
+    public String search(String keyword){
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> httpEntity = getHttpEntity();
         String SEARCH_URL = "https://openapi.naver.com/v1/search/book.json";
@@ -46,12 +50,18 @@ public class SearchService {
                 SearchDto.class
         ).getBody();
 
+        if (response.getTotal() == 0){
+            return "검색 결과 없음";
+        }
+        
         if (searchResults.isEmpty()) { // DTO Refresh
             searchResults.add(response);
+            return "저장 성공 [DTO 생성됨]";
         }
             else {
             searchResults.clear();
             searchResults.add(response);
+            return "저장 성공 [DTO 갱신]";
         }
 
     }

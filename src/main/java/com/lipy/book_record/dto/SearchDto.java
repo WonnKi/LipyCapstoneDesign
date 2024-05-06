@@ -19,6 +19,7 @@ public class SearchDto {
         public String author;
         public String isbn;
         public String description;
+        public String publisher;
     }
 }
 
