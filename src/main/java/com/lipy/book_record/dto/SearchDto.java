@@ -10,16 +10,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchDto {
-    public Integer total;
-    List<Items> items = new ArrayList<>();
-
-    static class Items{
-        public String title;
-        public String image;
-        public String author;
-        public String isbn;
-        public String description;
-        public String publisher;
-    }
+    public String title;
+    public String image;
+    public String author;
+    public String isbn;
+    public String description;
+    public String publisher;
 }
 
