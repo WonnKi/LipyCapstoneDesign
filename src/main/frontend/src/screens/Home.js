@@ -1,340 +1,39 @@
-import React from "react";
+import React, {useState} from "react";
+import BC from "../components/main/BC";
+import Co from "../components/main/Co";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid"
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import BC from "../components/main/BC";
-import Co from "../components/main/Co";
-import So from "../components/main/So";
-import Dummy from "../components/main/Dummy"
-import backgroundColor from "../img/backColor.png"
-
+import Cards from "../components/comuunity/Cards";
+import Card from "react-bootstrap/Card";
 
 const Home = () => {
+    const events = [
+        { title: 'Sample Event', date: new Date() },
+    ]
+
     return <div>
-        {/*<Container>*/}
-        {/*    <div className="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary"*/}
-        {/*         style={{*/}
-        {/*             backgroundImage: `url(${backgroundColor})`*/}
-        {/*         }}>*/}
-        {/*        <div className="col-lg-6 px-0">*/}
-        {/*            <h1 className="display-4 fst-italic">LIPY</h1>*/}
-        {/*            <p className="lead my-3">Literature & Insights Platform for You</p>*/}
-        {/*            <p className="lead my-3">홍보문구</p>*/}
-        {/*        </div>*/}
-        {/*    </div>*/}
+        {/*<FullCalendar*/}
+        {/*    plugins={[dayGridPlugin]}*/}
+        {/*    initialView="dayGridMonth"*/}
+        {/*/>*/}
 
-        {/*    /!*<Row>*!/*/}
-        {/*    /!*    <Col xs={7}>*!/*/}
-        {/*    /!*        <BC/>*!/*/}
-        {/*    /!*    </Col>*!/*/}
-        {/*    /!*    <Col>*!/*/}
-        {/*    /!*        <Dummy/>*!/*/}
-        {/*    /!*    </Col>*!/*/}
-        {/*    /!*</Row>*!/*/}
-        {/*    /!*<Row>*!/*/}
-        {/*    /!*    <Col>*!/*/}
-        {/*    /!*        <Co/>*!/*/}
-        {/*    /!*    </Col>*!/*/}
-        {/*    /!*    <Col>*!/*/}
-        {/*    /!*        <So/>*!/*/}
-        {/*    /!*    </Col>*!/*/}
-        {/*    /!*</Row>*!/*/}
+        <meta charSet="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <title>Business Casual - Start Bootstrap Theme</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
 
-        {/*<div className="row featurette">*/}
-        {/*    <div className="col-md-7">*/}
-        {/*        <h2 className="featurette-heading fw-normal lh-1"*/}
-        {/*            style={{*/}
-        {/*                position: "relative",*/}
-        {/*                top: "30%"*/}
-        {/*            }}>당신의 책장을 꾸며보세요</h2>*/}
-        {/*        <p className="lead"*/}
-        {/*           style={{*/}
-        {/*               position: "relative",*/}
-        {/*               top: "40%"*/}
-        {/*           }}>책을 읽고 기록 하며 책장을 채워나갈 수 있습니다.</p>*/}
-        {/*    </div>*/}
-        {/*    <div className="col-md-5">*/}
-        {/*        <BC/>*/}
-        {/*    </div>*/}
-        {/*</div>*/}
+        <link
+            href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet"/>
 
-        {/*    <hr className="featurette-divider"/>*/}
+        <link href="css/styles.css" rel="stylesheet"/>
 
-        {/*<div className="row featurette">*/}
-        {/*    <div className="col-md-7 order-md-2">*/}
-        {/*        <h2 className="featurette-heading fw-normal lh-1"*/}
-        {/*            style={{*/}
-        {/*                position: "relative",*/}
-        {/*                top: "30%"*/}
-        {/*            }}>커뮤니티에서 모두와 소통하세요</h2>*/}
-        {/*        <p className="lead"*/}
-        {/*           style={{*/}
-        {/*               position: "relative",*/}
-        {/*               top: "40%"*/}
-        {/*           }}>문구</p>*/}
-        {/*    </div>*/}
-        {/*    <div className="col-md-5">*/}
-        {/*        <Co/>*/}
-        {/*    </div>*/}
-        {/*</div>*/}
-
-        {/*<hr className="featurette-divider"/>*/}
-
-        {/*<div className="row featurette">*/}
-        {/*    <div className="col-md-7">*/}
-        {/*        <h2 className="featurette-heading fw-normal lh-1"*/}
-        {/*            style={{*/}
-        {/*                position: "relative",*/}
-        {/*                top: "30%"*/}
-        {/*            }}>당신의 책장을 꾸며보세요</h2>*/}
-        {/*        <p className="lead"*/}
-        {/*           style={{*/}
-        {/*               position: "relative",*/}
-        {/*               top: "40%"*/}
-        {/*           }}>문구</p>*/}
-        {/*    </div>*/}
-        {/*    <div className="col-md-5">*/}
-        {/*        <Co/>*/}
-        {/*    </div>*/}
-        {/*</div>*/}
-
-        {/*    <div class="col-md-4">*/}
-        {/*        <div class="position-sticky">*/}
-        {/*            <div>*/}
-        {/*                <h4 class="fst-italic">Recent posts</h4>*/}
-        {/*                <ul class="list-unstyled">*/}
-        {/*                    <li>*/}
-        {/*                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-        {/*                           href="#">*/}
-        {/*                            <svg class="bd-placeholder-img" width="100%" height="96"*/}
-        {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-        {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-        {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-        {/*                            </svg>*/}
-        {/*                            <div class="col-lg-8">*/}
-        {/*                                <h6 class="mb-0">Example blog post title</h6>*/}
-        {/*                                <small class="text-body-secondary">January 15, 2024</small>*/}
-        {/*                            </div>*/}
-        {/*                        </a>*/}
-        {/*                    </li>*/}
-        {/*                </ul>*/}
-        {/*            </div>*/}
-        {/*        </div>*/}
-        {/*    </div>*/}
-        {/*</Container>*/}
-
-
-        {/*<main className="container">*/}
-        {/*    <div className="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">*/}
-        {/*        <div className="col-lg-6 px-0">*/}
-        {/*            <h1 className="display-4 fst-italic">LIPY</h1>*/}
-        {/*            <p className="lead my-3">Literature & Insights Platform for You</p>*/}
-        {/*            <p className="lead my-3">홍보문구</p>*/}
-        {/*        </div>*/}
-        {/*    </div>*/}
-
-            {/*<div className="row g-5">*/}
-            {/*    <div className="col-md-8">*/}
-
-            {/*        <article className="blog-post">*/}
-            {/*            <div className="row featurette">*/}
-            {/*                <div className="col-md-7">*/}
-            {/*                    <h2 className="featurette-heading fw-normal lh-1"*/}
-            {/*                        style={{*/}
-            {/*                            position: "relative",*/}
-            {/*                            top: "30%"*/}
-            {/*                        }}>당신의 책장을 꾸며보세요</h2>*/}
-            {/*                    <p className="lead"*/}
-            {/*                       style={{*/}
-            {/*                           position: "relative",*/}
-            {/*                           top: "40%"*/}
-            {/*                       }}>책을 읽고 기록 하며 책장을 채워나갈 수 있습니다.</p>*/}
-            {/*                </div>*/}
-            {/*                <div className="col-md-5">*/}
-            {/*                    <BC/>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-
-            {/*            <div className="row featurette">*/}
-            {/*                <div className="col-md-7 order-md-2">*/}
-            {/*                    <h2 className="featurette-heading fw-normal lh-1"*/}
-            {/*                        style={{*/}
-            {/*                            position: "relative",*/}
-            {/*                            top: "30%"*/}
-            {/*                        }}>커뮤니티에서 모두와 소통하세요</h2>*/}
-            {/*                    <p className="lead"*/}
-            {/*                       style={{*/}
-            {/*                           position: "relative",*/}
-            {/*                           top: "40%"*/}
-            {/*                       }}>문구</p>*/}
-            {/*                </div>*/}
-            {/*                <div className="col-md-5">*/}
-            {/*                    <Co/>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-
-            {/*            <div className="row featurette">*/}
-            {/*                <div className="col-md-7">*/}
-            {/*                    <h2 className="featurette-heading fw-normal lh-1"*/}
-            {/*                        style={{*/}
-            {/*                            position: "relative",*/}
-            {/*                            top: "30%"*/}
-            {/*                        }}>당신의 책장을 꾸며보세요</h2>*/}
-            {/*                    <p className="lead"*/}
-            {/*                       style={{*/}
-            {/*                           position: "relative",*/}
-            {/*                           top: "40%"*/}
-            {/*                       }}>문구</p>*/}
-            {/*                </div>*/}
-            {/*                <div className="col-md-5">*/}
-            {/*                    <Co/>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </article>*/}
-            {/*    </div>*/}
-
-            {/*    <div className="col-md-4">*/}
-            {/*        <div className="position-sticky">*/}
-
-            {/*            <div>*/}
-            {/*                <h4 className="fst-italic">최신 게시물</h4>*/}
-            {/*                <ul className="list-unstyled"*/}
-            {/*                style={{*/}
-            {/*                    border: '1px solid black'*/}
-            {/*                }}>*/}
-            {/*                    <li>*/}
-            {/*                        <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-            {/*                           href="#">*/}
-            {/*                            <svg className="bd-placeholder-img" width="100%" height="96"*/}
-            {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-            {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-            {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-            {/*                            </svg>*/}
-            {/*                            <div className="col-lg-8">*/}
-            {/*                                <h6 className="mb-0">Example blog post title</h6>*/}
-            {/*                                <small className="text-body-secondary">January 15, 2024</small>*/}
-            {/*                            </div>*/}
-            {/*                        </a>*/}
-            {/*                    </li>*/}
-            {/*                    <li>*/}
-            {/*                        <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-            {/*                           href="#">*/}
-            {/*                            <svg className="bd-placeholder-img" width="100%" height="96"*/}
-            {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-            {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-            {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-            {/*                            </svg>*/}
-            {/*                            <div className="col-lg-8">*/}
-            {/*                                <h6 className="mb-0">This is another blog post title</h6>*/}
-            {/*                                <small className="text-body-secondary">January 14, 2024</small>*/}
-            {/*                            </div>*/}
-            {/*                        </a>*/}
-            {/*                    </li>*/}
-            {/*                    <li>*/}
-            {/*                        <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-            {/*                           href="#">*/}
-            {/*                            <svg className="bd-placeholder-img" width="100%" height="96"*/}
-            {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-            {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-            {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-            {/*                            </svg>*/}
-            {/*                            <div className="col-lg-8">*/}
-            {/*                                <h6 className="mb-0">Longer blog post title: This one has multiple*/}
-            {/*                                    lines!</h6>*/}
-            {/*                                <small className="text-body-secondary">January 13, 2024</small>*/}
-            {/*                            </div>*/}
-            {/*                        </a>*/}
-            {/*                    </li>*/}
-            {/*                </ul>*/}
-            {/*            </div>*/}
-
-            {/*            <div>*/}
-            {/*                <h4 className="fst-italic">최신 소셜링</h4>*/}
-            {/*                <ul className="list-unstyled"*/}
-            {/*                style={{*/}
-            {/*                    border: '1px solid black'*/}
-            {/*                }}>*/}
-            {/*                    <li>*/}
-            {/*                        <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-            {/*                           href="#">*/}
-            {/*                            <svg className="bd-placeholder-img" width="100%" height="96"*/}
-            {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-            {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-            {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-            {/*                            </svg>*/}
-            {/*                            <div className="col-lg-8">*/}
-            {/*                                <h6 className="mb-0">Example blog post title</h6>*/}
-            {/*                                <small className="text-body-secondary">January 15, 2024</small>*/}
-            {/*                            </div>*/}
-            {/*                        </a>*/}
-            {/*                    </li>*/}
-            {/*                    <li>*/}
-            {/*                        <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-            {/*                           href="#">*/}
-            {/*                            <svg className="bd-placeholder-img" width="100%" height="96"*/}
-            {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-            {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-            {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-            {/*                            </svg>*/}
-            {/*                            <div className="col-lg-8">*/}
-            {/*                                <h6 className="mb-0">This is another blog post title</h6>*/}
-            {/*                                <small className="text-body-secondary">January 14, 2024</small>*/}
-            {/*                            </div>*/}
-            {/*                        </a>*/}
-            {/*                    </li>*/}
-            {/*                    <li>*/}
-            {/*                        <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-            {/*                           href="#">*/}
-            {/*                            <svg className="bd-placeholder-img" width="100%" height="96"*/}
-            {/*                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-            {/*                                 preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-            {/*                                <rect width="100%" height="100%" fill="#777"/>*/}
-            {/*                            </svg>*/}
-            {/*                            <div className="col-lg-8">*/}
-            {/*                                <h6 className="mb-0">Longer blog post title: This one has multiple*/}
-            {/*                                    lines!</h6>*/}
-            {/*                                <small className="text-body-secondary">January 13, 2024</small>*/}
-            {/*                            </div>*/}
-            {/*                        </a>*/}
-            {/*                    </li>*/}
-            {/*                </ul>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-
-        {/*</main>*/}
-
-        {/*<footer className="py-5 text-center text-body-secondary bg-body-tertiary">*/}
-        {/*    <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a*/}
-        {/*        href="https://twitter.com/mdo">@mdo</a>.</p>*/}
-        {/*    <p className="mb-0">*/}
-        {/*        <a href="#">Back to top</a>*/}
-        {/*    </p>*/}
-        {/*</footer>*/}
-        {/*<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"*/}
-        {/*        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"*/}
-        {/*        crossOrigin="anonymous">*/}
-        {/*    */}
-        {/*</script>*/}
-
-
-        <head>
-            <meta charSet="utf-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-            <meta name="description" content=""/>
-            <meta name="author" content=""/>
-            <title>Business Casual - Start Bootstrap Theme</title>
-            <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
-
-            <link
-                href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
-                rel="stylesheet"/>
-            <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet"/>
-
-            <link href="css/styles.css" rel="stylesheet"/>
-        </head>
-        <body>
         <header>
             <h1 className="site-heading text-center text-faded d-none d-lg-block">
                 <span className="site-heading-upper text-primary mb-3">Literature & Insights Platform for You</span>
@@ -344,201 +43,269 @@ const Home = () => {
 
         <section className="page-section cta">
 
-                <div className="row">
-                    <div className="col-xl-9 mx-auto">
+            <div className="col">
+                <div className="col-xl-11 mx-auto">
 
-                        <div className="row g-5">
-                            <div className="col-md-8">
-                                <article className="blog-post">
-                                    <div className="row featurette">
-                                        <div className="cta-inner bg-faded text-center rounded">
+                    <div className="row g-5">
 
-                                            <div className="row featurette">
-                                                <div className="col-md-7">
-                                                    <h2 className="featurette-heading fw-normal lh-1"
-                                                        style={{
-                                                            position: "relative",
-                                                            top: "30%"
-                                                        }}>당신의 책장을 꾸며보세요</h2>
-                                                    <p className="lead"
-                                                       style={{
-                                                           position: "relative",
-                                                           top: "40%"
-                                                       }}>책을 읽고 기록 하며 책장을 채워나갈 수 있습니다.</p>
-                                                </div>
-                                                <div className="col-md-5">
-                                                    <BC/>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="row featurette">
-                                        <div className="cta-inner bg-faded text-center rounded">
-
-                                            <div className="row featurette">
-                                                <div className="col-md-7 order-md-2">
-                                                    <h2 className="featurette-heading fw-normal lh-1"
-                                                        style={{
-                                                            position: "relative",
-                                                            top: "30%"
-                                                        }}>커뮤니티에서 모두와 소통하세요</h2>
-                                                    <p className="lead"
-                                                       style={{
-                                                           position: "relative",
-                                                           top: "40%"
-                                                       }}>문구</p>
-                                                </div>
-                                                <div className="col-md-5">
-                                                    <Co/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="row featurette">
-                                        <div className="cta-inner bg-faded text-center rounded">
-
-                                            <div className="row featurette">
-                                                <div className="col-md-7">
-                                                    <h2 className="featurette-heading fw-normal lh-1"
-                                                        style={{
-                                                            position: "relative",
-                                                            top: "30%"
-                                                        }}>소셜링</h2>
-                                                    <p className="lead"
-                                                       style={{
-                                                           position: "relative",
-                                                           top: "40%"
-                                                       }}>문구</p>
-                                                </div>
-                                                <div className="col-md-5">
-                                                    <Co/>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-
-                            <div className="col-md-4">
-                                <div className="position-sticky">
-
-                                    <div>
-                                        <h4 className="fst-italic">최신 게시물</h4>
-                                        <ul className="cta-inner bg-faded text-center rounded">
-                                            <li>
-                                                <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                                   href="#">
-                                                    <svg className="bd-placeholder-img" width="100%" height="96"
-                                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                         preserveAspectRatio="xMidYMid slice" focusable="false">
-                                                        <rect width="100%" height="100%" fill="#777"/>
-                                                    </svg>
-                                                    <div className="col-lg-8">
-                                                        <h6 className="mb-0">Example blog post title</h6>
-                                                        <small className="text-body-secondary">January 15, 2024</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                                   href="#">
-                                                    <svg className="bd-placeholder-img" width="100%" height="96"
-                                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                         preserveAspectRatio="xMidYMid slice" focusable="false">
-                                                        <rect width="100%" height="100%" fill="#777"/>
-                                                    </svg>
-                                                    <div className="col-lg-8">
-                                                        <h6 className="mb-0">This is another blog post title</h6>
-                                                        <small className="text-body-secondary">January 14, 2024</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                                   href="#">
-                                                    <svg className="bd-placeholder-img" width="100%" height="96"
-                                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                         preserveAspectRatio="xMidYMid slice" focusable="false">
-                                                        <rect width="100%" height="100%" fill="#777"/>
-                                                    </svg>
-                                                    <div className="col-lg-8">
-                                                        <h6 className="mb-0">Longer blog post title: This one has
-                                                            multiple
-                                                            lines!</h6>
-                                                        <small className="text-body-secondary">January 13, 2024</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="fst-italic">최신 소셜링</h4>
-                                        <ul className="cta-inner bg-faded text-center rounded">
-                                            <li>
-                                                <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                                   href="#">
-                                                    <svg className="bd-placeholder-img" width="100%" height="96"
-                                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                         preserveAspectRatio="xMidYMid slice" focusable="false">
-                                                        <rect width="100%" height="100%" fill="#777"/>
-                                                    </svg>
-                                                    <div className="col-lg-8">
-                                                        <h6 className="mb-0">Example blog post title</h6>
-                                                        <small className="text-body-secondary">January 15, 2024</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                                   href="#">
-                                                    <svg className="bd-placeholder-img" width="100%" height="96"
-                                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                         preserveAspectRatio="xMidYMid slice" focusable="false">
-                                                        <rect width="100%" height="100%" fill="#777"/>
-                                                    </svg>
-                                                    <div className="col-lg-8">
-                                                        <h6 className="mb-0">This is another blog post title</h6>
-                                                        <small className="text-body-secondary">January 14, 2024</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                                   href="#">
-                                                    <svg className="bd-placeholder-img" width="100%" height="96"
-                                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                         preserveAspectRatio="xMidYMid slice" focusable="false">
-                                                        <rect width="100%" height="100%" fill="#777"/>
-                                                    </svg>
-                                                    <div className="col-lg-8">
-                                                        <h6 className="mb-0">Longer blog post title: This one has
-                                                            multiple
-                                                            lines!</h6>
-                                                        <small className="text-body-secondary">January 13, 2024</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
+                        <div className="col-md-7">
+                            <article className="blog-post">
+                                <div className="row featurette">
+                                    <div className="cta-inner bg-faded text-center rounded">
+                                        <FullCalendar
+                                            plugins={[dayGridPlugin]}
+                                            initialView="dayGridMonth"
+                                        />
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                         </div>
 
+                        <div className="col-md-5">
+                            <article className="blog-post">
+                                <div className="row featurette">
+                                    <div className="cta-inner bg-faded text-center rounded"
+                                         style={{
+                                             height: 620
+                                         }}>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div className="row-md-5">
+                            <article className="blog-post">
+                                <div className="row featurette">
+                                    <div className="cta-inner bg-faded text-center rounded">
+                                        <Container>
+                                            <Row>
+                                                <Col>
+                                                    <Card style={{ width: '20rem', margin: 10 }}>
+                                                        <Card.Img variant="top" src="https://velog.velcdn.com/images/oneoneone/post/b80ef382-273f-46fb-8cd4-700a136fc3c1/image.png" />
+                                                        <Card.Body>
+                                                            <Card.Title
+                                                            style={{
+                                                                width:"300px",
+                                                                overflow:"hidden",
+                                                                whiteSpace:"nowrap",
+                                                                textOverflow:"ellipsis",
+                                                            }}>[TOP 10] 개발자들이 많이 읽은 아티클 모음 - 5월 1주차</Card.Title>
+                                                            <Card.Text
+                                                            style={{
+                                                                textAlign:"left",
+                                                                height:100,
+                                                                fontSize:15
+                                                            }}>
+                                                                IT 제품 팀을 위한 감도 높은 정보 큐레이션 플랫폼 일일일에서 한 주간 개발자들이 많이 읽은 상위 10개의 아티클들을 소개합니다.
+                                                            </Card.Text>
+                                                            <Card.Footer></Card.Footer>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </Col>
+                                                <Col>
+                                                    <Card style={{ width: '20rem', margin: 10 }}>
+                                                        <Card.Img variant="top" src="https://velog.velcdn.com/images/surim014/post/bf98b93c-8b93-4b49-bcdd-642866e51e8d/image.png" />
+                                                        <Card.Body>
+                                                            <Card.Title
+                                                                style={{
+                                                                    width:"300px",
+                                                                    overflow:"hidden",
+                                                                    whiteSpace:"nowrap",
+                                                                    textOverflow:"ellipsis",
+                                                                }}>[번역] 소프트웨어 개발의 미래에 대한 생각</Card.Title>
+                                                            <Card.Text
+                                                            style={{
+                                                                textAlign:"left",
+                                                                height:100,
+                                                                fontSize:15
+                                                            }}>
+                                                                원문 : https://www.sheshbabu.com/posts/thoughts-on-the-future-of-software-development
+                                                            </Card.Text>
+                                                            <Card.Footer></Card.Footer>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </Col>
+                                                <Col>
+                                                    <Card style={{ width: '20rem', margin: 10 }}>
+                                                        <Card.Img variant="top" src="https://velog.velcdn.com/images/wijoonwu/post/b62dca0d-c782-492f-9c0e-409dd0e086d9/image.jpg" />
+                                                        <Card.Body>
+                                                            <Card.Title
+                                                                style={{
+                                                                    width:"300px",
+                                                                    overflow:"hidden",
+                                                                    whiteSpace:"nowrap",
+                                                                    textOverflow:"ellipsis",
+                                                                }}>2024 정보처리기사 실기 1회차 후기(+공부 방법)</Card.Title>
+                                                            <Card.Text
+                                                                style={{
+                                                                    textAlign:"left",
+                                                                    height:100,
+                                                                    fontSize:15
+                                                                }}>
+                                                                1회차는 쉽다고 했는데..
+                                                            </Card.Text>
+                                                            <Card.Footer></Card.Footer>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </Col>
+                                            </Row>
+                                        </Container>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+
+                        {/*// 옆 게시판*/}
+                        {/*<div className="col-md-4">*/}
+                        {/*    <div className="position-sticky">*/}
+
+                        {/*        <div>*/}
+                        {/*            <h4 className="fst-italic">최신 게시물</h4>*/}
+                        {/*            <ul className="cta-inner bg-faded text-center rounded">*/}
+                        {/*                <li>*/}
+                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                       href="#">*/}
+                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
+                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
+                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
+                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
+                        {/*                        </svg>*/}
+                        {/*                        <div className="col-lg-8">*/}
+                        {/*                            <h6 className="mb-0">Example blog post title</h6>*/}
+                        {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
+                        {/*                        </div>*/}
+                        {/*                    </a>*/}
+                        {/*                </li>*/}
+                        {/*                <li>*/}
+                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                       href="#">*/}
+                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
+                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
+                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
+                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
+                        {/*                        </svg>*/}
+                        {/*                        <div className="col-lg-8">*/}
+                        {/*                            <h6 className="mb-0">This is another blog post title</h6>*/}
+                        {/*                            <small className="text-body-secondary">January 14, 2024</small>*/}
+                        {/*                        </div>*/}
+                        {/*                    </a>*/}
+                        {/*                </li>*/}
+                        {/*                <li>*/}
+                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                       href="#">*/}
+                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
+                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
+                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
+                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
+                        {/*                        </svg>*/}
+                        {/*                        <div className="col-lg-8">*/}
+                        {/*                            <h6 className="mb-0">Longer blog post title: This one has*/}
+                        {/*                                multiple*/}
+                        {/*                                lines!</h6>*/}
+                        {/*                            <small className="text-body-secondary">January 13, 2024</small>*/}
+                        {/*                        </div>*/}
+                        {/*                    </a>*/}
+                        {/*                </li>*/}
+                        {/*            </ul>*/}
+                        {/*        </div>*/}
+
+                        {/*        <div>*/}
+                        {/*            <h4 className="fst-italic">최신 소셜링</h4>*/}
+                        {/*            <ul className="cta-inner bg-faded text-center rounded">*/}
+                        {/*                <li>*/}
+                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                       href="#">*/}
+                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
+                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
+                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
+                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
+                        {/*                        </svg>*/}
+                        {/*                        <div className="col-lg-8">*/}
+                        {/*                            <h6 className="mb-0">Example blog post title</h6>*/}
+                        {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
+                        {/*                        </div>*/}
+                        {/*                    </a>*/}
+                        {/*                </li>*/}
+                        {/*                <li>*/}
+                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                       href="#">*/}
+                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
+                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
+                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
+                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
+                        {/*                        </svg>*/}
+                        {/*                        <div className="col-lg-8">*/}
+                        {/*                            <h6 className="mb-0">This is another blog post title</h6>*/}
+                        {/*                            <small className="text-body-secondary">January 14, 2024</small>*/}
+                        {/*                        </div>*/}
+                        {/*                    </a>*/}
+                        {/*                </li>*/}
+                        {/*                <li>*/}
+                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                       href="#">*/}
+                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
+                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
+                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
+                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
+                        {/*                        </svg>*/}
+                        {/*                        <div className="col-lg-8">*/}
+                        {/*                            <h6 className="mb-0">Longer blog post title: This one has*/}
+                        {/*                                multiple*/}
+                        {/*                                lines!</h6>*/}
+                        {/*                            <small className="text-body-secondary">January 13, 2024</small>*/}
+                        {/*                        </div>*/}
+                        {/*                    </a>*/}
+                        {/*                </li>*/}
+                        {/*            </ul>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                     </div>
+
+                </div>
 
             </div>
         </section>
         <footer className="footer text-faded text-center py-5">
-            <div className="container"><p className="m-0 small">Copyright &copy; Your Website 2023</p></div>
+            <div className="container">
+                <div className="row">
+                    <div className="col-lg-4 mb-5 mb-lg-0">
+                        <h4 className="text-uppercase mb-4">LIPY</h4>
+                        <p className="lead mb-0"
+                           style={{
+                               fontSize: 15
+                           }}>
+                            소개
+                            <br/>
+                            FAQ
+                            <br/>
+                        </p>
+                    </div>
+
+                    <div className="col-lg-4 mb-5 mb-lg-0">
+                        <h4 className="text-uppercase mb-4">오시는 길</h4>
+                        <p className="lead mb-0"
+                           style={{
+                               fontSize: 15
+                           }}>
+                            경기도 의정부시 서부로 545
+                        </p>
+                    </div>
+
+                    <div className="col-lg-4 mb-5 mb-lg-0">
+                        <h4 className="text-uppercase mb-4">업무 시간</h4>
+                        <p className="lead mb-0"
+                           style={{
+                               fontSize: 15
+                           }}>
+                            평일 : 오전 10시 ~ 오후 7시
+                            <br/>
+                            토요일 : 오전 10시 ~ 오후 8시
+                        </p>
+                    </div>
+                </div>
+            </div>
         </footer>
-
-        </body>
-
 
     </div>
 };

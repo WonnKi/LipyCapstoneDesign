@@ -16,11 +16,12 @@ const SecondBookCase = () => {
             <Row>
                 <Col
                     className={'ColBC'}>
-                    <CaseModal/>
+                    <img className={'Books'} src={img01} alt="?"/>
+
                 </Col>
                 <Col
                     className={'ColBC'}>
-                    <img className={'Books'} src={img01} alt="?"/>
+                    <CaseModal/>
                 </Col>
                 <Col
                     className={'ColBC'}>

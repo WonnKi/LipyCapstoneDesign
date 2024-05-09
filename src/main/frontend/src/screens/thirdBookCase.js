@@ -3,25 +3,61 @@ import Tab from "../components/BC/Tab";
 import Col from "react-bootstrap/Col";
 import Row from 'react-bootstrap/Row';
 import Container from "react-bootstrap/Container";
+import img01 from "../img/dumy.webp";
+import CaseModal from "../components/BC/CaseModal";
 
 const ThirdBookCase = () => {
     return <div>
         <Tab/>
-        <div>
-            <Container
+        <Container
             style={{
-                background:"white"
+                background:"#E0B88A"
             }}>
-                <Row>
-                    <Col>
-                    </Col>
-                    <Col>
-                    </Col>
-                    <Col>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+            <Row>
+                <Col
+                    className={'ColBC'}>
+                    <CaseModal/>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+                <Col
+                    className={'ColBC'}>
+                </Col>
+
+            </Row>
+
+        </Container>
     </div>
 };
 

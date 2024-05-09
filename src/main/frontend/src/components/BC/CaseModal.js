@@ -24,6 +24,7 @@ function Example() {
 
     return (
         <>
+
             <Button variant="primary" onClick={handleShow}
                     style={{
                         position: "absolute",
@@ -35,39 +36,78 @@ function Example() {
                 +
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>책 검색</Modal.Title>
+            <Modal show={show} onHide={handleClose}
+            size="lg">
+                <Modal.Header closeButton
+                style={{
+                    height:100
+                }}>
+                    <h2>책 검색</h2>
+                    <div
+                    style={{
+                        position:"absolute",
+                        right:"10%",
+                        top:"10%",
+                        border: '1px solid black',
+                    }}>
+                        <input type="text" placeholder="책 제목을 입력하세요" value={bookName}
+                               onChange={e => setBookName(e.target.value)}/>
+                        <input type="submit" value="검색" onClick={handleSearch}/>
+                    </div>
                 </Modal.Header>
                 <Modal.Body
-                    style={{ height: 700, width: 600, overflowY: 'auto' }}>
-                    <input type="text" placeholder="책 제목을 입력하세요" value={bookName} onChange={e => setBookName(e.target.value)} />
-                    <input type="submit" value="검색" onClick={handleSearch} />
-
+                    style={{
+                        overflow: "auto",
+                        height: 500,
+                    }}>
+                    {/* 검색 결과 출력 */}
                     <ul style={{listStyleType: 'none', padding: 0}}>
                         {searchResult.map((item, index) => (
-                            <li key={index} style={{display: 'flex', marginBottom: '20px'}}>
-                                <div style={{backgroundColor: '#FBF2EF', display: 'flex'}}>
-                                    <div style={{marginRight: '20px', alignSelf: 'flex-start'}}>
-                                        <img src={item.image} alt={item.title}
-                                             style={{width: '130px', height: '160px'}}/>
-                                    </div>
-                                    <div>
-                                        <h6 style={{
-                                            marginBottom: '10px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                            width: '400px' // 글자 수 조절
-                                        }}>{item.title}</h6>
-                                        <div>
-                                            <p><strong>작가:</strong> {item.author}</p>
-                                            <p><strong>출판사:</strong> {item.publisher}</p>
-                                            <p><strong>ISBN:</strong> {item.isbn}</p>
+                            <div>
+                                <li key={index} style={{display: 'flex', marginBottom: '20px'}}>
+                                    <div style={{ display: 'flex'}}>
+                                        <div style={{marginRight: '20px', alignSelf: 'flex-start'}}>
+
+                                            <img src={item.image} alt={item.title}
+                                                 style={{width: '200px', height: '250px'}}/>
                                         </div>
-                                    </div>
-                                </div>
-                            </li>
+
+                                        <div
+                                        style={{
+                                            width:500,
+                                            height:250
+
+                                        }}>
+                                            {/*<h6 style={{*/}
+                                            {/*    marginBottom: '10px',*/}
+                                            {/*    overflow: 'hidden',*/}
+                                            {/*    textOverflow: 'ellipsis',*/}
+                                            {/*    whiteSpace: 'nowrap',*/}
+                                            {/*    height:100,*/}
+                                            {/*    width: '400px' // 글자 수 조절*/}
+                                            {/*}}>{item.title}</h6>*/}
+                                            <div
+                                                style={{
+                                                    width:500,
+                                                    height:250,
+
+                                                }}>
+                                                    <br/>
+                                                    <h3
+                                                    style={{
+                                                        width:'400px',
+                                                    }}>{item.title}</h3>
+                                                    <br/>
+                                                    <p><strong>작가:</strong> {item.author}</p>
+                                                    <p><strong>출판사:</strong> {item.publisher}</p>
+                                                    <p><strong>ISBN:</strong> {item.isbn}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <hr/>
+                            </div>
+
                         ))}
                     </ul>
                 </Modal.Body>
