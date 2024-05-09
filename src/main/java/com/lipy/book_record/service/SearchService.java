@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Getter
 @NoArgsConstructor
 @RequestMapping("test")
 public class SearchService {
@@ -91,6 +90,4 @@ public class SearchService {
         httpHeaders.set("X-Naver-Client-Secret", secret);
         return new HttpEntity<>(httpHeaders);
     }
-
-
 }

@@ -27,6 +27,6 @@ public class User {
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Book> books = new ArrayList<>();
+    private List<Book> books;
 }
 
