@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface SocialingRepository extends JpaRepository<Socialing, Long> {
     List<Socialing> findAllByOrderByCurrentparticipantsAsc();
+    List<Socialing> findByTitleContaining(String title);
 }

@@ -21,6 +21,11 @@ public class SocialingController {
         this.socialingService = socialingService;
     }
 
+    @GetMapping("/socialing/search") // 게시글 검색
+    public ResponseEntity<List<SocialingListResponse>> searchSocialingByTitle(@RequestParam String title) {
+        List<SocialingListResponse> socialings = socialingService.searchSocialingByTitle(title);
+        return ResponseEntity.ok().body(socialings);
+    }
     @GetMapping("/socialing/{id}") // 게시글 조회
     public ResponseEntity<SocialingResponse> findSocialing(@PathVariable long id){
         Socialing socialing = socialingService.findById(id);

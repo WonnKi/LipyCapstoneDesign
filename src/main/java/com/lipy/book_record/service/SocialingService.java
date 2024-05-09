@@ -1,5 +1,7 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.SocialingListResponse;
+import com.lipy.book_record.dto.SocialingResponse;
 import com.lipy.book_record.dto.UpdateSocialingRequest;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.SocialingRepository;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -50,6 +53,12 @@ public class SocialingService {
         return socialingRepository.save(socialing);
     }
 
+    public List<SocialingListResponse> searchSocialingByTitle(String title) { // title로 검색
+        List<Socialing> socialings = socialingRepository.findByTitleContaining(title);
+        return socialings.stream()
+                .map(SocialingListResponse::new)
+                .collect(Collectors.toList());
+    }
 
     public Socialing findById(long id){
         return socialingRepository.findById(id)
