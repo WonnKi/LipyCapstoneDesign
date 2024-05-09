@@ -11,7 +11,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@ToString
+//@Builder
 public class User {
     @Id
     @Column(name = "uid")
@@ -25,8 +26,8 @@ public class User {
     @NotNull
     private String nickname;
 
-    @Builder.Default
+//    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Book> books = new ArrayList<>();
+    private List<Book> books;
 }
 
