@@ -14,7 +14,6 @@ function Example() {
     const handleSearch = () => {
         axios.post(`/search/basic_search`, { bookName: bookName })
             .then(response => {
-                // 응답 데이터를 검색 결과 상태에 설정
                 setSearchResult(response.data);
             })
             .catch(error => {
