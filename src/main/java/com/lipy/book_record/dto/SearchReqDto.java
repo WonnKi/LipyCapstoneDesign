@@ -16,18 +16,20 @@ import java.time.LocalDate;
 @Builder
 public class SearchReqDto {
 
-    @NotNull
-    private String title;
+//    @NotNull
+//    private String title;
+//
+//    @NotNull
+//    private String image;
+//    private String author;
+//    private String publisher;
+//
+//    @NotNull
+////    @Pattern(regexp = "^.{10}\\s.{13}$")
+//    private String isbn;
+//    private String description;
+    private SearchDto info;
 
-    @NotNull
-    private String image;
-    private String author;
-    private String publisher;
-
-    @NotNull
-    @Pattern(regexp = "^.{10}\\s.{13}$")
-    private String isbn;
-    private String description;
     private Integer totPage;
 
     @NotNull
@@ -51,6 +53,4 @@ public class SearchReqDto {
     @NotNull
     @PositiveOrZero
     private Integer readPage;
-
-    private String expectation;
 }
