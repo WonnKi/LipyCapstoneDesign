@@ -1,13 +1,11 @@
 package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.SocialingListResponse;
-import com.lipy.book_record.dto.SocialingResponse;
 import com.lipy.book_record.dto.UpdateSocialingRequest;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +16,6 @@ import java.util.stream.Collectors;
 public class SocialingService {
     private final SocialingRepository socialingRepository;
 
-    public Socialing applyForSocialing(Long socialingId) {
-        Socialing socialing = socialingRepository.findById(socialingId)
-                .orElseThrow(() -> new RuntimeException("소셜링을 찾을 수 없습니다."));
-        if (!socialing.isFull()) {
-            socialing.increaseParticipants(); // 현재 참여자 수 증가
-            return socialingRepository.save(socialing);
-        } else {
-            throw new RuntimeException("소셜링의 최대 참여자 수를 초과했습니다.");
-        }
-    }
     @Transactional
     public Socialing update(long id, UpdateSocialingRequest request){
         Socialing socialing = socialingRepository.findById(id)

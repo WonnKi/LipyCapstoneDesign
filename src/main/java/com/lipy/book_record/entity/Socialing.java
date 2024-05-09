@@ -32,6 +32,9 @@ public class Socialing {
     @ManyToMany(mappedBy = "favoriteSocialings")
     private Set<Member> favoritedByMembers = new HashSet<>();
 
+    @OneToMany(mappedBy = "socialing")
+    private Set<SocialingApplication> applications = new HashSet<>();
+
     public void update(String title, String description,String content,int maxParticipants, Date date) {
         this.title = title;
         this.description = description;
@@ -48,5 +51,10 @@ public class Socialing {
     //== 소셜링 인원 증가 ==
     public void increaseParticipants() {
         currentparticipants++;
+    }
+
+    public void addApplication(SocialingApplication application) {
+        this.applications.add(application);
+        application.setSocialing(this);
     }
 }
