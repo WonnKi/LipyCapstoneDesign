@@ -6,12 +6,13 @@ import SecondBookCase from "../../screens/secondBookCase";
 const SecondBC = () => {
     return <div style={{
         backgroundColor:"gray",
-        position:"absolute",
-        top:"10%",
-        left:"34%",
-        height:"40%",
-        width:"30%",
-        margin:20}}>
+        // position:"absolute",
+        // top:"10%",
+        // left:"34%",
+        height:300,
+        // width:"30%",
+        // margin:20
+        }}>
         <a href="/secondBookCase"
            style={{color:"black",
                textDecorationLine:"none"}}>

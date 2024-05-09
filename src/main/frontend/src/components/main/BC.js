@@ -1,15 +1,17 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
+import backgroundColor from "../../img/backColor.png";
+import bookCaseImg from "../../img/bookCaseImg.webp"
 
 
 const BC = () => {
     return <div style={{
         backgroundColor:"gray",
-        position:"absolute",
-        top:"10%",
-        height:"45%",
-        width:"60%",
-        margin:20}}>
+        height:300,
+        margin:20,
+        backgroundImage: `url(${bookCaseImg})`,
+        backgroundSize:"100vh"
+        }}>
         <a href="/Bookcase"
         style={{color:"black",
                 textDecorationLine:"none"}}>

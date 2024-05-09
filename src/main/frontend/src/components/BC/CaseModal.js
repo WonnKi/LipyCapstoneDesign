@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
@@ -10,7 +10,14 @@ function Example() {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={handleShow}
+            style={{
+                position:"absolute",
+                top:"40%",
+                left:"40%",
+                margin:"auto",
+                display:"block",
+            }}>
                 +
             </Button>
 
@@ -18,7 +25,7 @@ function Example() {
                 <Modal.Header closeButton>
                     <Modal.Title>책 검색</Modal.Title>
                 </Modal.Header>
-                <Modal.Body
+                <Modal.Body 
                   style={{height:500}}>
                     <input type="" placeholder="책 제목을 입력하세요"/>
                     <input type="submit" value="검색"/>
@@ -29,10 +36,10 @@ function Example() {
                     </Button>
                     <Button variant="primary" onClick={handleClose}>
                         저장
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
+                  </Button>
+            </Modal.Footer>
+        </Modal>
+</>
     );
 }
 

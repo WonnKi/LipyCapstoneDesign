@@ -5,11 +5,11 @@ import {NavLink} from "react-router-dom";
 const dummy = () => {
     return <div style={{
         backgroundColor:"gray",
-        position:"absolute",
-        top:"10%",
-        right:"0%",
-        height:"45%",
-        width:"35%",
+        // position:"absolute",
+        // top:"10%",
+        // right:"0%",
+        height:300,
+        // width:"35%",
         margin:20,
         }}>
         <a href="/Bookcase"

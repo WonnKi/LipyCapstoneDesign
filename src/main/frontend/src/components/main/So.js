@@ -5,11 +5,11 @@ import {NavLink} from "react-router-dom";
 const So = () => {
     return <div style={{
         backgroundColor:"gray",
-        position:"absolute",
-        top:"60%",
-        right:"0%",
-        height:"40%",
-        width:"48%",
+        // position:"absolute",
+        // top:"60%",
+        // right:"0%",
+        height:300,
+        // width:"48%",
         margin:20,
         }}>
         <a href="/Socialing"

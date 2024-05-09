@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.ColBC{
+  position: relative;
+  border: 3px solid black;
+  height: 200px;
+}
+
+.Books{
+  position:absolute;
+  top:20%;
+  left:20%;
+  height:60%;
+  width: 60%;
+  margin:auto;
+  display:block;
+}

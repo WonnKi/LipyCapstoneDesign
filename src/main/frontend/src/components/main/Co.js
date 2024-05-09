@@ -1,20 +1,21 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
+import communityImg from "../../img/임시.png"
 
 
 const Co = () => {
     return <div style={{
         backgroundColor:"gray",
-        position:"absolute",
-        top:"60%",
-        height:"40%",
-        width:"48%",
+        height:300,
         margin:20,
+        backgroundImage: `url(${communityImg})`,
+        backgroundSize:"70vh",
+        border: '1px solid black'
         }}>
         <a href="/Community"
            style={{color:"black",
                textDecorationLine:"none"}}>
-            커뮤니티
+
         </a>
     </div>;
 };
