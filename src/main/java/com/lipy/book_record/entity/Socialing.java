@@ -35,14 +35,6 @@ public class Socialing {
     @OneToMany(mappedBy = "socialing")
     private Set<SocialingApplication> applications = new HashSet<>();
 
-    public void update(String title, String description,String content,int maxParticipants, Date date) {
-        this.title = title;
-        this.description = description;
-        this.content = content;
-        this.maxparticipants = maxParticipants;
-        this.date = date;
-    }
-
     //== 소셜링 인원 확인 ==//
     public boolean isFull() {
         return currentparticipants >= maxparticipants;
@@ -56,5 +48,11 @@ public class Socialing {
     public void addApplication(SocialingApplication application) {
         this.applications.add(application);
         application.setSocialing(this);
+    }
+
+    public void decreaseParticipants() {
+        if (this.currentparticipants > 0) {
+            this.currentparticipants--;
+        }
     }
 }

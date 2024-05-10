@@ -47,4 +47,17 @@ public class SocialingApplicationService {
         return socialing.getApplications().stream()
                 .anyMatch(application -> application.getMember().getId().equals(user.getId()));
     }
+
+    public void cancelSocialingApplication(Long applicationId) {
+        SocialingApplication socialingApplication = socialingApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Socialing application not found."));
+
+        // 소셜링 참여자 수 감소
+        Socialing socialing = socialingApplication.getSocialing();
+        socialing.decreaseParticipants(); // 현재 참여자 수 감소
+        socialingRepository.save(socialing); // 변경된 소셜링 정보 저장
+
+        // 소셜링 신청 삭제
+        socialingApplicationRepository.delete(socialingApplication);
+    }
 }

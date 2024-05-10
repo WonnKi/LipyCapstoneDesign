@@ -3,9 +3,7 @@ package com.lipy.book_record.controller;
 import com.lipy.book_record.service.SocialingApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SocialingApplicationController {
@@ -20,5 +18,10 @@ public class SocialingApplicationController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
+    }
+    @DeleteMapping("/socialing/apply/{applicationId}") // 소셜링 신청 취소
+    public ResponseEntity<String> cancelSocialingApplication(@PathVariable Long applicationId) {
+        socialingApplicationService.cancelSocialingApplication(applicationId);
+        return ResponseEntity.ok("Socialing application canceled successfully.");
     }
 }
