@@ -3,6 +3,7 @@ package com.lipy.book_record.controller;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.service.SearchService;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/search")
+@RequiredArgsConstructor
 public class SearchController {
 
-    @Autowired
-    SearchService searchService;
+    private final SearchService searchService; // <- Autowired 에서 바꿔봄
 
     @PostMapping("/basic_search")
     public List<SearchDto> search(@RequestBody SearchRequest searchRequest) throws ParseException {

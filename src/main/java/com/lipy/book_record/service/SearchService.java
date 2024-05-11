@@ -1,7 +1,6 @@
 package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.SearchDto;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

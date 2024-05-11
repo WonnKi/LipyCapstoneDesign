@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,13 +16,8 @@ import java.time.LocalDate;
 public class Book {
 
     @Id
-    @Column(name = "book_sn")
-    private int id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
     @NotNull
-    private User user;
+    private String isbn;
 
     @NotNull
     private String title;
@@ -35,8 +31,6 @@ public class Book {
     @Lob
     private String description;
 
-    @NotNull
-    private Integer isbn;
 
     private Integer totPage;
 
@@ -50,4 +44,23 @@ public class Book {
     private Integer score;
 
     private Integer readPage;
+
+    @ManyToOne
+    private User user;
+
+    @Builder
+    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage){
+        this.isbn = isbn;
+        this.title = title;
+        this.image = image;
+        this.author = author;
+        this.publisher = publisher;
+        this.description = description;
+        this.totPage = totPage;
+        this.bookStatus = bookStatus;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.score = score;
+        this.readPage = readPage;
+    }
 }

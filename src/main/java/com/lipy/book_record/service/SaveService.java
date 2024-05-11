@@ -1,41 +1,43 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
+import com.lipy.book_record.dto.UserDto;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.entity.User;
-import com.lipy.book_record.repository.BookRepository;
-import lombok.NoArgsConstructor;
+import com.lipy.book_record.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/save")
 public class SaveService {
 
-    BookRepository rep;
+    private final UserRepository rep;
 
-    public String saveBook(User user, SearchDto searchDto) {
+    public User saveBook(UserDto user, SearchDto info) {
         Book book = Book.builder()
-                .id(1)
-                .user(user)
-                .title(searchDto.getTitle())
-                .image(searchDto.getImage())
-                .author(searchDto.getAuthor())
-                .isbn(Integer.parseInt(searchDto.getIsbn()))
-                .description(searchDto.getDescription())
-                .publisher(searchDto.getPublisher())
-                .totPage(500)
-                .bookStatus(BookStatus.WISH)
+                .isbn(info.getIsbn())
+                .title(info.getTitle())
+                .image(info.getImage())
+                .author(info.getAuthor())
+                .publisher(info.getPublisher())
+                .description(info.getDescription())
+                .totPage(400)
+                .bookStatus(BookStatus.READING)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
                 .score(0)
                 .readPage(0)
                 .build();
-        rep.save(book);
-        return "저장 완료";
+
+        user.addBook(book);
+
+        return rep.save(user.toEntity());
     }
 }
