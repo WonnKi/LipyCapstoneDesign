@@ -26,11 +26,6 @@ public class Member {
     )
     private Set<Socialing> favoriteSocialings = new HashSet<>();
 
-    public void addFavoriteSocialing(Socialing socialing) {
-        favoriteSocialings.add(socialing);
-        socialing.getFavoritedByMembers().add(this);
-    }
-
     public void removeFavoriteSocialing(Socialing socialing) {
         favoriteSocialings.remove(socialing);
         socialing.getFavoritedByMembers().remove(this);

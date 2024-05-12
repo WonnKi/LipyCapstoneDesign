@@ -55,4 +55,9 @@ public class Socialing {
             this.currentparticipants--;
         }
     }
+
+    public void removeInterestedMember(Member member) {
+        this.favoritedByMembers.remove(member);
+        member.getFavoriteSocialings().remove(this);
+    }
 }

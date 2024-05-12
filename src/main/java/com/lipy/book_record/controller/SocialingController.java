@@ -61,12 +61,7 @@ public class SocialingController {
         Socialing createdPost = socialingService.createSocialingPost(socialing);
         return ResponseEntity.ok(createdPost);
     }
-//    @PostMapping("/socialing/apply/{socialingId}") // 소셜링 신청
-//    public ResponseEntity<Socialing> applyForSocialing(@PathVariable Long socialingId) {
-//        // 소셜링 신청 처리
-//        Socialing appliedSocialing = socialingService.applyForSocialing(socialingId);
-//        return ResponseEntity.ok(appliedSocialing);
-//    }
+
 
 
 }
