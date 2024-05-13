@@ -1,22 +1,26 @@
 package com.lipy.book_record.entity;
 
-import com.lipy.book_record.dto.BookDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "Users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-//@Builder
 public class User {
 
     @Id
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    private Long id;
+
+    @NotNull
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "pwd", nullable = false)
@@ -27,16 +31,16 @@ public class User {
 
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
     @Builder
-    public User(String id, String pwd, String nick, List<Book> books){
-        this.email = id;
+    public User(Long id,String email, String pwd, String nick, List<Book> books) {
+        this.id=id;
+        this.email = email;
         this.password = pwd;
         this.nickname = nick;
         this.books = books;
     }
-
 
 }
 

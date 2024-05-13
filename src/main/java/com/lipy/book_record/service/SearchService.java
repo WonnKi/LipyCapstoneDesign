@@ -12,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,7 +22,6 @@ import java.util.List;
 
 @Service
 @NoArgsConstructor
-@RequestMapping("test")
 public class SearchService {
     @Value("${naver.id}")   // API 요청 ID 값
     private String id;
@@ -55,17 +53,14 @@ public class SearchService {
         JSONObject obj = (JSONObject) parser.parse(response.getBody());
         JSONArray items = (JSONArray) obj.get("items");
 
-        if (!items.isEmpty()){
-            if (result.isEmpty()){
-                goSearch(obj, items);
-            }else {
-                result.clear();
-                goSearch(obj, items);
-            }
-            return result;
+        if (result.isEmpty()){
+            goSearch(obj, items);
         }else {
-            throw new NullPointerException();
+            result.clear();
+            goSearch(obj, items);
         }
+
+        return result;
     }
 
     private void goSearch(JSONObject obj, JSONArray items){ // result에 저장 하는 로직
