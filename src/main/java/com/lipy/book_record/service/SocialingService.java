@@ -58,7 +58,7 @@ public class SocialingService {
     }
 
     public List<Socialing> findAllOrderByCurrentParticipants() {
-        return socialingRepository.findAllByOrderByCurrentparticipantsAsc();
+        return socialingRepository.findAllByOrderByCurrentparticipantsDesc();
     }
     public List<Socialing> findAllSocialings() { // 게시글 목록 조회
         return socialingRepository.findAll();

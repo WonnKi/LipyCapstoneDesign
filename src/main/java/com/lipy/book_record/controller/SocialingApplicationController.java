@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class SocialingApplicationController {
     @Autowired
@@ -23,5 +25,12 @@ public class SocialingApplicationController {
     public ResponseEntity<String> cancelSocialingApplication(@PathVariable Long applicationId) {
         socialingApplicationService.cancelSocialingApplication(applicationId);
         return ResponseEntity.ok("Socialing application canceled successfully.");
+
+    }
+
+    @GetMapping("/socialing/apply/{applicationId}") //소셜링 신청정보 받기
+    public ResponseEntity<List<String>> getApplicantNamesBySocialingId(@PathVariable Long applicationId) {
+        List<String> applicant = socialingApplicationService.findApplicantInfoBySocialingId(applicationId);
+        return ResponseEntity.ok(applicant);
     }
 }

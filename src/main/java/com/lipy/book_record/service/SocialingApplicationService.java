@@ -9,12 +9,16 @@ import com.lipy.book_record.repository.SocialingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class SocialingApplicationService {
     private final MemberRepository memberRepository;
     private final SocialingApplicationRepository socialingApplicationRepository;
     private final SocialingRepository socialingRepository;
+
 
     public Long applyForSocialing(Long userId, Long socialingId) {
         Member user = memberRepository.findById(userId)
@@ -43,6 +47,10 @@ public class SocialingApplicationService {
         return socialingApplication.getId();
     }
 
+    public List<String> findApplicantInfoBySocialingId(Long socialingId) {
+        List<SocialingApplication> applications = socialingApplicationRepository.findBySocialingId(socialingId);
+        return applications.stream().map(app -> app.getMember().getUsername() + " (" + app.getMember().getEmail() + ")").collect(Collectors.toList());
+    }
     private boolean userAlreadyApplied(Member user, Socialing socialing) {
         return socialing.getApplications().stream()
                 .anyMatch(application -> application.getMember().getId().equals(user.getId()));

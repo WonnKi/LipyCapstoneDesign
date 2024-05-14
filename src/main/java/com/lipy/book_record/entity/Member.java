@@ -15,6 +15,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String email;
     private String username;
 
     // 즐겨찾기한 소셜링 정보를 저장하기 위한 필드
