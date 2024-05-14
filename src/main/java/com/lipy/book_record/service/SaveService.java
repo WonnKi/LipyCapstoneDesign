@@ -1,10 +1,10 @@
 package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.UserDto;
+import com.lipy.book_record.dto.UsersDto;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
-import com.lipy.book_record.repository.UserRepository;
+import com.lipy.book_record.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,69 +18,69 @@ import java.util.Random;
 @RequestMapping("/save")
 public class SaveService {
 
-    private final UserRepository rep;
+    private final UsersRepository rep;
 
-    public void saveBook(UserDto user, SearchDto info) {
+    public void saveBook(/*UserDto user, SearchDto info*/) {
 
         /*테스트용 코드 입니다.*/
-//        char[] codeTable = new char[]{
-//                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-//                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-//                'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
-//                'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-//                'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-//                'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
-//                '8', '9'
-//        };
-//        Random r = new Random();
-//
-//        for (int i=1; i<=10; i++){
-//            String code = "";
-//            int codeLength = 10;
-//            for(int y = 1; y <= codeLength; y++) {
-//                int index = r.nextInt(codeTable.length);
-//                code += codeTable[index];
-//            }
-//
-//            UserDto user = new UserDto((long) i,code + "@gmail.com","password", "닉네임", new ArrayList<>());
-//            for (int y=1; y<=10; y++){
-//
-//
-//                double min = 100000000;
-//                double max = 300000000;
-//
-//                SearchDto info = new SearchDto();
-//                info.setIsbn(String.valueOf((int) ((Math.random() * (max - min)) + min)));
-//                info.setTitle("책제목");
-//                info.setAuthor("저자");
-//                info.setDescription("책에 대한 정보");
-//                info.setImage("이미지 경로");
-//                info.setPublisher("퍼블리셔");
-//
-//                Book book = Book.builder()
-//                    .isbn(info.getIsbn())
-//                    .title(info.getTitle())
-//                    .image(info.getImage())
-//                    .author(info.getAuthor())
-//                    .publisher(info.getPublisher())
-//                    .description(info.getDescription())
-//                    .totPage(400)
-//                    .bookStatus(BookStatus.READING)
-//                    .startDate(LocalDate.now())
-//                    .endDate(LocalDate.now())
-//                    .score(0)
-//                    .readPage(0)
-//                    .build();
-//
-//                user.addBook(book);
-//                }
-//            rep.save(user.toEntity());
-//        }
+        char[] codeTable = new char[]{
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+                'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+                'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
+                '8', '9'
+        };
+        Random r = new Random();
+
+        for (int i=1; i<=10; i++){
+            String code = "";
+            int codeLength = 10;
+            for(int y = 1; y <= codeLength; y++) {
+                int index = r.nextInt(codeTable.length);
+                code += codeTable[index];
+            }
+
+            UsersDto user = new UsersDto((long) i,code + "@gmail.com","password", "닉네임", new ArrayList<>());
+            for (int y=1; y<=10; y++){
+
+
+                double min = 100000000;
+                double max = 300000000;
+
+                SearchDto info = new SearchDto();
+                info.setIsbn(String.valueOf((int) ((Math.random() * (max - min)) + min)));
+                info.setTitle("책제목");
+                info.setAuthor("저자");
+                info.setDescription("책에 대한 정보");
+                info.setImage("이미지 경로");
+                info.setPublisher("퍼블리셔");
+
+                Book book = Book.builder()
+                    .isbn(info.getIsbn())
+                    .title(info.getTitle())
+                    .image(info.getImage())
+                    .author(info.getAuthor())
+                    .publisher(info.getPublisher())
+                    .description(info.getDescription())
+                    .totPage(400)
+                    .bookStatus(BookStatus.READING)
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now())
+                    .score(0)
+                    .readPage(0)
+                    .build();
+
+                user.addBook(book);
+                }
+            rep.save(user.toEntity());
+        }
         /*테스트용 코드 입니다.*/
 
 
 
-        Book book = Book.builder()
+        /*Book book = Book.builder()
                 .isbn(info.getIsbn())
                 .title(info.getTitle())
                 .image(info.getImage())
@@ -97,6 +97,6 @@ public class SaveService {
 
         user.addBook(book);
 
-        rep.save(user.toEntity());
+        rep.save(user.toEntity());*/
     }
 }

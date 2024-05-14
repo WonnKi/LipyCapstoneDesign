@@ -1,13 +1,10 @@
 package com.lipy.book_record.entity;
 
-import com.lipy.book_record.dto.UserDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -39,6 +36,7 @@ public class Book {
     private Integer totPage;
 
     @Enumerated(EnumType.STRING)
+    @Setter
     private BookStatus bookStatus;
 
     private LocalDate startDate;
@@ -51,10 +49,10 @@ public class Book {
 
     @Setter
     @ManyToOne
-    private User user;
+    private Users user;
 
     @Builder
-    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, User user){
+    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users user){
         this.isbn = isbn;
         this.title = title;
         this.image = image;

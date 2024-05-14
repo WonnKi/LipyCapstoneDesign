@@ -1,7 +1,7 @@
 package com.lipy.book_record.dto;
 
 import com.lipy.book_record.entity.Book;
-import com.lipy.book_record.entity.User;
+import com.lipy.book_record.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class UserDto {
+public class UsersDto {
     private Long id;
     private String email;
     private String password;
@@ -27,8 +27,8 @@ public class UserDto {
         this.books.add(book);
     }
 
-    public User toEntity() {
-        User user = User.builder()
+    public Users toEntity() {
+        Users user = Users.builder()
                 .id(this.id)
                 .email(this.email)
                 .pwd(this.password)

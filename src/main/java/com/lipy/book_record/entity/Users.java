@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class User {
     private List<Book> books = new ArrayList<>();
 
     @Builder
-    public User(Long id,String email, String pwd, String nick, List<Book> books) {
+    public Users(Long id, String email, String pwd, String nick, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = pwd;

@@ -2,14 +2,11 @@ package com.lipy.book_record.dto;
 
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
-import com.lipy.book_record.entity.User;
+import com.lipy.book_record.entity.Users;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Getter
@@ -20,6 +17,8 @@ import java.util.List;
 @Builder
 public class BookDto {
     @Id
+    private String id;
+
     private String isbn;
 
     private String title;
@@ -60,5 +59,19 @@ public class BookDto {
                 .readPage(this.readPage)
                 .build();
     }
-
+    public BookDto(Book book){
+        this.id = book.getId();
+        this.isbn = book.getIsbn();
+        this.title = book.getTitle();
+        this.image = book.getImage();
+        this.author = book.getAuthor();
+        this.publisher = book.getPublisher();
+        this.description = book.getDescription();
+        this.totPage = book.getTotPage();
+        this.bookStatus = book.getBookStatus();
+        this.startDate = book.getStartDate();
+        this.endDate = book.getEndDate();
+        this.score = book.getScore();
+        this.readPage = book.getReadPage();
+    }
 }
