@@ -2,9 +2,11 @@ package com.lipy.book_record.dto;
 
 import com.lipy.book_record.entity.Socialing;
 import lombok.Getter;
+
 import java.util.Date;
 @Getter
 public class SocialingResponse {
+    private Long id;
     private String title;
     private String description;
     private String writer;
@@ -14,6 +16,7 @@ public class SocialingResponse {
     private Date date;
 
     public SocialingResponse(Socialing socialing){
+        this.id = socialing.getId();
         this.title = socialing.getTitle();
         this.description = socialing.getDescription();
         this.writer = socialing.getWriter();

@@ -1,9 +1,9 @@
 package com.lipy.book_record.service;
 
 import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.entity.SocialingApplication;
 import com.lipy.book_record.repository.MemberRepository;
-import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.SocialingApplicationRepository;
 import com.lipy.book_record.repository.SocialingRepository;
 import lombok.RequiredArgsConstructor;

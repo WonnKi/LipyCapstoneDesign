@@ -6,7 +6,6 @@ import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.MemberRepository;
 import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

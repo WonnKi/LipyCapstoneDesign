@@ -8,6 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class SocialingListResponse {
+    private Long id;
     private String title;
     private String description;
     private String writer;
@@ -16,6 +17,7 @@ public class SocialingListResponse {
     private Date date;
 
     public SocialingListResponse(Socialing socialing){
+        this.id = socialing.getId();
         this.title = socialing.getTitle();
         this.description = socialing.getDescription();
         this.writer = socialing.getWriter();

@@ -9,6 +9,13 @@ import NevBar from "./components/NevBar";
 import FirstBookCase from "./screens/firstBookCase";
 import SecondBookCase from "./screens/secondBookCase";
 import ThirdBookCase from "./screens/thirdBookCase";
+import Write from "./screens/Write";
+import SocialSearch from "./screens/SocialSearch";
+import SocialPost from "./screens/SocialPost";
+import CreateSocialingPost from "./screens/CreateSocialingPost";
+import SocialingDetail from "./screens/SocialingDetail";
+import UpdateSocialing from "./screens/UpdateSocialing";
+
 
 
 function App() {
@@ -23,6 +30,14 @@ function App() {
             <Route path = "/FirstBookCase" element={ <FirstBookCase /> } />
             <Route path = "/SecondBookCase" element={ <SecondBookCase /> } />
             <Route path = "/ThirdBookCase" element={ <ThirdBookCase /> } />
+            <Route path = "/Write" element={ <Write />} />
+            <Route path = "/SocialSearch" element={ <SocialSearch /> } />
+            <Route path = "/SocialPost" element={ <SocialPost /> } />
+            <Route path = "/CreateSocialingPost" element={ <CreateSocialingPost />} />
+            <Route path = "/socialing/:id" element={ <SocialingDetail />} />
+            <Route path = "/socialing/:id/edit" element={ <UpdateSocialing />} />
+
+
         </Routes>
       </BrowserRouter>
 

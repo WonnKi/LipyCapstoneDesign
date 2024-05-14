@@ -163,7 +163,7 @@ const Home = () => {
                         {/*            <h4 className="fst-italic">최신 게시물</h4>*/}
                         {/*            <ul className="cta-inner bg-faded text-center rounded">*/}
                         {/*                <li>*/}
-                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
                         {/*                       href="#">*/}
                         {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
                         {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
@@ -174,10 +174,10 @@ const Home = () => {
                         {/*                            <h6 className="mb-0">Example blog post title</h6>*/}
                         {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
                         {/*                        </div>*/}
-                        {/*                    </a>*/}
+                        {/*                    </test>*/}
                         {/*                </li>*/}
                         {/*                <li>*/}
-                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
                         {/*                       href="#">*/}
                         {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
                         {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
@@ -188,10 +188,10 @@ const Home = () => {
                         {/*                            <h6 className="mb-0">This is another blog post title</h6>*/}
                         {/*                            <small className="text-body-secondary">January 14, 2024</small>*/}
                         {/*                        </div>*/}
-                        {/*                    </a>*/}
+                        {/*                    </test>*/}
                         {/*                </li>*/}
                         {/*                <li>*/}
-                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
                         {/*                       href="#">*/}
                         {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
                         {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
@@ -204,7 +204,7 @@ const Home = () => {
                         {/*                                lines!</h6>*/}
                         {/*                            <small className="text-body-secondary">January 13, 2024</small>*/}
                         {/*                        </div>*/}
-                        {/*                    </a>*/}
+                        {/*                    </test>*/}
                         {/*                </li>*/}
                         {/*            </ul>*/}
                         {/*        </div>*/}
@@ -213,7 +213,7 @@ const Home = () => {
                         {/*            <h4 className="fst-italic">최신 소셜링</h4>*/}
                         {/*            <ul className="cta-inner bg-faded text-center rounded">*/}
                         {/*                <li>*/}
-                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
                         {/*                       href="#">*/}
                         {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
                         {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
@@ -224,10 +224,10 @@ const Home = () => {
                         {/*                            <h6 className="mb-0">Example blog post title</h6>*/}
                         {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
                         {/*                        </div>*/}
-                        {/*                    </a>*/}
+                        {/*                    </test>*/}
                         {/*                </li>*/}
                         {/*                <li>*/}
-                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
                         {/*                       href="#">*/}
                         {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
                         {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
@@ -238,10 +238,10 @@ const Home = () => {
                         {/*                            <h6 className="mb-0">This is another blog post title</h6>*/}
                         {/*                            <small className="text-body-secondary">January 14, 2024</small>*/}
                         {/*                        </div>*/}
-                        {/*                    </a>*/}
+                        {/*                    </test>*/}
                         {/*                </li>*/}
                         {/*                <li>*/}
-                        {/*                    <a className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
+                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
                         {/*                       href="#">*/}
                         {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
                         {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
@@ -254,7 +254,7 @@ const Home = () => {
                         {/*                                lines!</h6>*/}
                         {/*                            <small className="text-body-secondary">January 13, 2024</small>*/}
                         {/*                        </div>*/}
-                        {/*                    </a>*/}
+                        {/*                    </test>*/}
                         {/*                </li>*/}
                         {/*            </ul>*/}
                         {/*        </div>*/}
