@@ -55,6 +55,4 @@ public class BookController {
                 .map(BookDto::new)
                 .toList();
     }
-
-
 }
