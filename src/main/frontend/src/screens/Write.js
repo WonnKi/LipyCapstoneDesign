@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Write() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -20,10 +22,11 @@ function Write() {
         try {
             const response = await axios.post('/socialing/posts', formData);
             console.log(response.data);
-            // 작업이 성공적으로 완료되었을 때 사용자에게 알림 등을 표시할 수 있습니다.
+            navigate('/socialing');
+
         } catch (error) {
             console.error(error);
-            // 에러가 발생했을 때 사용자에게 알림 등을 표시할 수 있습니다.
+
         }
     };
 

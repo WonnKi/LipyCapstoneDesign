@@ -22,7 +22,7 @@
         }
 
         @GetMapping("/socialing/search") // 게시글 검색
-        public ResponseEntity<List<SocialingListResponse>> searchSocialingByTitle(@RequestParam String title) {
+        public ResponseEntity<List<SocialingListResponse>> searchSocialingByTitle(@RequestParam("title") String title) {
             List<SocialingListResponse> socialings = socialingService.searchSocialingByTitle(title);
             return ResponseEntity.ok().body(socialings);
         }
@@ -53,7 +53,8 @@
             return ResponseEntity.noContent().build();
         }
         @PutMapping("/socialing/{socialingId}") // 게시글 수정
-        public ResponseEntity<Socialing> updateForSocialing(@PathVariable("socialingId") Long socialingId, @RequestBody UpdateSocialingRequest request){
+        public ResponseEntity<Socialing> updateForSocialing(@PathVariable("socialingId") Long socialingId,
+                                                            @RequestBody UpdateSocialingRequest request){
             Socialing socialing = socialingService.update(socialingId, request);
             return ResponseEntity.ok().body(socialing);
         }

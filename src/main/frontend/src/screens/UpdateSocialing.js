@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Container from "react-bootstrap/Container";
 import axios from 'axios';
 
 const EditSocialing = () => {
     const { id } = useParams();
-    const navigate = useNavigate(); // useNavigate 훅 사용
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         writer: '',
         currentparticipants: 0,
         maxparticipants: 0,
-        date: new Date().toISOString() // 현재 날짜와 시간을 ISO 형식으로 초기값으로 설정
+        date: new Date().toISOString()
     });
 
     useEffect(() => {
@@ -41,7 +40,7 @@ const EditSocialing = () => {
         e.preventDefault();
         try {
             await axios.put(`/socialing/${id}`, formData);
-            navigate(`/socialing/${id}`); // 수정 완료 후 해당 게시글 페이지로 이동
+            navigate(`/socialing/${id}`);
         } catch (error) {
             console.error('게시글을 수정하는 중 에러 발생:', error);
         }
@@ -56,17 +55,21 @@ const EditSocialing = () => {
                         <input type="text" name="title" value={formData.title} onChange={handleChange}/>
                     </div>
                     <div>
-                        <label>내용</label>
+                        <label>설명</label>
                         <textarea name="description" value={formData.description} onChange={handleChange}/>
                     </div>
                     <div>
-                        <label>작성자</label>
-                        <input type="text" name="writer" value={formData.writer} onChange={handleChange}/>
+                        <label>글 내용</label>
+                        <textarea name="content" value={formData.content} onChange={handleChange}/>
                     </div>
                     <div>
                         <label>최대 참여자 수</label>
                         <input type="number" name="maxparticipants" value={formData.maxparticipants}
                                onChange={handleChange}/>
+                    </div>
+                    <div>
+                        <label>날짜</label>
+                        <input type="datetime-local" name="date" value={formData.date} onChange={handleChange}/>
                     </div>
                     <button type="submit">수정 완료</button>
                 </form>
