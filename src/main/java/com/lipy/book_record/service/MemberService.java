@@ -8,16 +8,44 @@ import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class MemberService {
+public class MemberService implements UserDetailsService {
+    private final MemberRepository memberRepository;
+    private final SocialingRepository socialingRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private SocialingRepository socialingRepository;
+    public MemberService(MemberRepository memberRepository, SocialingRepository socialingRepository, PasswordEncoder passwordEncoder) {
+        this.memberRepository = memberRepository;
+        this.socialingRepository = socialingRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public void save(Member member) {
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        memberRepository.save(member);
+    }
+
+    // 회원 중복검사
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberRepository.findByUsername(username);
+        if (member == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .roles("user")
+                .build();
+    }
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
         return new SocialingListResponse(
