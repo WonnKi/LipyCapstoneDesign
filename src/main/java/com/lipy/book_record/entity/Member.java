@@ -15,8 +15,17 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    @Column(nullable = false ,unique = true)
     private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String name;
 
     // 즐겨찾기한 소셜링 정보를 저장하기 위한 필드
     @ManyToMany
