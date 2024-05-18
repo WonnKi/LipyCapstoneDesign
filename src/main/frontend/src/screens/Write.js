@@ -21,12 +21,10 @@ function Write() {
         e.preventDefault();
         try {
             const response = await axios.post('/socialing/posts', formData);
-            console.log(response.data);
-            navigate('/socialing');
-
+            const PostId = response.data.id;
+            navigate(`/socialing/${PostId}`);
         } catch (error) {
-            console.error(error);
-
+            console.error('게시글을 작성하는 중 에러 발생:', error);
         }
     };
 
@@ -51,13 +49,11 @@ function Write() {
                 </div>
                 <div>
                     <label>참여자 수</label>
-                    <input type="number" name="currentparticipants" value={formData.currentparticipants}
-                           onChange={handleChange}/>
+                    <input type="number" name="currentparticipants" value={formData.currentparticipants} onChange={handleChange}/>
                 </div>
                 <div>
                     <label>최대 참여자 수</label>
-                    <input type="number" name="maxparticipants" value={formData.maxparticipants}
-                           onChange={handleChange}/>
+                    <input type="number" name="maxparticipants" value={formData.maxparticipants} onChange={handleChange}/>
                 </div>
                 <div>
                     <label>날짜</label>
