@@ -33,13 +33,18 @@ public class Users {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
 
+    @Column(name = "records")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Record> records = new ArrayList<>();
+
     @Builder
-    public Users(Long id, String email, String pwd, String nick, List<Book> books) {
+    public Users(Long id, String email, String pwd, String nick, List<Book> books, List<Record> records) {
         this.id=id;
         this.email = email;
         this.password = pwd;
         this.nickname = nick;
         this.books = books;
+        this.records = records;
     }
 
 }

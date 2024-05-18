@@ -1,27 +1,34 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.dto.UsersDto;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
+import com.lipy.book_record.repository.BookRepository;
 import com.lipy.book_record.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+
+import static com.lipy.book_record.entity.BookStatus.WISH;
 
 @Service
 @RequiredArgsConstructor
 @RequestMapping("/save")
-public class SaveService {
+public class BookService {
 
-    private final UsersRepository rep;
+    private final BookRepository bookRep;
+    private final UsersRepository userRep;
 
     public void saveBook(/*UserDto user, SearchDto info*/) {
-
         /*테스트용 코드 입니다.*/
         char[] codeTable = new char[]{
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -75,7 +82,7 @@ public class SaveService {
                 user.addBook(book);
                 }
 
-            rep.save(user.toEntity());
+            userRep.save(user.toEntity());
         }
         /*테스트용 코드 입니다.*/
 
@@ -99,5 +106,44 @@ public class SaveService {
         user.addBook(book);
 
         rep.save(user.toEntity());*/
+    }
+
+    public ResponseEntity<String> deleteBook(Long userId, String isbn){
+        try {
+            if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
+                return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
+            }
+            bookRep.deleteByUserIdAndIsbn(userId, isbn);
+            return ResponseEntity.ok("사용자 ID: " + userId + "의 ISBN: " + isbn + " 책이 삭제되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "의 책을 삭제하는 중 오류가 발생했습니다.");
+        }
+    }
+
+    public List<BookDto> ViewBookList(Long id){
+        return userRep
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("ID : " + id + " 를 찾을 수 없습니다."))
+                .getBooks()
+                .stream()
+                .map(BookDto::new)
+                .toList();
+    }
+
+    public ResponseEntity<String>  changeStatus(Long userId, String isbn, String status) {
+        try {
+            if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
+                return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
+            }
+            Book book = bookRep.findByUserIdAndIsbn(userId, isbn);
+            String bStatus = String.valueOf(book.getBookStatus());
+            book.setBookStatus(BookStatus.valueOf(status));
+            bookRep.save(book);
+            return ResponseEntity.ok("사용자 ID: " + userId + "의 ISBN: " + isbn + " 책이 " +
+                    bStatus + " → " + status + "로 변경되었습니다.");
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "의 책을 삭제하는 중 오류가 발생했습니다.");
+        }
+
     }
 }
