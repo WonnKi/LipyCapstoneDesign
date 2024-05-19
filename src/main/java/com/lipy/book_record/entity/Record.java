@@ -25,4 +25,12 @@ public class Record {
     @Setter
     @ManyToOne
     private Users user;
+
+    @Builder
+    public Record(String title, String content, LocalDate recordDate, Users user){
+        this.title = title;
+        this.content = content;
+        this.recordDate = recordDate;
+        this.user = user;
+    }
 }

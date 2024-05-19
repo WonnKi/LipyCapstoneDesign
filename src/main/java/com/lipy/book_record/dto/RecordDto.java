@@ -1,5 +1,6 @@
 package com.lipy.book_record.dto;
 
+import com.lipy.book_record.entity.Record;
 import com.lipy.book_record.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -31,4 +32,18 @@ public class RecordDto {
     @ManyToOne
     private Users user;
 
+    public RecordDto(Record record) {
+        this.id = record.getId();
+        this.title = record.getTitle();
+        this.content = record.getContent();
+        this.recordDate = record.getRecordDate();
+    }
+
+    public Record toEntity(){
+        return Record.builder()
+                .title(this.title)
+                .content(this.content)
+                .recordDate(this.recordDate)
+                .build();
+    }
 }

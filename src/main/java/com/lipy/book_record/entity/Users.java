@@ -1,5 +1,6 @@
 package com.lipy.book_record.entity;
 
+import com.lipy.book_record.dto.UsersDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -46,6 +47,7 @@ public class Users {
         this.books = books;
         this.records = records;
     }
+
 
 }
 

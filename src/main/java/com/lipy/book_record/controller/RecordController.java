@@ -1,9 +1,12 @@
 package com.lipy.book_record.controller;
 
+import com.lipy.book_record.dto.RecordDto;
 import com.lipy.book_record.service.RecordService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/record")
@@ -11,5 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecordController {
     private final RecordService recordService;
 
+    @PostMapping("/{userId}")
+    public ResponseEntity<String> createRecord(@PathVariable("userId") Long userId, @RequestBody RecordDto recordDto) {
+        return recordService.saveRecord(userId, recordDto);
+    }
 
+    @GetMapping("/{userId}")
+    public List<RecordDto> getRecordById(@PathVariable("userId") Long userId) {
+        return recordService.ViewRecordList(userId);
+    }
 }

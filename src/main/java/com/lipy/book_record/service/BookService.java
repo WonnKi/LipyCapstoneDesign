@@ -49,7 +49,7 @@ public class BookService {
                 code += codeTable[index];
             }
 
-            UsersDto user = new UsersDto((long) i,code + "@gmail.com","password", "닉네임", new ArrayList<>());
+            UsersDto user = new UsersDto((long) i,code + "@gmail.com","password", "닉네임", new ArrayList<>(), new ArrayList<>());
             for (int y=1; y<=10; y++){
 
 
