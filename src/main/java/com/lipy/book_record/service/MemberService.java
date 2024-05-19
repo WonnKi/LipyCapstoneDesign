@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,22 +30,19 @@ public class MemberService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void save(Member member) {
+    public Member save(Member member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberRepository.save(member);
+        return member;
     }
 
-    // 회원 중복검사
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username);
         if (member == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
         }
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(member.getUsername())
-                .password(member.getPassword())
-                .roles("user")
-                .build();
+        return new org.springframework.security.core.userdetails.User(member.getUsername(), member.getPassword(), new ArrayList<>());
     }
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
