@@ -5,6 +5,8 @@ import com.lipy.book_record.dto.RegisterRequest;
 import com.lipy.book_record.dto.SocialingListResponse;
 import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.service.MemberService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @RestController
 public class MemberController {
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     @Autowired
     private MemberService memberService;
@@ -44,14 +47,19 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody RegisterRequest registerRequest) {
-        Member member = new Member();
-        member.setUsername(registerRequest.getUsername());
-        member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        member.setName(registerRequest.getName());
-        member.setEmail(registerRequest.getEmail());
-        memberService.save(member);
-        return ResponseEntity.ok().body("Membership registration successful");
+        try {
+            Member member = new Member();
+            member.setUsername(registerRequest.getUsername());
+            member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+            member.setName(registerRequest.getName());
+            member.setEmail(registerRequest.getEmail());
+            memberService.save(member);
+            return ResponseEntity.ok().body("Membership registration successful");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
+
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout() {

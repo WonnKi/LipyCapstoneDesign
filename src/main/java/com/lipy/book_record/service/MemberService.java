@@ -30,11 +30,13 @@ public class MemberService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Member save(Member member) {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
+    public void save(Member member) {
         memberRepository.save(member);
-        return member;
     }
+//    public void save(Member member) {
+//        member.setPassword(passwordEncoder.encode(member.getPassword()));
+//        memberRepository.save(member);
+//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
