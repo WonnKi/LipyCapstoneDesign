@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/searchResult")
 @RequiredArgsConstructor
 public class SearchController {
 
     private final SearchService searchService; // <- Autowired 에서 바꿔봄
 
-    @PostMapping("/basic_search")
+    @GetMapping("/")
     public List<SearchDto> search(@RequestBody SearchRequest searchRequest) throws ParseException {
         return searchService.search(searchRequest.getBookName());
     }

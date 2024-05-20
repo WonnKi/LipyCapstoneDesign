@@ -28,8 +28,8 @@ public class BookService {
     private final BookRepository bookRep;
     private final UsersRepository userRep;
 
-    public void saveBook(/*UserDto user, SearchDto info*/) {
-        /*테스트용 코드 입니다.*/
+    public void saveBook(UsersDto user, SearchDto info) {
+        /*테스트용 코드 입니다.*//*
         char[] codeTable = new char[]{
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -84,11 +84,11 @@ public class BookService {
 
             userRep.save(user.toEntity());
         }
-        /*테스트용 코드 입니다.*/
+        *//*테스트용 코드 입니다.*/
 
 
 
-        /*Book book = Book.builder()
+        Book book = Book.builder()
                 .isbn(info.getIsbn())
                 .title(info.getTitle())
                 .image(info.getImage())
@@ -105,7 +105,7 @@ public class BookService {
 
         user.addBook(book);
 
-        rep.save(user.toEntity());*/
+        userRep.save(user.toEntity());
     }
 
     public ResponseEntity<String> deleteBook(Long userId, String isbn){

@@ -23,7 +23,7 @@ public class BookController {
 
     @PostMapping("/")
     public String SaveBook(UsersDto user, SearchDto info){
-        saveService.saveBook(/*user, info*/);
+        saveService.saveBook(user, info);
         return "저장완료";
     }
     @GetMapping("/{userId}")
