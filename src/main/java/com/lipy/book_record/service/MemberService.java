@@ -8,43 +8,29 @@ import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
-public class MemberService implements UserDetailsService {
+public class MemberService  {
     private final MemberRepository memberRepository;
     private final SocialingRepository socialingRepository;
-    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, SocialingRepository socialingRepository, PasswordEncoder passwordEncoder) {
+    public MemberService(MemberRepository memberRepository, SocialingRepository socialingRepository) {
         this.memberRepository = memberRepository;
         this.socialingRepository = socialingRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public void save(Member member) {
         memberRepository.save(member);
     }
-//    public void save(Member member) {
-//        member.setPassword(passwordEncoder.encode(member.getPassword()));
-//        memberRepository.save(member);
-//    }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUsername(username);
-        if (member == null) {
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
-        }
-        return new org.springframework.security.core.userdetails.User(member.getUsername(), member.getPassword(), new ArrayList<>());
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {

@@ -13,3 +13,6 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+jwt:
+  secret: mySuperSecretKey12345
+  expiration: 3600

@@ -1,5 +1,6 @@
 package com.lipy.book_record.dto;
 
+import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.Socialing;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import java.util.Date;
 public class SocialingListResponse {
     private String title;
     private String description;
-    private String writer;
+    private Member writer;
     private int currentparticipants;
     private int maxparticipants;
     private Date date;
@@ -29,7 +30,7 @@ public class SocialingListResponse {
     }
 
 
-    public SocialingListResponse(String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
+    public SocialingListResponse(String title, String description, Member writer, int currentparticipants, int maxparticipants, Date date) {
         this.title = title;
         this.description = description;
         this.writer = writer;

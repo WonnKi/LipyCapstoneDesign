@@ -20,7 +20,11 @@ public class Socialing {
 
     private String title;
     private String description;
-    private String writer;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private Member writer;
+
     private String content;
     private int maxparticipants; // 최대 참여자 수
     private int currentparticipants; // 현재 참여자 수
@@ -29,7 +33,11 @@ public class Socialing {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    //private String status; // "Pending", "Accepted", "Rejected"
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
 
     // 다대다 관계로 멤버와 연결
     @JsonIgnore
