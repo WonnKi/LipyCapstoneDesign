@@ -152,6 +152,7 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                 </Modal.Header>
                 <Modal.Body>
                     <input type="text" placeholder="페이지를 입력하세요"/>
+                    {/* npm install react-icons --save 설치 */}
                     <div>
                         {[...Array(rating)].map((a, i) => (
                             <PiStarFill className="star-lg" key={i} onClick={() => setRating(i + 1)}/>
