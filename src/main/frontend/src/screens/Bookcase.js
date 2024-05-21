@@ -10,20 +10,20 @@ import ThirdBC from "../components/bookcase_com/ThirdBC";
 const Bookcase = () => {
     return <div>
         <Container>
-                <Row>
-                    <Col>
-                        <FirstBC/>
-                    </Col>
-                    <Col>
-                        <SecondBC/>
-                    </Col>
-                    <Col>
-                        <ThirdBC/>
-                    </Col>
-                </Row>
+            <Row>
+                <Col>
+                    <FirstBC/>
+                </Col>
+                <Col>
+                    <SecondBC/>
+                </Col>
+                <Col>
+                    <ThirdBC/>
+                </Col>
+            </Row>
         </Container>
     </div>
 
-    };
+};
 
 export default Bookcase;

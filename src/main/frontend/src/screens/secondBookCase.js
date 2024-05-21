@@ -1,66 +1,72 @@
-import React from "react";
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Tab from "../components/BC/Tab";
 import CaseModal from "../components/BC/CaseModal";
-import img01 from "../img/dumy.webp"
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const SecondBookCase = () => {
-    return <div>
-        <Tab/>
-        <Container
-        style={{
-            background:"#E0B88A"
-        }}>
-            <Row>
-                <Col
-                    className={'ColBC'}>
-                    <img className={'Books'} src={img01} alt="?"/>
+    const [readingBooks, setReadingBooks] = useState([]);
+    const navigate = useNavigate();
 
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                    <CaseModal/>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-            </Row>
+    const addBookToReadingList = (bookImage) => {
+        setReadingBooks([...readingBooks, bookImage]);
+    };
 
-            <Row>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
+    const handleBookClick = (bookId) => {
+        navigate(`/books/${bookId}`);
+    };
 
-            </Row>
+    const renderBooks = () => {
+        const rows = [];
+        let currentRow = [];
+        let totalCols = readingBooks.length;
 
-        </Container>
-    </div>
+        readingBooks.forEach((bookImage, index) => {
+            currentRow.push(
+                <Col key={index} className={'ColBC'} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <img
+                        src={bookImage}
+                        alt="Book"
+                        style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', cursor: 'pointer' }}
+                        onClick={() => handleBookClick(index)}
+                    />
+                </Col>
+            );
+            if (currentRow.length === 5) {
+                rows.push(<Row key={index / 5}>{currentRow}</Row>);
+                currentRow = [];
+            }
+        });
+
+        if (currentRow.length < 5) {
+            currentRow.push(
+                <Col key={totalCols} className={'ColBC'} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CaseModal type="reading" onAddToSecondBookCase={addBookToReadingList} />
+                </Col>
+            );
+            totalCols += 1;
+        }
+
+        while (currentRow.length < 5) {
+            currentRow.push(<Col key={totalCols} className={'ColBC'}/>);
+            totalCols += 1;
+        }
+
+        rows.push(<Row key={totalCols / 5}>{currentRow}</Row>);
+
+        return rows;
+    };
+
+    return (
+        <div>
+            <Tab/>
+            <Container style={{ background: "#E0B88A" }}>
+                {renderBooks()}
+            </Container>
+        </div>
+    );
 };
 
 export default SecondBookCase;

@@ -1,64 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import Tab from "../components/BC/Tab";
-import Col from "react-bootstrap/Col";
-import Row from 'react-bootstrap/Row';
-import Container from "react-bootstrap/Container";
-import img01 from "../img/dumy.webp";
 import CaseModal from "../components/BC/CaseModal";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const ThirdBookCase = () => {
-    return <div>
-        <Tab/>
-        <Container
-            style={{
-                background:"#E0B88A"
-            }}>
-            <Row>
-                <Col
-                    className={'ColBC'}>
-                    <CaseModal/>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-            </Row>
+    const [finishedBooks, setFinishedBooks] = useState([]);
 
-            <Row>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
-                <Col
-                    className={'ColBC'}>
-                </Col>
+    const addBookToFinishedList = (bookImage) => {
+        setFinishedBooks([...finishedBooks, bookImage]);
+    };
 
-            </Row>
+    const renderBooks = () => {
+        const rows = [];
+        let currentRow = [];
+        let totalCols = finishedBooks.length;
 
-        </Container>
-    </div>
+        finishedBooks.forEach((bookImage, index) => {
+            currentRow.push(
+                <Col key={index} className={'ColBC'} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <img src={bookImage} alt="Book" style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}/>
+                </Col>
+            );
+            if (currentRow.length === 5) {
+                rows.push(<Row key={index / 5}>{currentRow}</Row>);
+                currentRow = [];
+            }
+        });
+
+        if (currentRow.length < 5) {
+            currentRow.push(
+                <Col key={totalCols} className={'ColBC'} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CaseModal type="finished" onAddToThirdBookCase={addBookToFinishedList} />
+                </Col>
+            );
+            totalCols += 1;
+        }
+
+        while (currentRow.length < 5) {
+            currentRow.push(<Col key={totalCols} className={'ColBC'}/>);
+            totalCols += 1;
+        }
+
+        rows.push(<Row key={totalCols / 5}>{currentRow}</Row>);
+
+        return rows;
+    };
+
+    return (
+        <div>
+            <Tab/>
+            <Container style={{ background: "#E0B88A" }}>
+                {renderBooks()}
+            </Container>
+        </div>
+    );
 };
 
 export default ThirdBookCase;

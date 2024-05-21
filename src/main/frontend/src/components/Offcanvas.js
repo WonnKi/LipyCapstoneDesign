@@ -3,7 +3,7 @@
 // import Offcanvas from 'react-bootstrap/Offcanvas';
 // import {Nav} from "react-bootstrap";
 //
-// function Example() {
+// function CaseModal() {
 //     const [show, setShow] = useState(false);
 //
 //     const handleClose = () => setShow(false);
@@ -29,4 +29,4 @@
 //     );
 // }
 //
-// export default Example;
+// export default CaseModal;

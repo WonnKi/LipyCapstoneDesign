@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const SocialingDetails = () => {
     const { id } = useParams();
-    const navigate = useNavigate(); // useNavigate 훅 사용
+    const navigate = useNavigate();
     const [socialing, setSocialing] = useState(null);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const SocialingDetails = () => {
     }, [id]);
 
     const handleEditClick = () => {
-        navigate(`/socialing/${id}/edit`); // 수정 페이지로 이동
+        navigate(`/socialing/${id}/edit`);
     };
 
     const handleDeleteClick = () => {
@@ -30,7 +30,7 @@ const SocialingDetails = () => {
         if (isConfirmed) {
             axios.delete(`/socialing/${id}`)
                 .then(() => {
-                    navigate('/socialing'); // 삭제 후 목록 페이지로 이동
+                    navigate('/socialing');
                 })
                 .catch(error => {
                     console.error('게시글을 삭제하는 중 에러 발생:', error);

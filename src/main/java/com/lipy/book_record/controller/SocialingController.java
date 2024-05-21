@@ -63,7 +63,4 @@
             Socialing createdPost = socialingService.createSocialingPost(socialing);
             return ResponseEntity.ok(createdPost);
         }
-
-
-
     }

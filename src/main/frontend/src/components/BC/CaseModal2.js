@@ -2,16 +2,11 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-import { PiStarFill, PiStarLight } from "react-icons/pi";
 
 function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToThirdBookCase }) {
     const [show, setShow] = useState(false);
     const [bookName, setBookName] = useState('');
     const [searchResult, setSearchResult] = useState([]);
-    const [showConfirmReadingModal, setShowConfirmReadingModal] = useState(false);
-    const [showConfirmFinishedModal, setShowConfirmFinishedModal] = useState(false);
-    const [selectedBookImage, setSelectedBookImage] = useState(null);
-    const [rating, setRating] = useState(3);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -22,6 +17,7 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                 setSearchResult(response.data);
             })
             .catch(error => {
+                // Error handling
                 console.error('ERROR :', error);
             });
     };
@@ -31,25 +27,13 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
         handleClose();
     };
 
-    const handleOpenConfirmReadingModal = (image) => {
-        setSelectedBookImage(image);
-        setShowConfirmReadingModal(true);
-    };
-
-    const handleConfirmAddToReadingList = () => {
-        onAddToSecondBookCase(selectedBookImage);
-        setShowConfirmReadingModal(false);
+    const handleAddToReadingList = (image) => {
+        onAddToSecondBookCase(image);
         handleClose();
     };
 
-    const handleOpenConfirmFinishedModal = (image) => {
-        setSelectedBookImage(image);
-        setShowConfirmFinishedModal(true);
-    };
-
-    const handleConfirmAddToFinishedList = () => {
-        onAddToThirdBookCase(selectedBookImage);
-        setShowConfirmFinishedModal(false);
+    const handleAddToFinishedList = (image) => {
+        onAddToThirdBookCase(image);
         handleClose();
     };
 
@@ -71,8 +55,8 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                     <h2>책 검색</h2>
                     <div style={{ position: "absolute", right: "10%", top: "10%", border: '1px solid black' }}>
                         <input type="text" placeholder="책 제목을 입력하세요" value={bookName}
-                               onChange={e => setBookName(e.target.value)} />
-                        <input type="submit" value="검색" onClick={handleSearch} />
+                               onChange={e => setBookName(e.target.value)}/>
+                        <input type="submit" value="검색" onClick={handleSearch}/>
                     </div>
                 </Modal.Header>
                 <Modal.Body style={{ overflow: "auto", height: 500 }}>
@@ -82,32 +66,32 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                                 <li style={{ display: 'flex', marginBottom: '20px' }}>
                                     <div style={{ display: 'flex' }}>
                                         <div style={{ marginRight: '20px', alignSelf: 'flex-start' }}>
-                                            <img src={item.image} alt={item.title} style={{ width: '200px', height: '250px' }} />
+                                            <img src={item.image} alt={item.title} style={{ width: '200px', height: '250px' }}/>
                                         </div>
                                         <div style={{ width: 500, height: 250 }}>
                                             <div style={{ width: 500, height: 250 }}>
-                                                <br />
+                                                <br/>
                                                 <h3 style={{ width: '400px' }}>{item.title}</h3>
-                                                <br />
+                                                <br/>
                                                 <p><strong>작가:</strong> {item.author}</p>
                                                 <p><strong>출판사:</strong> {item.publisher}</p>
                                                 <p><strong>ISBN:</strong> {item.isbn}
-                                                    <span style={{ float: 'right' }}>
-                                                        {type === 'wish' && (
-                                                            <Button variant="outline-primary"
-                                                                    onClick={() => handleAddToWishList(item.image)}>
-                                                                읽고 싶은 책
-                                                            </Button>
-                                                        )}
+                                                    <span style={{float: 'right'}}>
+                                                {type === 'wish' && (
+                                                    <Button variant="outline-primary"
+                                                            onClick={() => handleAddToWishList(item.image)}>
+                                                        읽고 싶은 책
+                                                    </Button>
+                                                )}
                                                         {type === 'reading' && (
                                                             <Button variant="outline-success"
-                                                                    onClick={() => handleOpenConfirmReadingModal(item.image)}>
+                                                                    onClick={() => handleAddToReadingList(item.image)}>
                                                                 읽는 중인 책
                                                             </Button>
                                                         )}
                                                         {type === 'finished' && (
                                                             <Button variant="outline-dark"
-                                                                    onClick={() => handleOpenConfirmFinishedModal(item.image)}>
+                                                                    onClick={() => handleAddToFinishedList(item.image)}>
                                                                 다 읽은 책
                                                             </Button>
                                                         )}
@@ -117,7 +101,7 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                                         </div>
                                     </div>
                                 </li>
-                                <hr />
+                                <hr/>
                             </div>
                         ))}
                     </ul>
@@ -125,49 +109,6 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         닫기
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            <Modal show={showConfirmReadingModal} onHide={() => setShowConfirmReadingModal(false)} size="sm">
-                <Modal.Header closeButton>
-                    <Modal.Title>페이지</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <input type="text" placeholder="페이지를 입력하세요" />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowConfirmReadingModal(false)}>
-                        취소
-                    </Button>
-                    <Button variant="primary" onClick={handleConfirmAddToReadingList}>
-                        저장
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            <Modal show={showConfirmFinishedModal} onHide={() => setShowConfirmFinishedModal(false)} size="sm">
-                <Modal.Header closeButton>
-                    <Modal.Title>페이지, 별점</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <input type="text" placeholder="페이지를 입력하세요"/>
-                    <div>
-                        {[...Array(rating)].map((a, i) => (
-                            <PiStarFill className="star-lg" key={i} onClick={() => setRating(i + 1)}/>
-                        ))}
-                        {[...Array(5 - rating)].map((a, i) => (
-                            <PiStarLight className="star-lg" key={i} onClick={() => setRating(rating + i + 1)}/>
-                        ))}
-                    </div>
-
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowConfirmFinishedModal(false)}>
-                        취소
-                    </Button>
-                    <Button variant="primary" onClick={handleConfirmAddToFinishedList}>
-                        저장
                     </Button>
                 </Modal.Footer>
             </Modal>

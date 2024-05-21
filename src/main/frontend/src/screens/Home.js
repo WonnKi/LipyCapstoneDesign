@@ -171,7 +171,7 @@ const Home = () => {
                         {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
                         {/*                        </svg>*/}
                         {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">Example blog post title</h6>*/}
+                        {/*                            <h6 className="mb-0">CaseModal blog post title</h6>*/}
                         {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
                         {/*                        </div>*/}
                         {/*                    </test>*/}
@@ -221,7 +221,7 @@ const Home = () => {
                         {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
                         {/*                        </svg>*/}
                         {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">Example blog post title</h6>*/}
+                        {/*                            <h6 className="mb-0">CaseModal blog post title</h6>*/}
                         {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
                         {/*                        </div>*/}
                         {/*                    </test>*/}
