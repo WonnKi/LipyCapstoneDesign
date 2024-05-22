@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -26,6 +28,14 @@ public class Member {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "books")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Book> books = new ArrayList<>();
+
+    @Column(name = "records")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Record> records = new ArrayList<>();
 
     // 즐겨찾기한 소셜링 정보를 저장하기 위한 필드
     @ManyToMany
