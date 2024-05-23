@@ -13,10 +13,27 @@ import java.util.List;
 
 @Service
 public class MemberService {
+//    @Autowired
+//    private MemberRepository memberRepository;
+//    @Autowired
+//    private SocialingRepository socialingRepository;
+
+    private final MemberRepository memberRepository;
+    private final SocialingRepository socialingRepository;
+
     @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private SocialingRepository socialingRepository;
+    public MemberService(MemberRepository memberRepository, SocialingRepository socialingRepository) {
+        this.memberRepository = memberRepository;
+        this.socialingRepository = socialingRepository;
+    }
+
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
+
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
         return new SocialingListResponse(

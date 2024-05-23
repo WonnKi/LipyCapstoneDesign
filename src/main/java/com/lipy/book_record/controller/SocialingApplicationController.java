@@ -1,8 +1,13 @@
 package com.lipy.book_record.controller;
 
+import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.service.SocialingApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,11 +16,19 @@ import java.util.List;
 public class SocialingApplicationController {
     @Autowired
     private SocialingApplicationService socialingApplicationService;
+    @Autowired
+    private MemberService memberService;
 
     @PostMapping("/socialing/apply")
-    public ResponseEntity<Long> applyForSocialing(@RequestParam Long userId, @RequestParam Long socialingId) {
+    public ResponseEntity<Long> applyForSocialing(@RequestParam("socialingId") Long socialingId) {
         try {
-            Long takeId = socialingApplicationService.applyForSocialing(userId, socialingId);
+            // 현재 로그인한 사용자의 정보를 가져옴
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            Member member = memberService.findByUsername(username);
+
+            Long takeId = socialingApplicationService.applyForSocialing(member.getId(), socialingId);
             return ResponseEntity.ok(takeId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);

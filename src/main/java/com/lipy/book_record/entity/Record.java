@@ -26,11 +26,16 @@ public class Record {
     @ManyToOne
     private Users user;
 
+    @Setter
+    @ManyToOne
+    private Member member;
+
     @Builder
     public Record(String title, String content, LocalDate recordDate, Users user){
         this.title = title;
         this.content = content;
         this.recordDate = recordDate;
         this.user = user;
+        this.member = member;
     }
 }

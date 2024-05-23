@@ -59,16 +59,16 @@ const EditSocialing = () => {
                         <textarea name="description" value={formData.description} onChange={handleChange}/>
                     </div>
                     <div>
-                        <label>글 내용</label>
+                        <label>내용</label>
                         <textarea name="content" value={formData.content} onChange={handleChange}/>
                     </div>
                     <div>
-                        <label>최대 참여자 수</label>
+                        <label>최대 참여 인원</label>
                         <input type="number" name="maxparticipants" value={formData.maxparticipants}
                                onChange={handleChange}/>
                     </div>
                     <div>
-                        <label>날짜</label>
+                        <label>일시</label>
                         <input type="datetime-local" name="date" value={formData.date} onChange={handleChange}/>
                     </div>
                     <button type="submit">수정 완료</button>

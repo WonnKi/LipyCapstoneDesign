@@ -17,6 +17,10 @@ import SocialingDetail from "./screens/SocialingDetail";
 import UpdateSocialing from "./screens/UpdateSocialing";
 import BookDetail from "./screens/BookDetail";
 import SignUp from "./screens/SignUp";
+import CreatePost from "./screens/CreatePost";
+import Login from "./screens/Login";
+import ViewPost from "./screens/ViewPost";
+import HotSocialing from "./screens/HotSocialing";
 
 
 function App() {
@@ -39,6 +43,11 @@ function App() {
             <Route path = "/socialing/:id/edit" element={ <UpdateSocialing />} />
             <Route path="/books/:bookId" element={<BookDetail />} />
             <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/CreatePost" element={<CreatePost />}/>
+            <Route path="Login" element={<Login />} />
+            <Route path="ViewPost" element={<ViewPost />} />
+            <Route path="HotSocialing" element={<HotSocialing />} />
+
 
 
         </Routes>

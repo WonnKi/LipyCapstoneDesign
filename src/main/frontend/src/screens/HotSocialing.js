@@ -7,14 +7,14 @@ import Col from "react-bootstrap/Col";
 import axios from 'axios';
 import Card from "react-bootstrap/Card";
 
-const Socialing = () => {
+const HotSocialing = () => {
     const [socialings, setSocialings] = useState([]);
 
     useEffect(() => {
         const fetchSocialings = async () => {
             try {
-                const response = await axios.get('/socialing');
-                setSocialings(response.data.reverse());
+                const response = await axios.get('/socialing/hot');
+                setSocialings(response.data);
             } catch (error) {
                 console.error('소셜링을 불러오는 중 에러 발생:', error);
             }
@@ -29,8 +29,8 @@ const Socialing = () => {
                 <Container>
                     <Row className="justify-content-end">
                         <Col xs="auto" className="mb-2">
-                            <Link to="/HotSocialing">
-                                <Button>인기순</Button>
+                            <Link to="/Socialing">
+                                <Button>최신순</Button>
                             </Link>
                         </Col>
                         <Col xs="auto" >
@@ -68,4 +68,4 @@ const Socialing = () => {
     );
 };
 
-export default Socialing;
+export default HotSocialing;

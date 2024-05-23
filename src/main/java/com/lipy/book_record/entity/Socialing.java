@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Socialing {
 
     private String title;
     private String description;
+
     private String writer;
     private String content;
     private int maxparticipants; // 최대 참여자 수
@@ -26,6 +28,16 @@ public class Socialing {
     private Date date;
 
     //private String status; // "Pending", "Accepted", "Rejected"
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+
 
     // 다대다 관계로 멤버와 연결
     @JsonIgnore

@@ -18,11 +18,18 @@ public class Book {
     @Column(name = "id")
     private String id = UUID.randomUUID().toString();;
 
-    @NotNull
+//    @NotNull
+//    private String isbn;
+//
+//    @NotNull
+//    private String title;
+
+    @Column(nullable = false)
     private String isbn;
 
-    @NotNull
+    @Column(nullable = false)
     private String title;
+
 
     private String image;
 
@@ -51,6 +58,10 @@ public class Book {
     @ManyToOne
     private Users user;
 
+    @Setter
+    @ManyToOne
+    private Member member;
+
     @Builder
     public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users user){
         this.isbn = isbn;
@@ -66,6 +77,7 @@ public class Book {
         this.score = score;
         this.readPage = readPage;
         this.user = user;
+        this.member = member;
     }
 
 }
