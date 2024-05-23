@@ -4,12 +4,13 @@ import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import { PiStarFill, PiStarLight } from "react-icons/pi";
 
+
 function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToThirdBookCase }) {
     const [show, setShow] = useState(false);
     const [bookName, setBookName] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [showConfirmReadingModal, setShowConfirmReadingModal] = useState(false);
-    const [showConfirmFinishedModal, setShowConfirmFinishedModal] = useState(false);
+    const [showConfirmDoneModal, setShowConfirmDoneModal] = useState(false);
     const [selectedBookImage, setSelectedBookImage] = useState(null);
     const [rating, setRating] = useState(3);
 
@@ -42,14 +43,14 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
         handleClose();
     };
 
-    const handleOpenConfirmFinishedModal = (image) => {
+    const handleOpenConfirmDoneModal = (image) => {
         setSelectedBookImage(image);
-        setShowConfirmFinishedModal(true);
+        setShowConfirmDoneModal(true);
     };
 
-    const handleConfirmAddToFinishedList = () => {
+    const handleConfirmAddToDoneList = () => {
         onAddToThirdBookCase(selectedBookImage);
-        setShowConfirmFinishedModal(false);
+        setShowConfirmDoneModal(false);
         handleClose();
     };
 
@@ -105,9 +106,9 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                                                                 읽는 중인 책
                                                             </Button>
                                                         )}
-                                                        {type === 'finished' && (
+                                                        {type === 'done' && (
                                                             <Button variant="outline-dark"
-                                                                    onClick={() => handleOpenConfirmFinishedModal(item.image)}>
+                                                                    onClick={() => handleOpenConfirmDoneModal(item.image)}>
                                                                 다 읽은 책
                                                             </Button>
                                                         )}
@@ -146,7 +147,7 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showConfirmFinishedModal} onHide={() => setShowConfirmFinishedModal(false)} size="sm">
+            <Modal show={showConfirmDoneModal} onHide={() => setShowConfirmDoneModal(false)} size="sm">
                 <Modal.Header closeButton>
                     <Modal.Title>페이지, 별점</Modal.Title>
                 </Modal.Header>
@@ -164,10 +165,10 @@ function CaseModal({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddToT
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowConfirmFinishedModal(false)}>
+                    <Button variant="secondary" onClick={() => setShowConfirmDoneModal(false)}>
                         취소
                     </Button>
-                    <Button variant="primary" onClick={handleConfirmAddToFinishedList}>
+                    <Button variant="primary" onClick={handleConfirmAddToDoneList}>
                         저장
                     </Button>
                 </Modal.Footer>

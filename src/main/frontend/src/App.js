@@ -16,7 +16,7 @@ import CreateSocialingPost from "./screens/CreateSocialingPost";
 import SocialingDetail from "./screens/SocialingDetail";
 import UpdateSocialing from "./screens/UpdateSocialing";
 import BookDetail from "./screens/BookDetail";
-
+import SignUp from "./screens/SignUp";
 
 
 function App() {
@@ -38,6 +38,7 @@ function App() {
             <Route path = "/socialing/:id" element={ <SocialingDetail />} />
             <Route path = "/socialing/:id/edit" element={ <UpdateSocialing />} />
             <Route path="/books/:bookId" element={<BookDetail />} />
+            <Route path="/SignUp" element={<SignUp />} />
 
 
         </Routes>
