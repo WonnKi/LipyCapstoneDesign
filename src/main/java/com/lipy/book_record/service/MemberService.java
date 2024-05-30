@@ -29,6 +29,8 @@ public class MemberService  {
         memberRepository.save(member);
     }
 
+
+
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }

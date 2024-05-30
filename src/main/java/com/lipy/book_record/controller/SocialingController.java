@@ -41,6 +41,7 @@ public class SocialingController {
     }
 
 
+
     @GetMapping("/socialing") //게시글 목록 조회
     public ResponseEntity<List<SocialingListResponse>> findAllSocialing(){
         List<SocialingListResponse> socialing = socialingService.findAllSocialings()
@@ -73,7 +74,7 @@ public class SocialingController {
         Member member = memberService.findByUsername(username);
 
         // 게시글 작성자 설정, 현재 인원 설정
-        socialing.setWriter(member);
+        socialing.setWriter(member.getName());
         socialing.setCurrentparticipants(0);
 
         // 게시글 저장

@@ -12,7 +12,7 @@ import java.util.Date;
 public class SocialingResponse {
     private String title;
     private String description;
-    private Member writer;
+    private String writer;
     private String content;
     private int currentparticipants;
     private int maxparticipants;

@@ -51,9 +51,21 @@ public class SocialingApplicationService {
         List<SocialingApplication> applications = socialingApplicationRepository.findBySocialingId(socialingId);
         return applications.stream().map(app -> app.getMember().getUsername() + " (" + app.getMember().getEmail() + ")").collect(Collectors.toList());
     }
+
+
     private boolean userAlreadyApplied(Member user, Socialing socialing) {
         return socialing.getApplications().stream()
                 .anyMatch(application -> application.getMember().getId().equals(user.getId()));
+    }
+
+    public SocialingApplication findByMemberAndSocialing(Long memberId, Long socialingId) {
+        return socialingApplicationRepository.findByMemberIdAndSocialingId(memberId, socialingId)
+                .orElse(null);
+    }
+
+    public SocialingApplication findById(Long applicationId) {
+        return socialingApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
     }
 
     public void cancelSocialingApplication(Long applicationId) {

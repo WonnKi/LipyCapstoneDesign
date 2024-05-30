@@ -20,11 +20,7 @@ public class Socialing {
 
     private String title;
     private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private Member writer;
-
+    private String writer;
     private String content;
     private int maxparticipants; // 최대 참여자 수
     private int currentparticipants; // 현재 참여자 수

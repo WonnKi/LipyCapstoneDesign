@@ -11,7 +11,7 @@ import java.util.Date;
 public class SocialingListResponse {
     private String title;
     private String description;
-    private Member writer;
+    private String writer;
     private int currentparticipants;
     private int maxparticipants;
     private Date date;
@@ -30,7 +30,7 @@ public class SocialingListResponse {
     }
 
 
-    public SocialingListResponse(String title, String description, Member writer, int currentparticipants, int maxparticipants, Date date) {
+    public SocialingListResponse(String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
         this.title = title;
         this.description = description;
         this.writer = writer;

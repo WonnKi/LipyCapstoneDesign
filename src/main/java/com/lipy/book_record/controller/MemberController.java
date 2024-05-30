@@ -7,6 +7,7 @@ import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MemberController {
@@ -70,9 +74,15 @@ public class MemberController {
         return ResponseEntity.ok().body("Logout successful");
     }
 
-    @PostMapping("/socialing/{socialingId}/interest/{memberId}")
-    public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long memberId, @PathVariable Long socialingId) {
-        memberService.addFavoriteSocialing(memberId, socialingId);
+    @PostMapping("/socialing/{socialingId}/interest")
+    public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long socialingId) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Member member = memberService.findByUsername(username);
+
+        memberService.addFavoriteSocialing(member.getId(), socialingId);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
@@ -80,10 +90,28 @@ public class MemberController {
         memberService.cancelFavoriteSocialing(memberId, socialingId);
         return ResponseEntity.ok("Interest socialing removed successfully");
     }
-    @GetMapping("/socialing/interest/{memberId}")
-    public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(@PathVariable Long memberId) {
-        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(memberId);
+
+    @GetMapping("/interest/me")
+    public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(Principal principal) {
+        Member member = memberService.findByUsername(principal.getName());
+        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(member.getId());
         return ResponseEntity.ok().body(favoriteSocialings);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == "anonymousUser") {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Member member = memberService.findByUsername(userDetails.getUsername());
+
+        // 사용자 정보에서 name을 포함하여 반환
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("username", member.getUsername());
+        userInfo.put("name", member.getName());
+
+        return ResponseEntity.ok(userInfo);
+    }
 }
