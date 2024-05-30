@@ -5,7 +5,7 @@ import Home from "./screens/Home";
 import Bookcase from "./screens/Bookcase";
 import Community from "./screens/Community";
 import Socialing from "./screens/Socialing";
-import NevBar from "./components/NevBar";
+import NavBar from "./components/NavBar";
 import FirstBookCase from "./screens/firstBookCase";
 import SecondBookCase from "./screens/secondBookCase";
 import ThirdBookCase from "./screens/thirdBookCase";
@@ -21,12 +21,21 @@ import CreatePost from "./screens/CreatePost";
 import Login from "./screens/Login";
 import ViewPost from "./screens/ViewPost";
 import HotSocialing from "./screens/HotSocialing";
+import Home2 from "./screens/Home2";
+import SignUp2 from "./screens/SignUp2";
+import FavoriteSocialing from "./screens/FavoriteSocialing";
+import Home3 from "./screens/Home3";
+import MyPage from "./screens/MyPage";
+import Socialing2 from "./screens/Socialing2";
+import HotSocialing2 from "./screens/HotSocialing2";
+import SocialSearch2 from "./screens/SocialSearch2";
+import MyPage2 from "./screens/MyPage2";
 
 
 function App() {
   return (
       <BrowserRouter>
-        <NevBar/>
+        <NavBar/>
         <Routes>
             <Route path = "/" element={ <Home /> } />
             <Route path = "/Bookcase" element={ <Bookcase /> } />
@@ -47,8 +56,16 @@ function App() {
             <Route path="Login" element={<Login />} />
             <Route path="ViewPost" element={<ViewPost />} />
             <Route path="HotSocialing" element={<HotSocialing />} />
-
-
+            <Route path="Home2" element={<Home2 />} />
+            <Route path="SignUp2" element={<SignUp2 />} />
+            <Route path="ViewPost" element={<ViewPost />} />
+            <Route path="FavoriteSocialing" element={<FavoriteSocialing />} />
+            <Route path="Home3" element={<Home3 />} />
+            <Route path="MyPage" element={<MyPage />} />
+            <Route path="Socialing2" element={<Socialing2 />} />
+            <Route path="HotSocialing2" element={<HotSocialing2 />} />
+            <Route path="SocialSearch2" element={<SocialSearch2 />} />
+            <Route path="MyPage2" element={<MyPage2 />} />
 
         </Routes>
       </BrowserRouter>

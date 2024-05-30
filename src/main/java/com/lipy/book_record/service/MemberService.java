@@ -7,6 +7,7 @@ import com.lipy.book_record.repository.MemberRepository;
 import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class MemberService {
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
         return new SocialingListResponse(
+                socialing.getId(),
                 socialing.getTitle(),
                 socialing.getDescription(),
                 socialing.getWriter(),
@@ -77,5 +79,10 @@ public class MemberService {
         // 멤버의 즐겨찾기에 소셜링 추가
         member.getFavoriteSocialings().add(socialing);
         memberRepository.save(member);
+    }
+
+    public boolean isInterestSocialing(Long memberId, Long socialingId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return member.getFavoriteSocialings().stream().anyMatch(socialing -> socialing.getId().equals(socialingId));
     }
 }

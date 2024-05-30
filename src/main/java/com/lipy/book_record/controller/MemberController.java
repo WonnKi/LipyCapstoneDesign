@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,19 +74,33 @@ public class MemberController {
         return ResponseEntity.ok().body("Logout successful");
     }
 
-    @PostMapping("/socialing/{socialingId}/interest/{memberId}")
-    public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long memberId, @PathVariable Long socialingId) {
-        memberService.addFavoriteSocialing(memberId, socialingId);
+    @PostMapping("/socialing/{socialingId}/interest")
+    public ResponseEntity<?> addFavoriteSocialing(@PathVariable("socialingId") Long socialingId) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Member member = memberService.findByUsername(username);
+
+        memberService.addFavoriteSocialing(member.getId(), socialingId);
         return ResponseEntity.ok().build();
     }
-    @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
-    public ResponseEntity<String> removeInterestSocialing(@PathVariable Long memberId, @PathVariable Long socialingId) {
-        memberService.cancelFavoriteSocialing(memberId, socialingId);
+
+    @DeleteMapping("/socialing/{socialingId}/interest")
+    public ResponseEntity<String> removeInterestSocialing(@PathVariable("socialingId") Long socialingId) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Member member = memberService.findByUsername(username);
+
+        memberService.cancelFavoriteSocialing(member.getId(), socialingId);
         return ResponseEntity.ok("Interest socialing removed successfully");
     }
-    @GetMapping("/socialing/interest/{memberId}")
-    public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(@PathVariable Long memberId) {
-        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(memberId);
+    @GetMapping("/interest/me")
+    public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(Principal principal) {
+        Member member = memberService.findByUsername(principal.getName());
+        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(member.getId());
         return ResponseEntity.ok().body(favoriteSocialings);
     }
 
@@ -104,5 +119,17 @@ public class MemberController {
         userInfo.put("name", member.getName());
 
         return ResponseEntity.ok(userInfo);
+    }
+
+    @GetMapping("/socialing/{socialingId}/is-interest")
+    public ResponseEntity<Boolean> isInterestSocialing(@PathVariable Long socialingId) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Member member = memberService.findByUsername(username);
+
+        boolean isInterest = memberService.isInterestSocialing(member.getId(), socialingId);
+        return ResponseEntity.ok(isInterest);
     }
 }

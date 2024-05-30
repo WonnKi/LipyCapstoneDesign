@@ -2,12 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Container from "react-bootstrap/Container";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const SocialingDetails = () => {
     const { id } = useParams();
     const [post, setPost] = useState(null);
     const [message, setMessage] = useState('');
     const [isAuthor, setIsAuthor] = useState(false);
+    const [isApplied, setIsApplied] = useState(false);
+    const [applicationId, setApplicationId] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [applicants, setApplicants] = useState([]);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -33,11 +40,44 @@ const SocialingDetails = () => {
                 const loggedInName = userResponse.data.name;
                 setIsAuthor(postResponse.data.writer === loggedInName);
 
+                const applyResponse = await axios.get(`http://localhost:8080/${id}/isApplied`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setIsApplied(applyResponse.data.isApplied);
+                setApplicationId(applyResponse.data.applicationId);
+
             } catch (error) {
                 setMessage('Error fetching post: ' + (error.response?.data || error.message));
             }
         };
         fetchPost();
+    }, [id]);
+
+
+
+    useEffect(() => {
+        const fetchApplicants = async () => {
+            try {
+                setLoading(true);
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    setMessage('회원에게만 보이는 글 입니다');
+                    return;
+                }
+                const response = await axios.get(`http://localhost:8080/apply/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setApplicants(response.data);
+                setLoading(false);
+            } catch (error) {
+                setLoading(false);
+            }
+        };
+        fetchApplicants();
     }, [id]);
 
     const handleDeleteClick = () => {
@@ -65,33 +105,89 @@ const SocialingDetails = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            setIsApplied(true);
             setMessage('신청 성공');
+            window.location.reload();
         } catch (error) {
             setMessage('신청 실패: ' + (error.response?.data || error.message));
         }
     };
 
-    if (!post) {
-        return (
-            <div>
-                <section className="page-section cta">
-                    회원에게만 보이는 글 입니다
-                </section>
-            </div>
-        );
-    }
+    const handleCancelClick = async () => {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                setMessage('No token found, please login again.');
+                return;
+            }
+            await axios.delete(`http://localhost:8080/socialing/apply/${applicationId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setIsApplied(false);
+            setMessage('취소 성공');
+        } catch (error) {
+            setMessage('취소 실패: ' + (error.response?.data || error.message));
+        }
+    };
+
+    const handleShowApplicants = async () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const handleAddInterestClick = async () => {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                setMessage('No token found, please login again.');
+                return;
+            }
+            await axios.post(`http://localhost:8080/socialing/${id}/interest`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setMessage('관심 등록 성공');
+        } catch (error) {
+            setMessage('관심 등록 실패: ' + (error.response?.data || error.message));
+        }
+    };
+
+    const handleRemoveInterestClick = async () => {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                setMessage('No token found, please login again.');
+                return;
+            }
+            await axios.delete(`http://localhost:8080/socialing/${id}/interest`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setMessage('관심 등록 취소 성공');
+        } catch (error) {
+            setMessage('관심 등록 취소 실패: ' + (error.response?.data || error.message));
+        }
+    };
 
     return (
         <section className="page-section cta">
             <Container>
                 <div className="cta-inner bg-faded text-center rounded">
-                    <h3>{post.title}</h3>
+                    <h3>{post?.title}</h3>
                     <hr/>
-                    <h6 style={{float: "left"}}>{post.writer}·{new Date(post.date).toLocaleDateString()}</h6>
+                    <h6 style={{float: "left"}}>{post?.writer}·{new Date(post?.date).toLocaleDateString()}</h6>
                     <br/>
                     <br/>
-                    <p>{post.content}</p>
-                    <p>모집 : {post.currentparticipants}/{post.maxparticipants} </p>
+                    <p>{post?.content}</p>
+                    <p>모집 : {post?.currentparticipants}/{post?.maxparticipants} </p>
+                    <button onClick={handleShowApplicants}>신청자 보기</button>
                     <hr/>
                     <div style={{float: "left"}}>
                         {isAuthor && (
@@ -102,17 +198,41 @@ const SocialingDetails = () => {
                         )}
                     </div>
                     <div style={{float: "right"}}>
-                        <button onClick={handleApplyClick}>신청하기</button>
-
-                        <button>관심등록</button>
+                        {isApplied ? (
+                            <button onClick={handleCancelClick}>신청 취소</button>
+                        ) : (
+                            <button onClick={handleApplyClick}>신청하기</button>
+                        )}
+                        <button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
+                            {isApplied ? "관심 등록 취소" : "관심등록"}
+                        </button>
                     </div>
                     {message && <p>{message}</p>}
                 </div>
             </Container>
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>신청자 목록</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        <ul>
+                            {applicants.map((applicant, index) => (
+                                <li key={index}>{applicant.name} - {applicant.email}</li>
+                            ))}
+                        </ul>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        닫기
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </section>
     );
 };
 
 export default SocialingDetails;
-
-

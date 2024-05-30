@@ -109,7 +109,7 @@ const SecondBookCase = () => {
 
     return (
         <div>
-            <Tab/>
+            {/*<Tab/>*/}
             <Container style={{ background: "#E0B88A" }}>
                 {renderBooks()}
             </Container>

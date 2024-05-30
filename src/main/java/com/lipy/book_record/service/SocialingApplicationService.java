@@ -1,5 +1,6 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.ApplicantInfo;
 import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.entity.SocialingApplication;
@@ -9,6 +10,7 @@ import com.lipy.book_record.repository.SocialingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,9 +49,19 @@ public class SocialingApplicationService {
         return socialingApplication.getId();
     }
 
-    public List<String> findApplicantInfoBySocialingId(Long socialingId) {
+    public List<ApplicantInfo> findApplicantInfoBySocialingId(Long socialingId) {
         List<SocialingApplication> applications = socialingApplicationRepository.findBySocialingId(socialingId);
-        return applications.stream().map(app -> app.getMember().getUsername() + " (" + app.getMember().getEmail() + ")").collect(Collectors.toList());
+        List<ApplicantInfo> applicantInfos = new ArrayList<>();
+        for (SocialingApplication application : applications) {
+            Member member = memberRepository.findById(application.getMember().getId()).orElse(null);
+            if (member != null) {
+                ApplicantInfo info = new ApplicantInfo();
+                info.setName(member.getName());
+                info.setEmail(member.getEmail());
+                applicantInfos.add(info);
+            }
+        }
+        return applicantInfos;
     }
     private boolean userAlreadyApplied(Member user, Socialing socialing) {
         return socialing.getApplications().stream()
@@ -67,5 +79,15 @@ public class SocialingApplicationService {
 
         // 소셜링 신청 삭제
         socialingApplicationRepository.delete(socialingApplication);
+    }
+
+    public SocialingApplication findById(Long applicationId) {
+        return socialingApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
+    }
+
+    public SocialingApplication findByMemberAndSocialing(Long memberId, Long socialingId) {
+        return socialingApplicationRepository.findByMemberIdAndSocialingId(memberId, socialingId)
+                .orElse(null);
     }
 }
