@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
 
 const Home = () => {
     const [socialings, setSocialings] = useState([]);
@@ -42,48 +44,53 @@ const Home = () => {
                             소셜링 페이지
                         </Link>
                     </div>
+                    <hr/>
+                    <Link className="btn btn-user btn-block" to="/Login">
+                        로그인
+                    </Link>
+                    <Link className="btn btn-user btn-block" to="/signup2">
+                        회원이 아니신가요?
+                    </Link>
                 </div>
 
                 <div id="content-wrapper" className="d-flex flex-column">
                     <div id="content">
-                        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                            <div className="navbar-nav ml-auto">
-                                <Link className="btn btn-primary btn-user btn-block" to="/Login">
-                                    로그인
-                                </Link>
-                            </div>
-                        </nav>
+
                         <div className="container-fluid">
                             <div className="row">
-                                <div className="col-lg-8 mb-3">
-                                    <div className="card shadow mb-4">
-                                        <div className="card-header py-3">
-                                            <h6 className="m-0 font-weight-bold text-primary">인기도서</h6>
+                                <div className="row">
+                                    <div className="col-xl-8 col-lg-5">
+                                        <div className="card shadow mb-4">
+                                            <div
+                                                className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 className="m-0 font-weight-bold text-primary">캘린더</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <div>
+                                                    <FullCalendar
+                                                        plugins={[dayGridPlugin]}
+                                                        initialView="dayGridMonth"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="card-body">
-                                            <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+                                    </div>
+                                    <div className="col-xl-4 col-lg-3">
+                                        <div className="card shadow mb-4">
+                                            <div
+                                                className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 className="m-0 font-weight-bold text-primary">현재 읽는 중</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <div>
+                                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                                    <br/><br/><br/><br/><br/><br/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-4 mb-3">
-                                    <div className="card shadow mb-4">
-                                        <div className="card-header py-3">
-                                            <h6 className="m-0 font-weight-bold text-primary">--</h6>
-                                        </div>
-                                        <div className="card-body">
-                                            <br/>
-                                            <br/>
-                                        </div>
-                                    </div>
-                                    <div className="card shadow mb-4">
-                                        <div className="card-header py-3">
-                                            <h6 className="m-0 font-weight-bold text-primary">--</h6>
-                                        </div>
-                                        <div className="card-body">
-                                            <br/> <br/>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div className="col-lg-12 mb-8">
                                     <div className="card shadow mb-4">
                                         <div
@@ -153,9 +160,7 @@ const Home = () => {
                     </div>
                     <footer className="sticky-footer bg-white">
                         <div className="container my-auto">
-                            <div className="copyright text-center my-auto">
-                                <span>Copyright &copy; Your Website 2021</span>
-                            </div>
+
                         </div>
                     </footer>
                 </div>

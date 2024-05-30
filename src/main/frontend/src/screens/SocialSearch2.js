@@ -33,27 +33,26 @@ const SocialSearch2 = () => {
                     </li>
                     <hr/>
                     <div className="nav-item">
-                        <Link className="nav-link" to="/mypage">
+                        <Link className="nav-link" to="/mypage2">
                             마이 페이지
                         </Link>
                     </div>
                     <div className="nav-item">
-                        <Link className="nav-link" to="/socialing">
+                        <Link className="nav-link" to="/socialing2">
                             소셜링 페이지
                         </Link>
                     </div>
+                    <hr/>
+                    <Link className="btn btn-user btn-block" to="/Login">
+                        로그인
+                    </Link>
+                    <Link className="btn btn-user btn-block" to="/signup2">
+                        회원이 아니신가요?
+                    </Link>
                 </div>
 
                 <div id="content-wrapper" className="d-flex flex-column">
                     <div id="content">
-                        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                            <div className="navbar-nav ml-auto">
-
-                                <Link className="btn btn-primary btn-user btn-block" to="/Login">
-                                    로그인
-                                </Link>
-                            </div>
-                        </nav>
                         <div className="container-fluid">
                             <div className="row">
                                 <div className="col-lg-12 mb-8">
@@ -67,7 +66,7 @@ const SocialSearch2 = () => {
                                                     value={searchTerm}
                                                     onChange={(e) => setSearchTerm(e.target.value)}
                                                 />
-                                                <Button onClick={handleSearch} style={{ height: 50 }}>검색</Button>
+                                                <Button onClick={handleSearch} style={{height: 50}}>검색</Button>
                                             </a>
                                         </nav>
                                         <div className="card-body">
@@ -78,9 +77,11 @@ const SocialSearch2 = () => {
                                                               className="text-decoration-none">
                                                             <Card className="h-100">
                                                                 <Card.Body>
-                                                                    <Card.Title>{socialing.title}<br />{new Date(socialing.date).toLocaleDateString()}</Card.Title>
-                                                                    <Card.Text>{socialing.description}<br />{socialing.writer}</Card.Text>
-                                                                    <hr />
+                                                                    <Card.Title>{socialing.title}<br/>{new Date(socialing.date).toLocaleDateString()}
+                                                                    </Card.Title>
+                                                                    <Card.Text>{socialing.description}<br/>{socialing.writer}
+                                                                    </Card.Text>
+                                                                    <hr/>
                                                                     <p>참여자 수: {socialing.currentparticipants}</p>
                                                                     <p>최대 참여자 수: {socialing.maxparticipants}</p>
                                                                 </Card.Body>
@@ -94,12 +95,11 @@ const SocialSearch2 = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>                    </div>
+                        </div>
+                    </div>
                     <footer className="sticky-footer bg-white">
                         <div className="container my-auto">
-                            <div className="copyright text-center my-auto">
-                                <span>Copyright &copy; Your Website 2021</span>
-                            </div>
+
                         </div>
                     </footer>
                 </div>

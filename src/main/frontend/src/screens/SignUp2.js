@@ -76,10 +76,7 @@ const SignUp2 = () => {
                                 <div className="text-center">
                                 <a className="small" href="login">이미 계정이 있으신가요?</a>
                                 </div>
-                                <div>
-                                    <a href="https://www.freepik.com/free-vector/hand-drawn-flat-design-poetry-illustration_23252610.htm#fromView=search&page=2&position=3&uuid=785c4f8e-4b31-4c52-851f-860ecc552c56">Image
-                                        by freepik</a>
-                                </div>
+
                             </div>
                         </div>
                     </div>

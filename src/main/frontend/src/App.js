@@ -35,7 +35,7 @@ import MyPage2 from "./screens/MyPage2";
 function App() {
   return (
       <BrowserRouter>
-        <NavBar/>
+        {/*<NavBar/>*/}
         <Routes>
             <Route path = "/" element={ <Home /> } />
             <Route path = "/Bookcase" element={ <Bookcase /> } />

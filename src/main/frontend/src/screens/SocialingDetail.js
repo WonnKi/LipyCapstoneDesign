@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import Container from "react-bootstrap/Container";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import { Container, Card, Button, Modal, Spinner, Alert } from 'react-bootstrap';
 
 const SocialingDetails = () => {
     const { id } = useParams();
@@ -22,7 +20,6 @@ const SocialingDetails = () => {
             try {
                 const token = localStorage.getItem('jwtToken');
                 if (!token) {
-                    setMessage('No token found, please login again.');
                     return;
                 }
                 const postResponse = await axios.get(`http://localhost:8080/socialing/${id}`, {
@@ -54,8 +51,6 @@ const SocialingDetails = () => {
         };
         fetchPost();
     }, [id]);
-
-
 
     useEffect(() => {
         const fetchApplicants = async () => {
@@ -106,10 +101,8 @@ const SocialingDetails = () => {
                 },
             });
             setIsApplied(true);
-            setMessage('신청 성공');
             window.location.reload();
         } catch (error) {
-            setMessage('신청 실패: ' + (error.response?.data || error.message));
         }
     };
 
@@ -126,9 +119,9 @@ const SocialingDetails = () => {
                 },
             });
             setIsApplied(false);
-            setMessage('취소 성공');
+            window.location.reload();
         } catch (error) {
-            setMessage('취소 실패: ' + (error.response?.data || error.message));
+
         }
     };
 
@@ -152,9 +145,8 @@ const SocialingDetails = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setMessage('관심 등록 성공');
+            window.location.reload();
         } catch (error) {
-            setMessage('관심 등록 실패: ' + (error.response?.data || error.message));
         }
     };
 
@@ -170,45 +162,53 @@ const SocialingDetails = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setMessage('관심 등록 취소 성공');
+            window.location.reload();
         } catch (error) {
-            setMessage('관심 등록 취소 실패: ' + (error.response?.data || error.message));
         }
     };
 
     return (
         <section className="page-section cta">
             <Container>
-                <div className="cta-inner bg-faded text-center rounded">
-                    <h3>{post?.title}</h3>
-                    <hr/>
-                    <h6 style={{float: "left"}}>{post?.writer}·{new Date(post?.date).toLocaleDateString()}</h6>
-                    <br/>
-                    <br/>
-                    <p>{post?.content}</p>
-                    <p>모집 : {post?.currentparticipants}/{post?.maxparticipants} </p>
-                    <button onClick={handleShowApplicants}>신청자 보기</button>
-                    <hr/>
-                    <div style={{float: "left"}}>
-                        {isAuthor && (
-                            <div>
-                                <button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</button>
-                                <button onClick={handleDeleteClick}>삭제</button>
+                <Card className="my-3">
+                    <Card.Header as="h3">{post?.title}</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                            <div className="d-flex justify-content-between">
+                                <span>{post?.writer}</span>
+                                {isAuthor && (
+                                    <div>
+                                        <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
+                                        <Button onClick={handleDeleteClick}>삭제</Button>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                    <div style={{float: "right"}}>
-                        {isApplied ? (
-                            <button onClick={handleCancelClick}>신청 취소</button>
-                        ) : (
-                            <button onClick={handleApplyClick}>신청하기</button>
-                        )}
-                        <button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
-                            {isApplied ? "관심 등록 취소" : "관심등록"}
-                        </button>
-                    </div>
-                    {message && <p>{message}</p>}
-                </div>
+                            <hr/>
+                            <p>{post?.content}</p>
+                            <div style={{margin: '100px 0'}}></div>
+                            <div className="text-center my-4">
+                                <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
+                            </div>
+                            <hr/>
+                            <p>모집: {post?.currentparticipants}/{post?.maxparticipants}</p>
+                            <div className="d-flex justify-content-between">
+                                <Button onClick={handleShowApplicants}>신청자 보기</Button>
+                                <div>
+                                    {isApplied ? (
+                                        <Button onClick={handleCancelClick}>신청 취소</Button>
+                                    ) : (
+                                        <Button onClick={handleApplyClick}>신청하기</Button>
+                                    )}
+                                    {' '}
+                                    <Button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
+                                        {isApplied ? "관심 등록 취소" : "관심등록"}
+                                    </Button>
+                                </div>
+                            </div>
+                            {message && <Alert variant="info" className="mt-3">{message}</Alert>}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             </Container>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
@@ -216,7 +216,7 @@ const SocialingDetails = () => {
                 </Modal.Header>
                 <Modal.Body>
                     {loading ? (
-                        <p>Loading...</p>
+                        <Spinner animation="border" />
                     ) : (
                         <ul>
                             {applicants.map((applicant, index) => (
