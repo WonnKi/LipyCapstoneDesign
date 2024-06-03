@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -49,10 +51,15 @@ public class Book {
 
     @Setter
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private Users user;
 
+    @Column(name = "records")
+    @OneToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    private List<Record> records = new ArrayList<>();
+
     @Builder
-    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users user){
+    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users user, List<Record> records){
         this.isbn = isbn;
         this.title = title;
         this.image = image;
@@ -68,4 +75,8 @@ public class Book {
         this.user = user;
     }
 
+    public void addRecord(Record record) {
+        record.setBooks(this);
+        this.records.add(record);
+    }
 }

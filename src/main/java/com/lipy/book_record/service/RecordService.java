@@ -1,12 +1,9 @@
 package com.lipy.book_record.service;
 
-import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.RecordDto;
-import com.lipy.book_record.dto.UsersDto;
+import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.Record;
-import com.lipy.book_record.entity.Users;
-import com.lipy.book_record.repository.RecordRepository;
-import com.lipy.book_record.repository.UsersRepository;
+import com.lipy.book_record.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,39 +15,38 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RecordService {
-    private final RecordRepository recordRep;
-    private final UsersRepository userRep;
+    private final BookRepository bookRep;
 
+    public ResponseEntity<String> saveRecord(Long userId, String isbn,@RequestBody RecordDto recordDto) {
+        try {
+            if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
+                return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
+            }
+            Record record = Record.builder()
+                    .title(recordDto.getTitle())
+                    .content(recordDto.getContent())
+                    .recordDate(LocalDate.now())
+                    .build();
 
-    public ResponseEntity<String> saveRecord(Long id, @RequestBody RecordDto recordDto) {
+            Book book = bookRep.findByUserIdAndIsbn(userId,isbn);
 
-        recordDto.setRecordDate(LocalDate.now());
-        Record record = Record.builder()
-                .title(recordDto.getTitle())
-                .content(recordDto.getContent())
-                .recordDate(LocalDate.now())
-                .build();
+            record.setBooks(book);
+            book.addRecord(record);
+            bookRep.save(book);
 
-        UsersDto user = userRep.findById(id)
-                .map(this::convertToDto)
-                .orElseThrow(() -> new RuntimeException("유저 정보를 찾을 수 없습니다. : " + id));
+            return ResponseEntity.ok("기록 저장이 완료되었습니다.");
 
-        user.addRecord(record);
-
-        userRep.save(user.toEntity());
-
-        return ResponseEntity.ok("기록 저장이 완료되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "의 책을 삭제하는 중 오류가 발생했습니다.");
+        }
     }
 
-
-    private UsersDto convertToDto(Users user) {
-        return new UsersDto(user.getId(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBooks(), user.getRecords());
-    }
-
-    public List<RecordDto> ViewRecordList(Long id) {
-        return userRep
-                .findById(id)
-                .orElseThrow(() -> new RuntimeException("ID : " + id + " 를 찾을 수 없습니다."))
+    public List<RecordDto> FindRecordList(Long id, String isbn){
+        if (!bookRep.existsByUserIdAndIsbn(id, isbn)) {
+            return null;
+        }
+        return bookRep
+                .findByUserIdAndIsbn(id,isbn)
                 .getRecords()
                 .stream()
                 .map(RecordDto::new)

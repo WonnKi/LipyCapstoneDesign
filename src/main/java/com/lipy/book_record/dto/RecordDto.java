@@ -1,5 +1,6 @@
 package com.lipy.book_record.dto;
 
+import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.Record;
 import com.lipy.book_record.entity.Users;
 import jakarta.persistence.Column;
@@ -8,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Getter
@@ -30,7 +32,7 @@ public class RecordDto {
 
     @Setter
     @ManyToOne
-    private Users user;
+    private Book book;
 
     public RecordDto(Record record) {
         this.id = record.getId();

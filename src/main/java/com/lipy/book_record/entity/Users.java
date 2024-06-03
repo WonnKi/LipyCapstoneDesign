@@ -24,28 +24,27 @@ public class Users {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "pwd", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "userName", nullable = false)
+    private String userName;
+
     @Column(name = "nickname", nullable = false)
-    private String nickname;
+    private String nickName;
 
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
 
-    @Column(name = "records")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Record> records = new ArrayList<>();
-
     @Builder
-    public Users(Long id, String email, String pwd, String nick, List<Book> books, List<Record> records) {
+    public Users(Long id, String email, String pwd, String userName, String nickName, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = pwd;
-        this.nickname = nick;
+        this.userName = userName;
+        this.nickName = nickName;
         this.books = books;
-        this.records = records;
     }
 
 

@@ -14,13 +14,12 @@ import java.util.List;
 public class RecordController {
     private final RecordService recordService;
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<String> createRecord(@PathVariable("userId") Long userId, @RequestBody RecordDto recordDto) {
-        return recordService.saveRecord(userId, recordDto);
+    @PostMapping("/{userId}/{isbn}")
+    public ResponseEntity<String> createRecord(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn, @RequestBody RecordDto recordDto) {
+        return recordService.saveRecord(userId, isbn, recordDto);
     }
-
-    @GetMapping("/{userId}")
-    public List<RecordDto> getRecordById(@PathVariable("userId") Long userId) {
-        return recordService.ViewRecordList(userId);
+    @GetMapping("/{userId}/{isbn}")
+    public List<RecordDto> getRecordById(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn) {
+        return recordService.FindRecordList(userId, isbn);
     }
 }
