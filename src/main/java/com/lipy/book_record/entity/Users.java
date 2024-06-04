@@ -1,6 +1,5 @@
 package com.lipy.book_record.entity;
 
-import com.lipy.book_record.dto.UsersDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -27,11 +26,11 @@ public class Users {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "userName", nullable = false)
-    private String userName;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Column(name = "nickname", nullable = false)
-    private String nickName;
+    private String nickname;
 
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -42,8 +41,8 @@ public class Users {
         this.id=id;
         this.email = email;
         this.password = pwd;
-        this.userName = userName;
-        this.nickName = nickName;
+        this.username = userName;
+        this.nickname = nickName;
         this.books = books;
     }
 

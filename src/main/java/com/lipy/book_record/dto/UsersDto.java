@@ -17,8 +17,8 @@ public class UsersDto {
     private Long id;
     private String email;
     private String password;
-    private String userName;
-    private String nickName;
+    private String username;
+    private String nickname;
     private List<Book> books;
 
     public void addBook(Book book){
@@ -35,8 +35,8 @@ public class UsersDto {
                 .id(this.id)
                 .email(this.email)
                 .pwd(this.password)
-                .userName(this.userName)
-                .nickName(this.nickName)
+                .userName(this.username)
+                .nickName(this.nickname)
                 .books(this.books)
                 .build();
         if (this.books != null) {
@@ -45,5 +45,14 @@ public class UsersDto {
             }
         }
         return user;
+    }
+
+    public UsersDto(Users user){
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.username = user.getUsername();
+        this.nickname = user.getNickname();
+        this.books = user.getBooks();
     }
 }

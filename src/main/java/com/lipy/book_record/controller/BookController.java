@@ -3,6 +3,7 @@ package com.lipy.book_record.controller;
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.dto.UsersDto;
+import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,9 @@ import java.util.List;
 public class BookController {
     private final BookService saveService;
 
-    @PostMapping("/")
-    public String SaveBook(UsersDto user, SearchDto info){
-        saveService.saveBook(user, info);
+    @PostMapping("/{userId}")
+    public String SaveBook(@PathVariable("userId") Long userId, SearchDto info, @RequestBody int page){
+        saveService.saveBook(userId, info, page);
         return "저장완료";
     }
     @GetMapping("/{userId}")
