@@ -1,11 +1,13 @@
 package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.SocialingListResponse;
+import com.lipy.book_record.dto.SocialingRequest;
 import com.lipy.book_record.dto.SocialingResponse;
 import com.lipy.book_record.dto.UpdateSocialingRequest;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.service.SocialingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.lipy.book_record.entity.Member;
@@ -13,8 +15,17 @@ import com.lipy.book_record.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class SocialingController {
@@ -66,21 +77,31 @@ public class SocialingController {
         Socialing socialing = socialingService.update(socialingId, request);
         return ResponseEntity.ok().body(socialing);
     }
-    @PostMapping("/socialing/post") // 게시글 생성
+    @PostMapping("/socialing/post")
     public ResponseEntity<Socialing> createSocialingPost(@RequestBody Socialing socialing) {
-        // 현재 로그인한 사용자의 정보를 가져옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
         Member member = memberService.findByUsername(username);
 
-        // 게시글 작성자 설정, 현재 인원 설정
         socialing.setWriter(member.getName());
         socialing.setCurrentparticipants(0);
 
-        // 게시글 저장
         Socialing createdPost = socialingService.createSocialingPost(socialing);
         return ResponseEntity.ok(createdPost);
+    }
+
+    @PostMapping("/socialing/uploadImage")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path path = Paths.get("C:/images/" + fileName);
+            Files.copy(file.getInputStream(), path);
+            String imageUrl = "/images/" + fileName;  // Return a relative path to be used by the front-end
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Image upload failed");
+        }
     }
 
 

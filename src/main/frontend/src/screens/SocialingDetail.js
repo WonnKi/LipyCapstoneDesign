@@ -75,16 +75,24 @@ const SocialingDetails = () => {
         fetchApplicants();
     }, [id]);
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = async () => {
         const isConfirmed = window.confirm('삭제 하시겠습니까?');
         if (isConfirmed) {
-            axios.delete(`/socialing/${id}`)
-                .then(() => {
-                    navigate('/socialing');
-                })
-                .catch(error => {
-                    console.error('게시글을 삭제하는 중 에러 발생:', error);
+            try {
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    setMessage('No token found, please login again.');
+                    return;
+                }
+                await axios.delete(`http://localhost:8080/socialing/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
+                navigate('/socialing');
+            } catch (error) {
+                console.error('게시글을 삭제하는 중 에러 발생:', error);
+            }
         }
     };
 
@@ -184,8 +192,10 @@ const SocialingDetails = () => {
                                 )}
                             </div>
                             <hr/>
-                            <p>{post?.content}</p>
-                            <div style={{margin: '100px 0'}}></div>
+                            <div className="post-content">
+                                <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+                            </div>
+                            <div style={{ margin: '100px 0' }}></div>
                             <div className="text-center my-4">
                                 <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
                             </div>

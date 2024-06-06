@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card";
 import axios from "axios";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import Sidebar from "../components/BC/Sidebar"
 
 const Home = () => {
     const [socialings, setSocialings] = useState([]);
@@ -22,40 +23,14 @@ const Home = () => {
     }, []);
 
     return (
-        <div>
+        <div
+        style={{
+            background:"black"
+        }}>
             <div id="wrapper">
-                <div className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                    <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                        <div className="sidebar-brand-text mx-3">LIPY</div>
-                    </a>
-                    <hr className="sidebar-divider my-0"/>
-                    <li className="nav-item active">
-                        <a className="nav-link" href="/">
-                            <span>홈</span></a>
-                    </li>
-                    <hr/>
-                    <div className="nav-item">
-                        <Link className="nav-link" to="/mypage2">
-                            마이 페이지
-                        </Link>
-                    </div>
-                    <div className="nav-item">
-                        <Link className="nav-link" to="/socialing2">
-                            소셜링 페이지
-                        </Link>
-                    </div>
-                    <hr/>
-                    <Link className="btn btn-user btn-block" to="/Login">
-                        로그인
-                    </Link>
-                    <Link className="btn btn-user btn-block" to="/signup2">
-                        회원이 아니신가요?
-                    </Link>
-                </div>
-
+                <Sidebar/>
                 <div id="content-wrapper" className="d-flex flex-column">
                     <div id="content">
-
                         <div className="container-fluid">
                             <div className="row">
                                 <div className="row">
@@ -163,29 +138,6 @@ const Home = () => {
 
                         </div>
                     </footer>
-                </div>
-            </div>
-            <a className="scroll-to-top rounded" href="#page-top">
-                <i className="fas fa-angle-up"></i>
-            </a>
-            <div className="modal fade" id="logoutModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                            <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">Select "Logout" below if you are ready to end your current
-                            session.
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                            <a className="btn btn-primary" href="login.html">Logout</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

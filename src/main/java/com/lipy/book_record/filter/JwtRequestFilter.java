@@ -35,6 +35,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
 
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/images/")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {

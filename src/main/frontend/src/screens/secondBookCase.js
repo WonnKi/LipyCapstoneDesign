@@ -1,157 +1,110 @@
-import React, { useState } from "react";
-import Tab from "../components/BC/Tab";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 import CaseModal from "../components/BC/CaseModal";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 
 const SecondBookCase = () => {
     const [readingBooks, setReadingBooks] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [memoText, setMemoText] = useState('');
-    const [memoList, setMemoList] = useState([]);
-    const [selectedMemoIndex, setSelectedMemoIndex] = useState(null);
-
-    const addBookToReadingList = (bookImage) => {
-        setReadingBooks([...readingBooks, { image: bookImage }]);
+    const addBookToReadingList = (bookImage, bookAuthor, bookTitle, bookPublisher, startDate) => {
+        setReadingBooks([...readingBooks, {
+            image: bookImage,
+            author: bookAuthor,
+            title: bookTitle,
+            publisher: bookPublisher,
+            status: "읽는 중",
+            startDate: startDate }]);
     };
-
-    const handleImageClick = (image) => {
-        setSelectedImage(image);
-        setShowModal(true);
+    const handleStatusChange = (index, newStatus) => {
+        const updatedBooks = [...readingBooks];
+        updatedBooks[index].status = newStatus;
+        setReadingBooks(updatedBooks);
     };
-
-    const removeBook = (index) => {
-        if (window.confirm('정말 삭제하시겠습니까?')) {
-            const updatedBooks = [...readingBooks];
-            updatedBooks.splice(index, 1);
-            setReadingBooks(updatedBooks);
-        }
-    };
-
-    const handleMemoChange = (event) => {
-        setMemoText(event.target.value);
-    };
-
-    const handleSaveMemo = () => {
-        const newMemoList = [...memoList, memoText];
-        setMemoList(newMemoList);
-        setMemoText('');
-    };
-
-    const handleMemoButtonClick = (index) => {
-        setSelectedMemoIndex(index);
-        setShowModal(true);
-    };
-
-    const renderMemoButtons = () => {
-        return memoList.map((memo, index) => (
-            <Button
-                key={index}
-                variant="primary"
-                onClick={() => handleMemoButtonClick(index)}
-            >
-                {index + 1}번째 메모
-            </Button>
-        ));
-    };
-
-    const renderBooks = () => {
-        const rows = [];
-        let currentRow = [];
-        let totalCols = readingBooks.length;
-
-        readingBooks.forEach((book, index) => {
-            currentRow.push(
-                <Col key={index} className={'ColBC'} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <img
-                        src={book.image}
-                        alt="Book"
-                        style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', cursor: 'pointer' }}
-                        onClick={() => handleImageClick(book.image)}
-                    />
-                    <Button
-                        variant="danger"
-                        style={{ position: 'absolute', top: '0%', right: '10%' }}
-                        onClick={() => removeBook(index)}
-                    >
-                        x
-                    </Button>
-                </Col>
-            );
-            if (currentRow.length === 5) {
-                rows.push(<Row key={index / 5}>{currentRow}</Row>);
-                currentRow = [];
-            }
-        });
-
-        if (currentRow.length < 5) {
-            currentRow.push(
-                <Col key={totalCols} className={'ColBC'} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <CaseModal type="reading" onAddToSecondBookCase={addBookToReadingList} />
-                </Col>
-            );
-            totalCols += 1;
-        }
-
-        while (currentRow.length < 5) {
-            currentRow.push(<Col key={totalCols} className={'ColBC'}/>);
-            totalCols += 1;
-        }
-
-        rows.push(<Row key={totalCols / 5}>{currentRow}</Row>);
-
-        return rows;
-    };
-
     return (
         <div>
-            {/*<Tab/>*/}
-            <Container style={{ background: "#E0B88A" }}>
-                {renderBooks()}
-            </Container>
-
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Body style={{overflow: "auto", height: 600}}>
-                    {selectedMemoIndex !== null ? (
-                        <div>
-                            <h4>{selectedMemoIndex + 1}번째 메모</h4>
-                            <p>{memoList[selectedMemoIndex]}</p>
-                            <Button variant="primary" onClick={() => setSelectedMemoIndex(null)}>돌아가기</Button>
+            <div id="wrapper">
+                <div className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                    <a className="sidebar-brand d-flex align-items-center justify-content-center">
+                        <div className="sidebar-brand-text mx-3">LIPY</div>
+                    </a>
+                    <hr className="sidebar-divider my-0"/>
+                    <li className="nav-item active">
+                        <a className="nav-link" href="/">
+                            <span>홈</span></a>
+                    </li>
+                    <hr/>
+                    <div className="nav-item">
+                        <Link className="nav-link" to="/mypage2">
+                            마이 페이지
+                        </Link>
+                    </div>
+                    <div className="nav-item">
+                        <Link className="nav-link" to="/socialing2">
+                            소셜링 페이지
+                        </Link>
+                    </div>
+                    <hr/>
+                    <Link className="btn btn-user btn-block" to="/Login">
+                        로그인
+                    </Link>
+                    <Link className="btn btn-user btn-block" to="/signup2">
+                        <a className="small" href="signup2">회원이 아니신가요?</a>
+                    </Link>
+                </div>
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-lg-12 mb-8">
+                                    <div className="card shadow mb-4">
+                                        <div
+                                            className="card-header py-3 d-flex justify-content-between align-items-center">
+                                            <h6 className="m-0 font-weight-bold text-primary">독서 기록</h6>
+                                            <CaseModal type="reading"
+                                                       onAddToSecondBookCase={addBookToReadingList}/>
+                                        </div>
+                                        <div className="card-body">
+                                            <div className="row">
+                                                <Table bordered hover>
+                                                    <thead>
+                                                    <tr>
+                                                        <th style={{width: '40%'}}>제목</th>
+                                                        <th style={{width: '15%'}}>작가</th>
+                                                        <th style={{width: '15%'}}>출판사</th>
+                                                        <th style={{width: '15%'}}>상태</th>
+                                                        <th style={{width: '15%'}}>독서 시작일</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {readingBooks.map((book, index) => (
+                                                        <tr key={index}>
+                                                            <td>{book.title}</td>
+                                                            <td>{book.author}</td>
+                                                            <td>{book.publisher}</td>
+                                                            <td>
+                                                                <DropdownButton title={book.status}
+                                                                                onSelect={(eventKey) => handleStatusChange(index, eventKey)}>
+                                                                    <Dropdown.Item eventKey="읽는 중">읽는 중</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="완독">완독</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="독서 예정">독서
+                                                                        예정</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
+                                                            <td>{book.startDate}</td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    ) : (
-                        <div>
-                            <Row>
-                                <Col xs lg="5">
-                                    <img src={selectedImage} alt="Book" style={{width: '100%', height: 'auto'}}/>
-                                </Col>
-                                <Col>
-                                </Col>
-                            </Row>
-                            <Row>
-                                {renderMemoButtons()}
-                                <textarea
-                                    value={memoText}
-                                    onChange={handleMemoChange}
-                                    style={{width: '100%', height: 150, resize: 'none'}}
-                                    placeholder="메모를 작성하세요..."/>
-                                <Button variant="primary" onClick={handleSaveMemo}>메모 저장</Button>
-                            </Row>
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="outline-primary">
-                        읽고 싶은 책
-                    </Button>
-                    <Button variant="outline-dark">
-                        다 읽은 책
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

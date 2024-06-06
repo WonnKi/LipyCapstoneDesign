@@ -1,10 +1,7 @@
 import React, {useState} from "react";
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 
 const SignUp2 = () => {
@@ -15,7 +12,7 @@ const SignUp2 = () => {
         email: '',
     });
 
-    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,9 +26,11 @@ const SignUp2 = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/register', formData);
-            setMessage('회원가입 성공!');
+            if (window.confirm("회원가입 성공.")) {
+                navigate('/login');
+            }
         } catch (error) {
-            setMessage('회원가입 실패: ' + error.response.data);
+            window.confirm("회원가입 실패.")
         }
     };
 
@@ -70,7 +69,6 @@ const SignUp2 = () => {
                                     <button type="submit" className="btn btn-primary btn-user btn-block">
                                         계정 등록
                                     </button>
-                                    {message && <p>{message}</p>}
                                 </form>
                                 <hr/>
                                 <div className="text-center">

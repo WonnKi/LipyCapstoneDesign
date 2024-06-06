@@ -30,6 +30,7 @@ import Socialing2 from "./screens/Socialing2";
 import HotSocialing2 from "./screens/HotSocialing2";
 import SocialSearch2 from "./screens/SocialSearch2";
 import MyPage2 from "./screens/MyPage2";
+import SecondBookCase2 from "./screens/secondBookCase2";
 
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
             <Route path="HotSocialing2" element={<HotSocialing2 />} />
             <Route path="SocialSearch2" element={<SocialSearch2 />} />
             <Route path="MyPage2" element={<MyPage2 />} />
+            <Route path = "/SecondBookCase2" element={ <SecondBookCase2 /> } />
 
         </Routes>
       </BrowserRouter>

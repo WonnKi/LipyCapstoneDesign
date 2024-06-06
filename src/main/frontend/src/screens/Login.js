@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 const Login = () => {
@@ -22,7 +19,6 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -33,9 +29,11 @@ const Login = () => {
             });
             const token = response.data.split(' ')[2]; // "login succeed <token>"에서 토큰만 추출
             localStorage.setItem('jwtToken', token);
-            setMessage('로그인 완료');
+            if (window.confirm("로그인 성공.")) {
+                navigate('/');
+            }
         } catch (error) {
-            setMessage('아이디 또는 비밀번호를 확인하세요');
+              window.confirm("아이디 또는 비밀번호를 확인하세요.");
         }
     };
 
@@ -78,7 +76,6 @@ const Login = () => {
                                                 <button type="submit" className="btn btn-primary btn-user btn-block">
                                                     로그인
                                                 </button>
-                                                {message && <p>{message}</p>}
                                                 <hr/>
                                             </form>
                                             <div className="text-center">회원이 아니신가요?</div>

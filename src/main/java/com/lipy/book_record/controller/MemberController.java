@@ -132,4 +132,7 @@ public class MemberController {
         boolean isInterest = memberService.isInterestSocialing(member.getId(), socialingId);
         return ResponseEntity.ok(isInterest);
     }
+
+
+
 }

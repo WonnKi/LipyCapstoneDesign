@@ -38,6 +38,29 @@ function Write() {
         }
     };
 
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post(
+                'http://localhost:8080/socialing/uploadImage',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    },
+                }
+            );
+            const imageUrl = response.data;
+            setContent(content + `<img src="${imageUrl}" alt="uploaded image" />`);
+        } catch (error) {
+            console.error('Image upload failed:', error);
+        }
+    };
+
     return (
         <Container>
             <Card className="my-3">
@@ -83,6 +106,14 @@ function Write() {
                                 type="datetime-local"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="image" className="mt-3">
+                            <Form.Label>이미지</Form.Label>
+                            <Form.Control
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
                             />
                         </Form.Group>
                         <Button variant="primary" type="submit" className="mt-3">작성하기</Button>

@@ -4499,6 +4499,8 @@ input[type="button"].btn-block {
     background-clip: border-box;
     border: 1px solid #e3e6f0;
     border-radius: 0.35rem;
+
+
 }
 
 .card > hr {
@@ -4532,6 +4534,7 @@ input[type="button"].btn-block {
     flex: 1 1 auto;
     min-height: 1px;
     padding: 1.25rem;
+    background-color: #f0eee2;
 }
 
 .card-title {
@@ -4564,6 +4567,7 @@ input[type="button"].btn-block {
 
 .card-header:first-child {
     border-radius: calc(0.35rem - 1px) calc(0.35rem - 1px) 0 0;
+    background-color: #c8c5bc;
 }
 
 .card-footer {
@@ -10516,6 +10520,9 @@ a:focus {
 @media (min-width: 768px) {
     .sidebar {
         width: 14rem !important;
+        height: 100%;
+        position: sticky;
+        top: 0;
     }
     .sidebar .nav-item .collapse {
         position: relative;
@@ -11297,5 +11304,14 @@ body {
 
 }
 
+.post-content img {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+}
 
-
+.post-content p,
+.post-content div {
+    display: block;
+    width: 100%;
+}
