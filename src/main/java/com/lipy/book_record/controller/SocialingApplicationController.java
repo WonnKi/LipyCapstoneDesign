@@ -1,7 +1,6 @@
 package com.lipy.book_record.controller;
 
-import com.lipy.book_record.dto.ApplicantInfo;
-import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.entity.Users;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.entity.SocialingApplication;
 import com.lipy.book_record.service.MemberService;
@@ -35,9 +34,9 @@ public class SocialingApplicationController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            Users users = memberService.findByUsername(username);
 
-            Long takeId = socialingApplicationService.applyForSocialing(member.getId(), socialingId);
+            Long takeId = socialingApplicationService.applyForSocialing(users.getId(), socialingId);
             return ResponseEntity.ok(takeId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
@@ -52,13 +51,13 @@ public class SocialingApplicationController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            Users users = memberService.findByUsername(username);
 
             // 신청 정보 가져오기
             SocialingApplication application = socialingApplicationService.findById(applicationId);
 
             // 현재 로그인한 사용자가 신청한 것인지 확인
-            if (!application.getMember().getId().equals(member.getId())) {
+            if (!application.getUsers().getId().equals(users.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only cancel your own application.");
             }
 
@@ -77,9 +76,9 @@ public class SocialingApplicationController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            Users users = memberService.findByUsername(username);
 
-            SocialingApplication application = socialingApplicationService.findByMemberAndSocialing(member.getId(), id);
+            SocialingApplication application = socialingApplicationService.findByMemberAndSocialing(users.getId(), id);
             if (application != null) {
                 response.put("isApplied", true);
                 response.put("applicationId", application.getId());
@@ -99,11 +98,11 @@ public class SocialingApplicationController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-        Member member = memberService.findByUsername(username);
+        Users users = memberService.findByUsername(username);
 
         // 소셜링 게시글 작성자인지 확인
         Socialing socialing = socialingService.findById(socialingId);
-        if (socialing.getWriter().equals(member.getName())) {
+        if (socialing.getWriter().equals(users.getUsername())) {
             List<String> applicantInfos = socialingApplicationService.findApplicantInfoBySocialingId(socialingId);
             return ResponseEntity.ok(applicantInfos);
         } else {

@@ -38,7 +38,7 @@ public class Socialing {
     // 다대다 관계로 멤버와 연결
     @JsonIgnore
     @ManyToMany(mappedBy = "favoriteSocialings")
-    private Set<Member> favoritedByMembers = new HashSet<>();
+    private Set<Users> favoritedByUsers = new HashSet<>();
 
     @OneToMany(mappedBy = "socialing")
     private Set<SocialingApplication> applications = new HashSet<>();
@@ -64,8 +64,8 @@ public class Socialing {
         }
     }
 
-    public void removeInterestedMember(Member member) {
-        this.favoritedByMembers.remove(member);
-        member.getFavoriteSocialings().remove(this);
+    public void removeInterestedMember(Users users) {
+        this.favoritedByUsers.remove(users);
+        users.getFavoriteSocialings().remove(this);
     }
 }

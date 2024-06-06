@@ -1,7 +1,7 @@
 package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.SocialingListResponse;
-import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.entity.Users;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.MemberRepository;
 import com.lipy.book_record.repository.SocialingRepository;
@@ -25,13 +25,13 @@ public class MemberService  {
         this.socialingRepository = socialingRepository;
     }
 
-    public void save(Member member) {
-        memberRepository.save(member);
+    public void save(Users users) {
+        memberRepository.save(users);
     }
 
 
 
-    public Member findByUsername(String username) {
+    public Users findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
 
@@ -46,10 +46,10 @@ public class MemberService  {
         );
     }
     public List<SocialingListResponse> getFavoriteSocialings(Long memberId) { //관심있는 소셜링 가져오기
-        Member member = memberRepository.findById(memberId)
+        Users users = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
 
-        return member.getFavoriteSocialings().stream()
+        return users.getFavoriteSocialings().stream()
                 .map(this::mapToSocialingListResponse)
                 .toList();
     }
@@ -57,25 +57,25 @@ public class MemberService  {
     public void cancelFavoriteSocialing(Long memberId, Long socialingId) {
         Socialing socialing = socialingRepository.findById(socialingId)
                 .orElseThrow(() -> new RuntimeException("소셜링을 찾을 수 없습니다."));
-        Member member = memberRepository.findById(memberId)
+        Users users = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다."));
 
-        socialing.removeInterestedMember(member);
-        member.removeFavoriteSocialing(socialing);
+        socialing.removeInterestedMember(users);
+        users.removeFavoriteSocialing(socialing);
 
         socialingRepository.save(socialing);
-        memberRepository.save(member);
+        memberRepository.save(users);
     }
 
     public void addFavoriteSocialing(Long memberId, Long socialingId) {
-        Member member = memberRepository.findById(memberId)
+        Users users = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + memberId));
 
         Socialing socialing = socialingRepository.findById(socialingId)
                 .orElseThrow(() -> new IllegalArgumentException("Socialing not found with id: " + socialingId));
 
         // 멤버의 즐겨찾기에 소셜링 추가
-        member.getFavoriteSocialings().add(socialing);
-        memberRepository.save(member);
+        users.getFavoriteSocialings().add(socialing);
+        memberRepository.save(users);
     }
 }

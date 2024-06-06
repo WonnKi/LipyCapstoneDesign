@@ -3,7 +3,7 @@ package com.lipy.book_record.controller;
 import com.lipy.book_record.dto.LoginRequest;
 import com.lipy.book_record.dto.RegisterRequest;
 import com.lipy.book_record.dto.SocialingListResponse;
-import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.entity.Users;
 import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(), loginRequest.getPassword());
+                    loginRequest.getEmail(), loginRequest.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
@@ -55,12 +55,11 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody RegisterRequest registerRequest) {
         try {
-            Member member = new Member();
-            member.setUsername(registerRequest.getUsername());
-            member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-            member.setName(registerRequest.getName());
-            member.setEmail(registerRequest.getEmail());
-            memberService.save(member);
+            Users users = new Users();
+            users.setEmail(registerRequest.getEmail());
+            users.setUsername(registerRequest.getUsername());
+            users.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+            memberService.save(users);
             return ResponseEntity.ok().body("Membership registration successful");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
@@ -80,9 +79,9 @@ public class MemberController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-        Member member = memberService.findByUsername(username);
+        Users users = memberService.findByUsername(username);
 
-        memberService.addFavoriteSocialing(member.getId(), socialingId);
+        memberService.addFavoriteSocialing(users.getId(), socialingId);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
@@ -93,8 +92,8 @@ public class MemberController {
 
     @GetMapping("/interest/me")
     public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(Principal principal) {
-        Member member = memberService.findByUsername(principal.getName());
-        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(member.getId());
+        Users users = memberService.findByUsername(principal.getName());
+        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(users.getId());
         return ResponseEntity.ok().body(favoriteSocialings);
     }
 
@@ -105,12 +104,12 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Member member = memberService.findByUsername(userDetails.getUsername());
+        Users users = memberService.findByUsername(userDetails.getUsername());
 
         // 사용자 정보에서 name을 포함하여 반환
         Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("username", member.getUsername());
-        userInfo.put("name", member.getName());
+        userInfo.put("email", users.getEmail());
+        userInfo.put("username", users.getUsername());
 
         return ResponseEntity.ok(userInfo);
     }

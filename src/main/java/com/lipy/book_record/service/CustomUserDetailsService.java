@@ -1,6 +1,6 @@
 package com.lipy.book_record.service;
 
-import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.entity.Users;
 import com.lipy.book_record.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -19,10 +19,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUsername(username);
-        if (member == null) {
+        Users users = memberRepository.findByUsername(username);
+        if (users == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new User(member.getUsername(), member.getPassword(), Collections.emptyList());
+        return new User(users.getUsername(), users.getPassword(), Collections.emptyList());
     }
 }

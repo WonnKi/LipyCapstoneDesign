@@ -15,15 +15,15 @@ public class SocialingApplication {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private Users users;
 
     @ManyToOne
     @JoinColumn(name = "socialing_id", nullable = false)
     private Socialing socialing;
 
     @Builder
-    public SocialingApplication(Member member,Socialing socialing){
-        this.member = member;
+    public SocialingApplication(Users users, Socialing socialing){
+        this.users = users;
         this.socialing = socialing;
     }
 

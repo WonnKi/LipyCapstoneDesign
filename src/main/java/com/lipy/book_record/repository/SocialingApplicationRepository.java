@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface SocialingApplicationRepository extends JpaRepository<SocialingApplication, Long> {
     List<SocialingApplication> findBySocialingId(Long socialingId);
-    Optional<SocialingApplication> findByMemberIdAndSocialingId(Long memberId, Long socialingId);
+    Optional<SocialingApplication> findByUsersIdAndSocialingId(Long usersId, Long socialingId);
 }

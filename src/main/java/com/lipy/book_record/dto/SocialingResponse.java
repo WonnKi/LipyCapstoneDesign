@@ -1,6 +1,5 @@
 package com.lipy.book_record.dto;
 
-import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.Socialing;
 import lombok.Getter;
 import lombok.Setter;
