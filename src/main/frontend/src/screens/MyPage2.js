@@ -31,40 +31,12 @@ const MyPage2 = () => {
         <div>
             <div id="wrapper">
                 <Sidebar />
-                <div id="content-wrapper" className="d-flex flex-column">
+                <div id="content-wrapper" className="d-flex flex-column"
+                     style={{
+                         background:"#D9C5AD"
+                     }}>
                     <div id="content">
                         <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-xl-8 col-lg-5">
-                                    <div className="card shadow mb-4">
-                                        <div
-                                            className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">캘린더</h6>
-                                        </div>
-                                        <div className="card-body">
-                                            <div>
-                                                <FullCalendar
-                                                    plugins={[dayGridPlugin]}
-                                                    initialView="dayGridMonth"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-xl-4 col-lg-3">
-                                    <div className="card shadow mb-4">
-                                        <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">현재 읽는 중</h6>
-                                        </div>
-                                        <div className="card-body">
-                                            <div>
-                                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                                                <br/><br/><br/><br/><br/><br/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div className="row">
                                 <div className="col-lg-12 mb-8">
@@ -118,7 +90,7 @@ const MyPage2 = () => {
                         </div>
                     </div>
 
-                    <footer className="sticky-footer bg-white">
+                    <footer className="sticky-footer">
                         <div className="container my-auto">
 
                         </div>

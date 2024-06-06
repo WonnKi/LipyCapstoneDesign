@@ -17,4 +17,3 @@ public class SearchDto {
     public String description;
     public String publisher;
 }
-

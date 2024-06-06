@@ -15,8 +15,8 @@ function Sidebar() {
             </li>
             <hr />
             <div className="nav-item">
-                <Link className="nav-link" to="/mypage2">
-                    마이 페이지
+                <Link className="nav-link" to="/secondBookCase  ">
+                    내 서재
                 </Link>
             </div>
             <div className="nav-item">

@@ -25,13 +25,17 @@ const Socialing2 = () => {
             <div id="wrapper">
                 <Sidebar/>
 
-                <div id="content-wrapper" className="d-flex flex-column">
+                <div id="content-wrapper" className="d-flex flex-column"
+                     style={{
+                         background:"#D9C5AD"
+                     }}>
                     <div id="content">
                         <div className="container-fluid">
-                            <div className="row">
+                            <div className="row"
+                                 style={{ marginTop: '20px' }}>
                                 <div className="col-lg-12 mb-8">
                                     <div className="card shadow mb-4">
-                                        <nav id="navbar-example2" className="navbar bg-body-tertiary px-3 mb-3">
+                                        <nav id="navbar-example2" className="navbar  bg-body-tertiary px-3 mb-3">
                                             <a className="navbar-brand">최신 소셜링</a>
                                             <ul className="nav nav-pills">
                                                 <li className="nav-item">
@@ -51,23 +55,69 @@ const Socialing2 = () => {
                                         <div className="card-body">
                                             <div className="row">
                                             {socialings.map((socialing, index) => (
-                                                    <Col key={socialing.id} className="col-lg-3 col-md-3 mb-3">
+                                                    <Col key={socialing.id} className="col-lg-4 col-md-4 mb-4 ">
                                                         <Link to={`/socialing/${socialing.id}`}
                                                               className="text-decoration-none">
-                                                            <Card className="h-100">
-                                                                <Card.Body>
-                                                                    <Card.Title>{socialing.title}<br/>{new Date(socialing.date).toLocaleDateString()}
-                                                                    </Card.Title>
-                                                                    <Card.Text>{socialing.description}<br/>{socialing.writer}
-                                                                    </Card.Text>
-                                                                    <hr/>
-                                                                    <p>참여자 수: {socialing.currentparticipants}</p>
-                                                                    <p>최대 참여자 수: {socialing.maxparticipants}</p>
-                                                                </Card.Body>
+                                                            {/*<Card className="h-100">*/}
+                                                            {/*    <Card.Title*/}
+                                                            {/*    style={{*/}
+                                                            {/*        background:"white",*/}
+                                                            {/*    }}>*/}
+                                                            {/*        <h5>{socialing.title}</h5>*/}
+                                                            {/*    </Card.Title>*/}
+                                                            {/*    <Card.Body*/}
+                                                            {/*        style={{*/}
+                                                            {/*            background:"white",*/}
+                                                            {/*        }}>*/}
+                                                            {/*        {socialing.description}*/}
+                                                            {/*    </Card.Body>*/}
+                                                            {/*    <Card.Body*/}
+                                                            {/*        style={{*/}
+                                                            {/*            background:"white",*/}
+                                                            {/*        }}>*/}
+                                                            {/*        <div>{new Date(socialing.date).toLocaleDateString()}</div>*/}
+                                                            {/*        <div>*/}
+                                                            {/*            {socialing.currentparticipants}/{socialing.maxparticipants}*/}
+                                                            {/*        </div>*/}
+                                                            {/*    </Card.Body>*/}
+                                                            {/*    <Card.Footer>*/}
+                                                            {/*        dd*/}
+                                                            {/*    </Card.Footer>*/}
+                                                            {/*</Card>*/}
+                                                            <Card
+                                                                style={{
+                                                                    background: "white"
+                                                                }}>
+                                                                <h5 className="card-title"
+                                                                    style={{
+                                                                        background:"white"
+                                                                    }}>{socialing.title}</h5>
+                                                                <p className="card-text2"
+                                                                   style={{
+                                                                       background:"white"
+                                                                   }}>
+                                                                    {socialing.description}
+                                                                </p>
+                                                                <p
+                                                                style={{
+                                                                    paddingLeft:15
+                                                                }}>
+                                                                    {new Date(socialing.date).toLocaleDateString()}<br/>
+                                                                    {new Date(socialing.date).toLocaleTimeString()}
+                                                                </p>
+                                                                <div className="card-footer"
+                                                                style={{
+                                                                    display:"flex",
+                                                                    justifyContent:"space-between",
+                                                                    alignItems:"center"
+                                                                }}>
+                                                                    <a>{socialing.writer}</a>
+                                                                    <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
+                                                                </div>
                                                             </Card>
                                                         </Link>
                                                     </Col>
-                                                ))}
+                                            ))}
                                             </div>
                                         </div>
                                     </div>
@@ -75,7 +125,7 @@ const Socialing2 = () => {
                             </div>
                         </div>
                     </div>
-                    <footer className="sticky-footer bg-white">
+                    <footer className="sticky-footer">
                         <div className="container my-auto">
 
                         </div>

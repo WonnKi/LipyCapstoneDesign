@@ -1,9 +1,7 @@
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 // import { useParams, useNavigate } from 'react-router-dom';
-// import Container from "react-bootstrap/Container";
-// import Modal from 'react-bootstrap/Modal';
-// import Button from 'react-bootstrap/Button';
+// import { Container, Card, Button, Modal, Spinner, Alert } from 'react-bootstrap';
 //
 // const SocialingDetails = () => {
 //     const { id } = useParams();
@@ -22,7 +20,6 @@
 //             try {
 //                 const token = localStorage.getItem('jwtToken');
 //                 if (!token) {
-//                     setMessage('No token found, please login again.');
 //                     return;
 //                 }
 //                 const postResponse = await axios.get(`http://localhost:8080/socialing/${id}`, {
@@ -40,7 +37,6 @@
 //                 const loggedInName = userResponse.data.name;
 //                 setIsAuthor(postResponse.data.writer === loggedInName);
 //
-//                 // 사용자가 이미 신청했는지 확인
 //                 const applyResponse = await axios.get(`http://localhost:8080/${id}/isApplied`, {
 //                     headers: {
 //                         Authorization: `Bearer ${token}`,
@@ -62,7 +58,7 @@
 //                 setLoading(true);
 //                 const token = localStorage.getItem('jwtToken');
 //                 if (!token) {
-//                     setMessage('No token found, please login again.');
+//                     setMessage('회원에게만 보이는 글 입니다');
 //                     return;
 //                 }
 //                 const response = await axios.get(`http://localhost:8080/apply/${id}`, {
@@ -73,23 +69,30 @@
 //                 setApplicants(response.data);
 //                 setLoading(false);
 //             } catch (error) {
-//                 setMessage('Error fetching applicants: ' + (error.response?.data || error.message));
 //                 setLoading(false);
 //             }
 //         };
 //         fetchApplicants();
 //     }, [id]);
 //
-//     const handleDeleteClick = () => {
+//     const handleDeleteClick = async () => {
 //         const isConfirmed = window.confirm('삭제 하시겠습니까?');
 //         if (isConfirmed) {
-//             axios.delete(`/socialing/${id}`)
-//                 .then(() => {
-//                     navigate('/socialing');
-//                 })
-//                 .catch(error => {
-//                     console.error('게시글을 삭제하는 중 에러 발생:', error);
+//             try {
+//                 const token = localStorage.getItem('jwtToken');
+//                 if (!token) {
+//                     setMessage('No token found, please login again.');
+//                     return;
+//                 }
+//                 await axios.delete(`http://localhost:8080/socialing/${id}`, {
+//                     headers: {
+//                         Authorization: `Bearer ${token}`,
+//                     },
 //                 });
+//                 navigate('/socialing');
+//             } catch (error) {
+//                 console.error('게시글을 삭제하는 중 에러 발생:', error);
+//             }
 //         }
 //     };
 //
@@ -106,11 +109,8 @@
 //                 },
 //             });
 //             setIsApplied(true);
-//             setMessage('신청 성공');
-//             // 페이지 새로고침
 //             window.location.reload();
 //         } catch (error) {
-//             setMessage('신청 실패: ' + (error.response?.data || error.message));
 //         }
 //     };
 //
@@ -127,9 +127,9 @@
 //                 },
 //             });
 //             setIsApplied(false);
-//             setMessage('취소 성공');
+//             window.location.reload();
 //         } catch (error) {
-//             setMessage('취소 실패: ' + (error.response?.data || error.message));
+//
 //         }
 //     };
 //
@@ -141,47 +141,92 @@
 //         setShowModal(false);
 //     };
 //
+//     const handleAddInterestClick = async () => {
+//         try {
+//             const token = localStorage.getItem('jwtToken');
+//             if (!token) {
+//                 setMessage('No token found, please login again.');
+//                 return;
+//             }
+//             await axios.post(`http://localhost:8080/socialing/${id}/interest`, null, {
+//                 headers: {
+//                     Authorization: `Bearer ${token}`,
+//                 },
+//             });
+//             window.location.reload();
+//         } catch (error) {
+//         }
+//     };
+//
+//     const handleRemoveInterestClick = async () => {
+//         try {
+//             const token = localStorage.getItem('jwtToken');
+//             if (!token) {
+//                 setMessage('No token found, please login again.');
+//                 return;
+//             }
+//             await axios.delete(`http://localhost:8080/socialing/${id}/interest`, {
+//                 headers: {
+//                     Authorization: `Bearer ${token}`,
+//                 },
+//             });
+//             window.location.reload();
+//         } catch (error) {
+//         }
+//     };
+//
 //     return (
 //         <section className="page-section cta">
 //             <Container>
-//                 <div className="cta-inner bg-faded text-center rounded">
-//                     <h3>{post?.title}</h3>
-//                     <hr/>
-//                     <h6 style={{float: "left"}}>{post?.writer}·{new Date(post?.date).toLocaleDateString()}</h6>
-//                     <br/>
-//                     <br/>
-//                     <p>{post?.content}</p>
-//                     <p>모집 : {post?.currentparticipants}/{post?.maxparticipants} </p>
-//                     <button onClick={handleShowApplicants}>신청자 보기</button>
-//                     <hr/>
-//                     <div style={{float: "left"}}>
-//                         {isAuthor && (
-//                             <div>
-//                                 <button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</button>
-//                                 <button onClick={handleDeleteClick}>삭제</button>
+//                 <Card className="my-3">
+//                     <Card.Header as="h3">{post?.title}</Card.Header>
+//                     <Card.Body>
+//                         <Card.Text>
+//                             <div className="d-flex justify-content-between">
+//                                 <span>{post?.writer}</span>
+//                                 {isAuthor && (
+//                                     <div>
+//                                         <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
+//                                         <Button onClick={handleDeleteClick}>삭제</Button>
+//                                     </div>
+//                                 )}
 //                             </div>
-//                         )}
-//                     </div>
-//                     <div style={{float: "right"}}>
-//                         {isApplied ? (
-//                             <button onClick={handleCancelClick}>신청 취소</button>
-//                         ) : (
-//                             <button onClick={handleApplyClick}>신청하기</button>
-//                         )}
-//                         <button>관심등록</button>
-//                     </div>
-//                     {message && <p>{message}</p>}
-//                 </div>
+//                             <hr/>
+//                             <div className="post-content">
+//                                 <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+//                             </div>
+//                             <div style={{ margin: '100px 0' }}></div>
+//                             <div className="text-center my-4">
+//                                 <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
+//                             </div>
+//                             <hr/>
+//                             <p>모집: {post?.currentparticipants}/{post?.maxparticipants}</p>
+//                             <div className="d-flex justify-content-between">
+//                                 <Button onClick={handleShowApplicants}>신청자 보기</Button>
+//                                 <div>
+//                                     {isApplied ? (
+//                                         <Button onClick={handleCancelClick}>신청 취소</Button>
+//                                     ) : (
+//                                         <Button onClick={handleApplyClick}>신청하기</Button>
+//                                     )}
+//                                     {' '}
+//                                     <Button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
+//                                         {isApplied ? "관심 등록 취소" : "관심등록"}
+//                                     </Button>
+//                                 </div>
+//                             </div>
+//                             {message && <Alert variant="info" className="mt-3">{message}</Alert>}
+//                         </Card.Text>
+//                     </Card.Body>
+//                 </Card>
 //             </Container>
-//
-//             {/* Applicants Modal */}
 //             <Modal show={showModal} onHide={handleCloseModal}>
 //                 <Modal.Header closeButton>
 //                     <Modal.Title>신청자 목록</Modal.Title>
 //                 </Modal.Header>
 //                 <Modal.Body>
 //                     {loading ? (
-//                         <p>Loading...</p>
+//                         <Spinner animation="border" />
 //                     ) : (
 //                         <ul>
 //                             {applicants.map((applicant, index) => (

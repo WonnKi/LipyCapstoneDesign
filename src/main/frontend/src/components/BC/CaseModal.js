@@ -109,7 +109,7 @@
                                                             {type === 'reading' && (
                                                                 <Button variant="outline-success"
                                                                         onClick={() => handleOpenConfirmReadingModal(item.image, item.author, item.title, item.publisher)}>
-                                                                    읽는 중인 책
+                                                                    내 서재에 저장
                                                                 </Button>
                                                             )}
                                                             {type === 'done' && (

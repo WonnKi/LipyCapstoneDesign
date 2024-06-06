@@ -178,48 +178,60 @@ const SocialingDetails = () => {
     return (
         <section className="page-section cta">
             <Container>
-                <Card className="my-3">
-                    <Card.Header as="h3">{post?.title}</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                            <div className="d-flex justify-content-between">
-                                <span>{post?.writer}</span>
-                                {isAuthor && (
-                                    <div>
-                                        <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
-                                        <Button onClick={handleDeleteClick}>삭제</Button>
-                                    </div>
-                                )}
-                            </div>
-                            <hr/>
-                            <div className="post-content">
-                                <div dangerouslySetInnerHTML={{ __html: post?.content }} />
-                            </div>
-                            <div style={{ margin: '100px 0' }}></div>
-                            <div className="text-center my-4">
-                                <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
-                            </div>
-                            <hr/>
-                            <p>모집: {post?.currentparticipants}/{post?.maxparticipants}</p>
-                            <div className="d-flex justify-content-between">
-                                <Button onClick={handleShowApplicants}>신청자 보기</Button>
-                                <div>
-                                    {isApplied ? (
-                                        <Button onClick={handleCancelClick}>신청 취소</Button>
-                                    ) : (
-                                        <Button onClick={handleApplyClick}>신청하기</Button>
-                                    )}
-                                    {' '}
-                                    <Button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
-                                        {isApplied ? "관심 등록 취소" : "관심등록"}
-                                    </Button>
-                                </div>
-                            </div>
-                            {message && <Alert variant="info" className="mt-3">{message}</Alert>}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                <div
+                style={{
+                    padding:130,
+                }}>
+                    <div
+                        style={{
+                            background:"#F2EFE4",
+                            padding:20
+                        }}>
+                <h2
+                style={{
+                    fontWeight:"bold"
+                }}>
+                    {post?.title}
+                </h2>
+                <div className="d-flex justify-content-between">
+                    <span>{post?.writer}</span>
+                    {isAuthor && (
+                        <div>
+                            <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
+                            <Button onClick={handleDeleteClick}>삭제</Button>
+                        </div>
+                    )}
+                </div>
+                <hr/>
+                <div className="post-content">
+                    <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+                </div>
+                <div style={{ margin: '100px 0' }}></div>
+                <div className="text-center my-4">
+                    <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
+                </div>
+                    <hr/>
+                <p>모집: {post?.currentparticipants}/{post?.maxparticipants}</p>
+                <div className="d-flex justify-content-between">
+                    <Button onClick={handleShowApplicants}>신청자 보기</Button>
+                    <div>
+                        {isApplied ? (
+                            <Button onClick={handleCancelClick}>신청 취소</Button>
+                        ) : (
+                            <Button onClick={handleApplyClick}>신청하기</Button>
+                        )}
+                        {' '}
+                        <Button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
+                            {isApplied ? "관심 등록 취소" : "관심등록"}
+                        </Button>
+                    </div>
+                </div>
+                {message && <Alert variant="info" className="mt-3">{message}</Alert>}
+                </div>
+                </div>
             </Container>
+
+
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>신청자 목록</Modal.Title>
