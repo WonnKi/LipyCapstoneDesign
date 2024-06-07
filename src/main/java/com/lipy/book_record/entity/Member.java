@@ -17,8 +17,8 @@ public class Member {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
     @Column(name = "email", unique = true)
@@ -38,7 +38,7 @@ public class Member {
     private List<Book> books = new ArrayList<>();
 
     @Builder
-    public Member(String id, String email, String pwd, String userName, String nickName, List<Book> books) {
+    public Member(Long id, String email, String pwd, String userName, String nickName, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = pwd;

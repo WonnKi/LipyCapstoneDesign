@@ -24,34 +24,41 @@ public class BookService {
     private final BookRepository bookRep;
     private final MemberRepository userRep;
 
-    public void saveBook(String userId, SearchDto info, int page) {
+    public ResponseEntity<String> saveBook(Long userId, SearchDto info, int page) {
+        try{
+            Member userInfo = userRep.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
 
-        Member userInfo = userRep.findById(userId)
-                .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
+            MemberDto user = new MemberDto(userInfo);
 
-        MemberDto user = new MemberDto(userInfo);
+            Book book = Book.builder()
+                    .isbn(info.getIsbn())
+                    .title(info.getTitle())
+                    .image(info.getImage())
+                    .author(info.getAuthor())
+                    .publisher(info.getPublisher())
+                    .description(info.getDescription())
+                    .totPage(page)
+                    .bookStatus(BookStatus.WISH)
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now())
+                    .score(0)
+                    .readPage(0)
+                    .build();
 
-        Book book = Book.builder()
-                .isbn(info.getIsbn())
-                .title(info.getTitle())
-                .image(info.getImage())
-                .author(info.getAuthor())
-                .publisher(info.getPublisher())
-                .description(info.getDescription())
-                .totPage(page)
-                .bookStatus(BookStatus.WISH)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now())
-                .score(0)
-                .readPage(0)
-                .build();
+            user.addBook(book);
 
-        user.addBook(book);
+            userRep.save(user.toEntity());
+            return ResponseEntity.ok("\""+ book.getTitle() + "\" 저장이 완료되었습니다.");
+        } catch (Exception e){
+            return ResponseEntity.ok("책 저장에 실패하였습니다.");
+        }
 
-        userRep.save(user.toEntity());
+
+
     }
 
-    public ResponseEntity<String> deleteBook(String userId, String isbn){
+    public ResponseEntity<String> deleteBook(Long userId, String isbn){
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -63,17 +70,17 @@ public class BookService {
         }
     }
 
-    public List<BookDto> ViewBookList(String id){
+    public List<BookDto> ViewBookList(Long userId){
         return userRep
-                .findById(id)
-                .orElseThrow(() -> new RuntimeException("ID : " + id + " 를 찾을 수 없습니다."))
+                .findById(userId)
+                .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))
                 .getBooks()
                 .stream()
                 .map(BookDto::new)
                 .toList();
     }
 
-    public ResponseEntity<String>  changeStatus(String userId, String isbn, String status) {
+    public ResponseEntity<String>  changeStatus(Long userId, String isbn, String status) {
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");

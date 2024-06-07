@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class MemberDto {
-    private String id;
+    private Long id;
     private String email;
     private String password;
     private String username;

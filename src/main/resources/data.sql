@@ -1,1 +1,2 @@
-INSERT INTO MEMBER(id, email, password, username, nickname) VALUES ('1','yang215959@gmail.com', 'pwd1234', '양원기', '원기');
+INSERT INTO MEMBER(email, password, username, nickname) VALUES ('yang215959@gmail.com', 'pwd1234', '양원기', '원기');
+INSERT INTO MEMBER(email, password, username, nickname) VALUES ('email@gmail.com', 'pwd1234', '박아무개', '아무개');

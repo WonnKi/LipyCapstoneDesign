@@ -17,7 +17,7 @@ import java.util.List;
 public class RecordService {
     private final BookRepository bookRep;
 
-    public ResponseEntity<String> saveRecord(String userId, String isbn,@RequestBody RecordDto recordDto) {
+    public ResponseEntity<String> saveRecord(Long userId, String isbn,@RequestBody RecordDto recordDto) {
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -41,23 +41,23 @@ public class RecordService {
         }
     }
 
-    public List<RecordDto> FindRecordList(String id, String isbn){
-        if (!bookRep.existsByUserIdAndIsbn(id, isbn)) {
+    public List<RecordDto> FindRecordList(Long userId, String isbn){
+        if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
             return null;
         }
         return bookRep
-                .findByUserIdAndIsbn(id,isbn)
+                .findByUserIdAndIsbn(userId,isbn)
                 .getRecords()
                 .stream()
                 .map(RecordDto::new)
                 .toList();
     }
 
-    public ResponseEntity<String> DeleteRecord(String userId, String rId) {
+    public ResponseEntity<String> DeleteRecord(Long userId, String rId) {
         return null;
     }
 
-    public ResponseEntity<String> PutRecord(String userId, String rId){
+    public ResponseEntity<String> PutRecord(Long userId, String rId){
         return null;
     }
 }
