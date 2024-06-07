@@ -2,7 +2,6 @@ package com.lipy.book_record.dto;
 
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.Record;
-import com.lipy.book_record.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

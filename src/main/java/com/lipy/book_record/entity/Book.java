@@ -18,7 +18,7 @@ public class Book {
 
     @Id
     @Column(name = "id")
-    private String id = UUID.randomUUID().toString();;
+    private String id = UUID.randomUUID().toString();
 
     @NotNull
     private String isbn;
@@ -52,14 +52,14 @@ public class Book {
     @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users user;
+    private Member user;
 
     @Column(name = "records")
     @OneToMany(mappedBy = "books", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
     @Builder
-    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users user, List<Record> records){
+    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Member user, List<Record> records){
         this.isbn = isbn;
         this.title = title;
         this.image = image;
@@ -72,6 +72,7 @@ public class Book {
         this.endDate = endDate;
         this.score = score;
         this.readPage = readPage;
+        this.records = records;
         this.user = user;
     }
 

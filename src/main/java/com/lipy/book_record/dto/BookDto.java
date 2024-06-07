@@ -2,8 +2,8 @@ package com.lipy.book_record.dto;
 
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
+import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.Record;
-import com.lipy.book_record.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -46,7 +46,7 @@ public class BookDto {
 
     private Integer readPage;
 
-    private Users user;
+    private Member user;
 
     private List<Record> records;
 

@@ -2,12 +2,12 @@ package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.UsersDto;
+import com.lipy.book_record.dto.MemberDto;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
-import com.lipy.book_record.entity.Users;
+import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.repository.BookRepository;
-import com.lipy.book_record.repository.UsersRepository;
+import com.lipy.book_record.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRep;
-    private final UsersRepository userRep;
+    private final MemberRepository userRep;
 
-    public void saveBook(Long userId, SearchDto info, int page) {
+    public void saveBook(String userId, SearchDto info, int page) {
 
-        Users userInfo = userRep.findById(userId)
+        Member userInfo = userRep.findById(userId)
                 .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
 
-        UsersDto user = new UsersDto(userInfo);
+        MemberDto user = new MemberDto(userInfo);
 
         Book book = Book.builder()
                 .isbn(info.getIsbn())
@@ -51,7 +51,7 @@ public class BookService {
         userRep.save(user.toEntity());
     }
 
-    public ResponseEntity<String> deleteBook(Long userId, String isbn){
+    public ResponseEntity<String> deleteBook(String userId, String isbn){
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -63,7 +63,7 @@ public class BookService {
         }
     }
 
-    public List<BookDto> ViewBookList(Long id){
+    public List<BookDto> ViewBookList(String id){
         return userRep
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("ID : " + id + " 를 찾을 수 없습니다."))
@@ -73,7 +73,7 @@ public class BookService {
                 .toList();
     }
 
-    public ResponseEntity<String>  changeStatus(Long userId, String isbn, String status) {
+    public ResponseEntity<String>  changeStatus(String userId, String isbn, String status) {
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");

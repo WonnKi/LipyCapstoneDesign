@@ -1,1 +1,1 @@
-INSERT INTO USERS(email, password, username, nickname) VALUES ('yang215959@gmail.com', 'pwd1234', '양원기', '원기');
+INSERT INTO MEMBER(id, email, password, username, nickname) VALUES ('1','yang215959@gmail.com', 'pwd1234', '양원기', '원기');

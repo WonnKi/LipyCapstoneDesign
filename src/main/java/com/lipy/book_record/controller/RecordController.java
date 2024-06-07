@@ -4,6 +4,7 @@ import com.lipy.book_record.dto.RecordDto;
 import com.lipy.book_record.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,11 +16,22 @@ public class RecordController {
     private final RecordService recordService;
 
     @PostMapping("/{userId}/{isbn}")
-    public ResponseEntity<String> createRecord(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn, @RequestBody RecordDto recordDto) {
+    public ResponseEntity<String> CreateRecord(@PathVariable("userId") String userId, @PathVariable("isbn") String isbn, @RequestBody RecordDto recordDto) {
         return recordService.saveRecord(userId, isbn, recordDto);
     }
     @GetMapping("/{userId}/{isbn}")
-    public List<RecordDto> getRecordById(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn) {
+    public List<RecordDto> GetRecord(@PathVariable("userId") String userId, @PathVariable("isbn") String isbn) {
         return recordService.FindRecordList(userId, isbn);
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<String> DeleteRecord(@PathVariable("userId") String userId, @PathVariable("rId") String rId){
+        return recordService.DeleteRecord(userId, rId);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> PutRecord(@PathVariable("userId") String userId, @PathVariable("rId") String rId){
+        return recordService.PutRecord(userId, rId);
     }
 }

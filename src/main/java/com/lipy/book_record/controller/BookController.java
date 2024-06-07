@@ -2,8 +2,6 @@ package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.UsersDto;
-import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,22 +18,22 @@ public class BookController {
     private final BookService saveService;
 
     @PostMapping("/{userId}")
-    public String SaveBook(@PathVariable("userId") Long userId, SearchDto info, @RequestBody int page){
+    public String SaveBook(@PathVariable("userId") String userId, SearchDto info, @RequestBody int page){
         saveService.saveBook(userId, info, page);
         return "저장완료";
     }
     @GetMapping("/{userId}")
-    public List<BookDto> ViewBookList(@PathVariable("userId") Long userId){
+    public List<BookDto> ViewBookList(@PathVariable("userId") String userId){
         return saveService.ViewBookList(userId);
     }
     @DeleteMapping("/{userId}/{isbn}")
     @Transactional
-    public ResponseEntity<String> deleteBook(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn) {
+    public ResponseEntity<String> deleteBook(@PathVariable("userId") String userId, @PathVariable("isbn") String isbn) {
         return saveService.deleteBook(userId, isbn);
     }
 
     @PatchMapping("/{userId}/{isbn}")
-    public ResponseEntity<String> changeStatus(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn,@RequestBody String status){
+    public ResponseEntity<String> changeStatus(@PathVariable("userId") String userId, @PathVariable("isbn") String isbn,@RequestBody String status){
         return saveService.changeStatus(userId, isbn, status);
     }
 

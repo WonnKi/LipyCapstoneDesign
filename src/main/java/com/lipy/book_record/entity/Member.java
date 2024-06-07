@@ -6,18 +6,19 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "Member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Users {
+public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy=GenerationType.UUID)
+    private String id;
 
     @NotNull
     @Column(name = "email", unique = true)
@@ -37,7 +38,7 @@ public class Users {
     private List<Book> books = new ArrayList<>();
 
     @Builder
-    public Users(Long id, String email, String pwd, String userName, String nickName, List<Book> books) {
+    public Member(String id, String email, String pwd, String userName, String nickName, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = pwd;

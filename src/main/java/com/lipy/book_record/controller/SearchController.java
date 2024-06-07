@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchController {
 
-    private final SearchService searchService; // <- Autowired 에서 바꿔봄
+    private final SearchService searchService;
 
     @GetMapping("/")
     public List<SearchDto> search(@RequestBody SearchRequest searchRequest) throws ParseException {
