@@ -103,7 +103,7 @@ const SignUp2 = () => {
                                             required
                                         />
                                         <button type="button" onClick={handleSendVerificationCode}
-                                                className=" btn-primary  ">인증 코드 받기</button>
+                                                className=" btn-primary">인증 코드 받기</button>
                                     </div>
 
                                     {isVerificationSent && !isVerified && (
