@@ -84,7 +84,7 @@ public class SocialingController {
         String username = userDetails.getUsername();
         Member member = memberService.findByUsername(username);
 
-        socialing.setWriter(member.getName());
+        socialing.setWriter(member.getNickname());
         socialing.setCurrentparticipants(0);
 
         Socialing createdPost = socialingService.createSocialingPost(socialing);

@@ -30,7 +30,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/register","/socialing/{id}", "/login","/socialing","/search/basic_search","/socialing/{socialingId}","/socialing/${id}" ,"/h2-console/**", "/images/**").permitAll()
+                        .requestMatchers("/register","/socialing/{id}", "/login","/socialing","/search/basic_search","/socialing/{socialingId}","/socialing/${id}" ,"/h2-console/**", "/images/**","/searchResult","/verify","/send").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

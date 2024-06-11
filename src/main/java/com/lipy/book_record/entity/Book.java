@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,20 +18,13 @@ public class Book {
 
     @Id
     @Column(name = "id")
-    private String id = UUID.randomUUID().toString();;
+    private String id = UUID.randomUUID().toString();
 
-//    @NotNull
-//    private String isbn;
-//
-//    @NotNull
-//    private String title;
-
-    @Column(nullable = false)
+    @NotNull
     private String isbn;
 
-    @Column(nullable = false)
+    @NotNull
     private String title;
-
 
     private String image;
 
@@ -56,14 +51,15 @@ public class Book {
 
     @Setter
     @ManyToOne
-    private Users user;
+    @JoinColumn(name = "user_id")
+    private Member user;
 
-    @Setter
-    @ManyToOne
-    private Member member;
+    @Column(name = "records")
+    @OneToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    private List<Record> records = new ArrayList<>();
 
     @Builder
-    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users user){
+    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Member user, List<Record> records){
         this.isbn = isbn;
         this.title = title;
         this.image = image;
@@ -76,8 +72,12 @@ public class Book {
         this.endDate = endDate;
         this.score = score;
         this.readPage = readPage;
+        this.records = records;
         this.user = user;
-        this.member = member;
     }
 
+    public void addRecord(Record record) {
+        record.setBooks(this);
+        this.records.add(record);
+    }
 }

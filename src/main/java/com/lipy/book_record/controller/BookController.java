@@ -2,13 +2,11 @@ package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.UsersDto;
 import com.lipy.book_record.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -19,10 +17,9 @@ import java.util.List;
 public class BookController {
     private final BookService saveService;
 
-    @PostMapping("/")
-    public String SaveBook(UsersDto user, SearchDto info){
-        saveService.saveBook(user, info);
-        return "저장완료";
+    @PostMapping("/{userId}")
+    public ResponseEntity<String> SaveBook(@PathVariable("userId") Long userId, SearchDto info, @RequestBody int page){
+        return saveService.saveBook(userId, info, page);
     }
     @GetMapping("/{userId}")
     public List<BookDto> ViewBookList(@PathVariable("userId") Long userId){

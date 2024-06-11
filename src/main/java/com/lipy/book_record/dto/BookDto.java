@@ -2,12 +2,14 @@ package com.lipy.book_record.dto;
 
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.entity.Record;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -44,6 +46,10 @@ public class BookDto {
 
     private Integer readPage;
 
+    private Member user;
+
+    private List<Record> records;
+
     public Book toEntity() {
         return Book.builder()
                 .isbn(this.isbn)
@@ -58,6 +64,8 @@ public class BookDto {
                 .endDate(this.endDate)
                 .score(this.score)
                 .readPage(this.readPage)
+                .user(this.user)
+                .records(this.records)
                 .build();
     }
     public BookDto(Book book){
@@ -74,5 +82,7 @@ public class BookDto {
         this.endDate = book.getEndDate();
         this.score = book.getScore();
         this.readPage = book.getReadPage();
+        this.user = book.getUser();
+        this.records = book.getRecords();
     }
 }

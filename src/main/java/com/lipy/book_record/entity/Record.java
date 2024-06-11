@@ -24,18 +24,14 @@ public class Record {
 
     @Setter
     @ManyToOne
-    private Users user;
-
-    @Setter
-    @ManyToOne
-    private Member member;
+    @JoinColumn(name = "book_Id")
+    private Book books;
 
     @Builder
-    public Record(String title, String content, LocalDate recordDate, Users user){
+    public Record(String title, String content, LocalDate recordDate, Book book){
         this.title = title;
         this.content = content;
         this.recordDate = recordDate;
-        this.user = user;
-        this.member = member;
+        this.books = book;
     }
 }

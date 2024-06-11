@@ -56,7 +56,7 @@ public class SocialingApplicationService {
             Member member = memberRepository.findById(application.getMember().getId()).orElse(null);
             if (member != null) {
                 ApplicantInfo info = new ApplicantInfo();
-                info.setName(member.getName());
+                info.setName(member.getUsername());
                 info.setEmail(member.getEmail());
                 applicantInfos.add(info);
             }

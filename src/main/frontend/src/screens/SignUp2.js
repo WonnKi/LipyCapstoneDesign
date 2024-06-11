@@ -11,6 +11,13 @@ const SignUp2 = () => {
         name: '',
         email: '',
     });
+    const [verificationCode, setVerificationCode] = useState('');
+    const [inputCode, setInputCode] = useState('');
+    const [message, setMessage] = useState('');
+    const [isVerificationSent, setIsVerificationSent] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
+
+
 
     const navigate = useNavigate();
 
@@ -22,17 +29,50 @@ const SignUp2 = () => {
         });
     };
 
+    const handleSendVerificationCode = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/send', { email: formData.email });
+            setMessage('인증코드가 전송되었습니다.');
+            setIsVerificationSent(true);
+        } catch (error) {
+            setMessage('인증코드 전송 실패');
+        }
+    };
+
+    const handleVerifyCode = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/verify', null, {
+                params: {
+                    email: formData.email,
+                    code: inputCode,
+                },
+            });
+            setMessage('이메일 인증 성공');
+            setIsVerified(true);
+        } catch (error) {
+            setMessage('인증 코드를 확인하세요' );
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!isVerified) {
+            setMessage('이메일을 확인하세요');
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:8080/register', formData);
             if (window.confirm("회원가입 성공.")) {
                 navigate('/login');
             }
         } catch (error) {
-            window.confirm("회원가입 실패.")
+            setMessage('Registration failed: ' + error.response?.data);
         }
     };
+
+
 
 
     return <div>
@@ -53,16 +93,41 @@ const SignUp2 = () => {
                                                placeholder="이름" value={formData.name} onChange={handleChange} required />
                                     </div>
                                     <div className="form-group">
-                                        <input type="email" className="form-control form-control-user" name="email"
-                                               placeholder="이메일" value={formData.email} onChange={handleChange} required/>
+                                        <input
+                                            type="email"
+                                            className="form-control form-control-user"
+                                            name="email"
+                                            placeholder="이메일"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                        <button type="button" onClick={handleSendVerificationCode}
+                                                className=" btn-primary  ">인증 코드 받기</button>
                                     </div>
+
+                                    {isVerificationSent && !isVerified && (
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                className="form-control form-control-user"
+                                                placeholder="인증 코드 입력"
+                                                value={inputCode}
+                                                onChange={(e) => setInputCode(e.target.value)}
+                                            />
+                                            <button type="button" onClick={handleVerifyCode}>인증 확인</button>
+                                            {message && <p>{message}</p>}
+                                        </div>
+                                    )}
+
                                     <div className="form-group">
-                                        <input type="text"  className="form-control form-control-user" name="username"
-                                               placeholder="아이디" value={formData.username} onChange={handleChange} required/>
+                                        <input type="text" className="form-control form-control-user" name="username"
+                                               placeholder="아이디" value={formData.username} onChange={handleChange}
+                                               required/>
 
                                     </div>
                                     <div className="form-group">
-                                    <input type="password" className="form-control form-control-user" name="password"
+                                        <input type="password" className="form-control form-control-user" name="password"
                                            placeholder="비밀번호" value={formData.password} onChange={handleChange} required />
 
                                     </div>

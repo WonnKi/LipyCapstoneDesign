@@ -2,11 +2,12 @@ package com.lipy.book_record.service;
 
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.UsersDto;
+import com.lipy.book_record.dto.MemberDto;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
+import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.repository.BookRepository;
-import com.lipy.book_record.repository.UsersRepository;
+import com.lipy.book_record.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,86 +22,40 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRep;
-    private final UsersRepository userRep;
+    private final MemberRepository userRep;
 
-    public void saveBook(UsersDto user, SearchDto info) {
-        /*테스트용 코드 입니다.*//*
-        char[] codeTable = new char[]{
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-                'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
-                'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-                'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
-                '8', '9'
-        };
-        Random r = new Random();
+    public ResponseEntity<String> saveBook(Long userId, SearchDto info, int page) {
+        try{
+            Member userInfo = userRep.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
 
-        for (int i=1; i<=10; i++){
-            String code = "";
-            int codeLength = 10;
-            for(int y = 1; y <= codeLength; y++) {
-                int index = r.nextInt(codeTable.length);
-                code += codeTable[index];
-            }
+            MemberDto user = new MemberDto(userInfo);
 
-            UsersDto user = new UsersDto((long) i,code + "@gmail.com","password", "닉네임", new ArrayList<>(), new ArrayList<>());
-            for (int y=1; y<=10; y++){
-
-
-                double min = 100000000;
-                double max = 300000000;
-
-                SearchDto info = new SearchDto();
-                info.setIsbn(String.valueOf((int) ((Math.random() * (max - min)) + min)));
-                info.setTitle("책제목");
-                info.setAuthor("저자");
-                info.setDescription("책에 대한 정보");
-                info.setImage("이미지 경로");
-                info.setPublisher("퍼블리셔");
-
-                Book book = Book.builder()
+            Book book = Book.builder()
                     .isbn(info.getIsbn())
                     .title(info.getTitle())
                     .image(info.getImage())
                     .author(info.getAuthor())
                     .publisher(info.getPublisher())
                     .description(info.getDescription())
-                    .totPage(400)
-                    .bookStatus(BookStatus.READING)
+                    .totPage(page)
+                    .bookStatus(BookStatus.WISH)
                     .startDate(LocalDate.now())
                     .endDate(LocalDate.now())
                     .score(0)
                     .readPage(0)
                     .build();
 
-                user.addBook(book);
-                }
+            user.addBook(book);
 
             userRep.save(user.toEntity());
+            return ResponseEntity.ok("\""+ book.getTitle() + "\" 저장이 완료되었습니다.");
+        } catch (Exception e){
+            return ResponseEntity.ok("책 저장에 실패하였습니다.");
         }
-        *//*테스트용 코드 입니다.*/
 
 
 
-        Book book = Book.builder()
-                .isbn(info.getIsbn())
-                .title(info.getTitle())
-                .image(info.getImage())
-                .author(info.getAuthor())
-                .publisher(info.getPublisher())
-                .description(info.getDescription())
-                .totPage(400)
-                .bookStatus(BookStatus.READING)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now())
-                .score(0)
-                .readPage(0)
-                .build();
-
-        user.addBook(book);
-
-//    w
     }
 
     public ResponseEntity<String> deleteBook(Long userId, String isbn){
@@ -115,10 +70,10 @@ public class BookService {
         }
     }
 
-    public List<BookDto> ViewBookList(Long id){
+    public List<BookDto> ViewBookList(Long userId){
         return userRep
-                .findById(id)
-                .orElseThrow(() -> new RuntimeException("ID : " + id + " 를 찾을 수 없습니다."))
+                .findById(userId)
+                .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))
                 .getBooks()
                 .stream()
                 .map(BookDto::new)

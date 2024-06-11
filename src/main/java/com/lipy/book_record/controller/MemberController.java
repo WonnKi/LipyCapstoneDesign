@@ -4,8 +4,11 @@ import com.lipy.book_record.dto.LoginRequest;
 import com.lipy.book_record.dto.RegisterRequest;
 import com.lipy.book_record.dto.SocialingListResponse;
 import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.service.EmailService;
 import com.lipy.book_record.service.MemberService;
+import com.lipy.book_record.service.VerificationService;
 import com.lipy.book_record.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +25,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 public class MemberController {
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final MemberService memberService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final EmailService emailService;
+    private final VerificationService verificationService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -55,11 +57,12 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody RegisterRequest registerRequest) {
         try {
-            Member member = new Member();
-            member.setUsername(registerRequest.getUsername());
-            member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-            member.setName(registerRequest.getName());
-            member.setEmail(registerRequest.getEmail());
+            Member member = new Member(
+                    registerRequest.getUsername(),
+                    passwordEncoder.encode(registerRequest.getPassword()),
+                    registerRequest.getEmail(),
+                    registerRequest.getName()
+            );
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");
         } catch (Exception e) {
@@ -116,12 +119,12 @@ public class MemberController {
         // 사용자 정보에서 name을 포함하여 반환
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("username", member.getUsername());
-        userInfo.put("name", member.getName());
+        userInfo.put("name", member.getUsername());
 
         return ResponseEntity.ok(userInfo);
     }
 
-    @GetMapping("/socialing/{socialingId}/is-interest")
+    @GetMapping("/socialing/{socialingId}/is-in terest")
     public ResponseEntity<Boolean> isInterestSocialing(@PathVariable Long socialingId) {
         // 현재 로그인한 사용자의 정보를 가져옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -131,6 +134,29 @@ public class MemberController {
 
         boolean isInterest = memberService.isInterestSocialing(member.getId(), socialingId);
         return ResponseEntity.ok(isInterest);
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            String verificationCode = verificationService.generateVerificationCode();
+            verificationService.saveVerificationCode(email, verificationCode);
+            emailService.sendVerificationCode(email, verificationCode);
+            return ResponseEntity.ok("Verification code sent successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
+        boolean isVerified = verificationService.verifyCode(email, code);
+        if (isVerified) {
+            return ResponseEntity.ok("Email verified successfully.");
+        } else {
+            return ResponseEntity.status(400).body("Invalid verification code.");
+        }
     }
 
 
