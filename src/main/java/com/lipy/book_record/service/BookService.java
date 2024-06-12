@@ -24,7 +24,7 @@ public class BookService {
     private final BookRepository bookRep;
     private final MemberRepository userRep;
 
-    public ResponseEntity<String> saveBook(Long userId, SearchDto info, int page) {
+    public ResponseEntity<String> saveBook(Long userId, SearchDto info) {
         try{
             Member userInfo = userRep.findById(userId)
                     .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
@@ -38,7 +38,7 @@ public class BookService {
                     .author(info.getAuthor())
                     .publisher(info.getPublisher())
                     .description(info.getDescription())
-                    .totPage(page)
+                    .totPage(0)
                     .bookStatus(BookStatus.WISH)
                     .startDate(LocalDate.now())
                     .endDate(LocalDate.now())
