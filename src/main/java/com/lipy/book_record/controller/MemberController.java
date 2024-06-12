@@ -61,7 +61,7 @@ public class MemberController {
                     registerRequest.getUsername(),
                     passwordEncoder.encode(registerRequest.getPassword()),
                     registerRequest.getEmail(),
-                    registerRequest.getName()
+                    registerRequest.getNickname()
             );
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");

@@ -33,9 +33,9 @@ public class MemberDto {
         Member user = Member.builder()
                 .id(this.id)
                 .email(this.email)
-                .pwd(this.password)
-                .userName(this.username)
-                .nickName(this.nickname)
+                .password(this.password)
+                .username(this.username)
+                .nickname(this.nickname)
                 .books(this.books)
                 .build();
         if (this.books != null) {

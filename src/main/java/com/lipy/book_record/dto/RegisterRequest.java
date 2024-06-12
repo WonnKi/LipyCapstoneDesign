@@ -8,17 +8,17 @@ import lombok.Setter;
 public class RegisterRequest {
     private String username;
     private String password;
-    private String name;
+    private String nickname;
     private String email;
 
     // 기본 생성자
     public RegisterRequest() {}
 
     // 매개변수가 있는 생성자
-    public RegisterRequest(String username, String password, String name, String email) {
+    public RegisterRequest(String username, String password, String nickname, String email) {
         this.username = username;
         this.password = password;
-        this.name = name;
+        this.nickname = nickname;
         this.email = email;
     }
 }
