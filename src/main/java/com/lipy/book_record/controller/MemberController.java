@@ -59,7 +59,7 @@ public class MemberController {
             Member member = new Member();
             member.setEmail(registerRequest.getEmail());
             member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-            member.setName(registerRequest.getName());
+            member.setUsername(registerRequest.getUsername());
             member.setNickname(registerRequest.getNickname());
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");

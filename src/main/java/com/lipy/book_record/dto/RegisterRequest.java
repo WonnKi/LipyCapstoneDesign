@@ -9,20 +9,20 @@ import lombok.Setter;
 public class RegisterRequest {
     private String email;
     private String password;
-    private String name;
+    private String username;
     private String nickname;
 
     public RegisterRequest(Member member) {
         email = member.getEmail();
         password = member.getPassword();
-        name = member.getName();
+        username = member.getUsername();
         nickname = member.getNickname();
     }
 
-    public RegisterRequest( String email,String password,String nickname, String name) {
+    public RegisterRequest( String email,String password,String nickname, String username) {
         this.email = email;
         this.password = password;
-        this.name = name;
+        this.username = username;
         this.nickname = nickname;
     }
 }

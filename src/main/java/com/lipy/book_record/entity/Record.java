@@ -1,5 +1,6 @@
 package com.lipy.book_record.entity;
 
+import com.lipy.book_record.entity.Book;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,13 +25,14 @@ public class Record {
 
     @Setter
     @ManyToOne
-    private Member member;
+    @JoinColumn(name = "book_Id")
+    private Book books;
 
     @Builder
-    public Record(String title, String content, LocalDate recordDate, Member member){
+    public Record(String title, String content, LocalDate recordDate, Book book){
         this.title = title;
         this.content = content;
         this.recordDate = recordDate;
-        this.member = member;
+        this.books = book;
     }
 }
