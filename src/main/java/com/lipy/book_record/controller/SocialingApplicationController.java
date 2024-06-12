@@ -100,7 +100,7 @@ public class SocialingApplicationController {
 
         // 소셜링 게시글 작성자인지 확인
         Socialing socialing = socialingService.findById(socialingId);
-        if (socialing.getWriter().equals(member.getEmail())) {
+        if (socialing.getWriter().equals(member.getNickname())) {
             List<String> applicantInfos = socialingApplicationService.findApplicantInfoBySocialingId(socialingId);
             return ResponseEntity.ok(applicantInfos);
         } else {
