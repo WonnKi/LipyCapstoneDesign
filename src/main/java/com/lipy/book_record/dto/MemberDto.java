@@ -34,8 +34,8 @@ public class MemberDto {
                 .id(this.id)
                 .email(this.email)
                 .password(this.password)
-                .username(this.username)
-                .nickname(this.nickname)
+                .userName(this.username)
+                .nickName(this.nickname)
                 .books(this.books)
                 .build();
         if (this.books != null) {

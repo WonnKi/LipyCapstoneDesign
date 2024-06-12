@@ -8,7 +8,7 @@ const SignUp2 = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
-        name: '',
+        nickname: '',
         email: '',
     });
     const [verificationCode, setVerificationCode] = useState('');
@@ -89,8 +89,8 @@ const SignUp2 = () => {
                                 </div>
                                 <form className="user" onSubmit={handleSubmit} >
                                     <div className="form-group">
-                                        <input type="text" className="form-control form-control-user" name="name"
-                                               placeholder="이름" value={formData.name} onChange={handleChange} required />
+                                        <input type="text" className="form-control form-control-user" name="nickname"
+                                               placeholder="닉네임" value={formData.nickname} onChange={handleChange} required />
                                     </div>
                                     <div className="form-group">
                                         <input

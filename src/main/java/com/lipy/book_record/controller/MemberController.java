@@ -116,10 +116,9 @@ public class MemberController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Member member = memberService.findByUsername(userDetails.getUsername());
 
-        // 사용자 정보에서 name을 포함하여 반환
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("username", member.getUsername());
-        userInfo.put("name", member.getUsername());
+        userInfo.put("nickname", member.getNickname());
 
         return ResponseEntity.ok(userInfo);
     }

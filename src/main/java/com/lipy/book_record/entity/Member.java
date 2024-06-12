@@ -1,7 +1,9 @@
 package com.lipy.book_record.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,9 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "Member")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +27,10 @@ public class Member {
     @Column(nullable = false ,unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false ,unique = true)
     private String nickname;
 
+    @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
 
@@ -48,13 +48,17 @@ public class Member {
         socialing.getFavoritedByMembers().remove(this);
     }
 
+    public Member() {
+
+    }
+
     @Builder
-    public Member(Long id, String email, String password, String username, String nickname, List<Book> books) {
-        this.id = id;
+    public Member(Long id, String email, String password, String userName, String nickName, List<Book> books) {
+        this.id=id;
         this.email = email;
         this.password = password;
-        this.username = username;
-        this.nickname = nickname;
+        this.username = userName;
+        this.nickname = nickName;
         this.books = books;
     }
 
