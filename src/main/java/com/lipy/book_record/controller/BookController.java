@@ -18,8 +18,8 @@ public class BookController {
     private final BookService saveService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<String> SaveBook(@PathVariable("userId") Long userId, SearchDto info){
-        return saveService.saveBook(userId, info);
+    public ResponseEntity<String> SaveBook(@PathVariable("userId") Long userId/*, SearchDto info*/){
+        return saveService.saveBook(userId/*, info*/);
     }
     @GetMapping("/{userId}")
     public List<BookDto> ViewBookList(@PathVariable("userId") Long userId){

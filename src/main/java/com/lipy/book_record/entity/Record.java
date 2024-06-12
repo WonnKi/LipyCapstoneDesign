@@ -28,7 +28,8 @@ public class Record {
     private Book books;
 
     @Builder
-    public Record(String title, String content, LocalDate recordDate, Book book){
+    public Record(String id, String title, String content, LocalDate recordDate, Book book){
+        this.id = id;
         this.title = title;
         this.content = content;
         this.recordDate = recordDate;

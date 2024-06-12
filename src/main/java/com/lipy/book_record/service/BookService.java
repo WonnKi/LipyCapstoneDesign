@@ -24,7 +24,8 @@ public class BookService {
     private final BookRepository bookRep;
     private final MemberRepository userRep;
 
-    public ResponseEntity<String> saveBook(Long userId, SearchDto info) {
+    public ResponseEntity<String> saveBook(Long userId/*, SearchDto info*/) {
+        SearchDto info = new SearchDto("제목","이미지","저자","isbn","설명","출판사");
         try{
             Member userInfo = userRep.findById(userId)
                     .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));

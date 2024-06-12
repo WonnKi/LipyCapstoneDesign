@@ -24,14 +24,14 @@ public class RecordController {
         return recordService.FindRecordList(userId, isbn);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{userId}/{isbn}/{rId}")
     @Transactional
-    public ResponseEntity<String> DeleteRecord(@PathVariable("userId") Long userId, @PathVariable("rId") String rId){
-        return recordService.DeleteRecord(userId, rId);
+    public ResponseEntity<String> DeleteRecord(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn, @PathVariable("rId") String rId){
+        return recordService.DeleteRecord(userId, isbn, rId);
     }
 
-    @PutMapping
-    public ResponseEntity<String> PutRecord(@PathVariable("userId") Long userId, @PathVariable("rId") String rId){
-        return recordService.PutRecord(userId, rId);
+    @PutMapping("/{userId}/{isbn}/{rId}")
+    public ResponseEntity<String> PutRecord(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn, @PathVariable("rId") String rId, @RequestBody RecordDto recordDto){
+        return recordService.PutRecord(userId, isbn, rId, recordDto);
     }
 }
