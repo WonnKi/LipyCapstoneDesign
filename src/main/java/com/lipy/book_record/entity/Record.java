@@ -24,13 +24,13 @@ public class Record {
 
     @Setter
     @ManyToOne
-    private Users users;
+    private Member member;
 
     @Builder
-    public Record(String title, String content, LocalDate recordDate, Users users){
+    public Record(String title, String content, LocalDate recordDate, Member member){
         this.title = title;
         this.content = content;
         this.recordDate = recordDate;
-        this.users = users;
+        this.member = member;
     }
 }

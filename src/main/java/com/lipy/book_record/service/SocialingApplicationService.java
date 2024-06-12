@@ -1,6 +1,6 @@
 package com.lipy.book_record.service;
 
-import com.lipy.book_record.entity.Users;
+import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.SocialingApplication;
 import com.lipy.book_record.repository.MemberRepository;
 import com.lipy.book_record.entity.Socialing;
@@ -21,7 +21,7 @@ public class SocialingApplicationService {
 
 
     public Long applyForSocialing(Long userId, Long socialingId) {
-        Users user = memberRepository.findById(userId)
+        Member user = memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         Socialing socialing = socialingRepository.findById(socialingId)
                 .orElseThrow(() -> new RuntimeException("소셜링을 찾을 수 없습니다."));
@@ -36,7 +36,7 @@ public class SocialingApplicationService {
 
         SocialingApplication socialingApplication = socialingApplicationRepository.save(
                 SocialingApplication.builder()
-                        .users(user)
+                        .member(user)
                         .socialing(socialing)
                         .build());
 
@@ -49,17 +49,17 @@ public class SocialingApplicationService {
 
     public List<String> findApplicantInfoBySocialingId(Long socialingId) {
         List<SocialingApplication> applications = socialingApplicationRepository.findBySocialingId(socialingId);
-        return applications.stream().map(app -> app.getUsers().getUsername() + " (" + app.getUsers().getEmail() + ")").collect(Collectors.toList());
+        return applications.stream().map(app -> app.getMember().getEmail() + " (" + app.getMember().getNickname() + ")").collect(Collectors.toList());
     }
 
 
-    private boolean userAlreadyApplied(Users user, Socialing socialing) {
+    private boolean userAlreadyApplied(Member user, Socialing socialing) {
         return socialing.getApplications().stream()
-                .anyMatch(application -> application.getUsers().getId().equals(user.getId()));
+                .anyMatch(application -> application.getMember().getId().equals(user.getId()));
     }
 
-    public SocialingApplication findByMemberAndSocialing(Long userId, Long socialingId) {
-        return socialingApplicationRepository.findByUsersIdAndSocialingId(userId, socialingId)
+    public SocialingApplication findByMemberAndSocialing(Long memberId, Long socialingId) {
+        return socialingApplicationRepository.findByMemberIdAndSocialingId(memberId, socialingId)
                 .orElse(null);
     }
 

@@ -1,6 +1,6 @@
 package com.lipy.book_record.dto;
 
-import com.lipy.book_record.entity.Users;
+import com.lipy.book_record.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,9 +17,9 @@ public class LoginRequest {
         this.password = password;
     }
 
-    public LoginRequest(Users users){
-        this.email = users.getEmail();
-        this.password = users.getPassword();
+    public LoginRequest(Member member){
+        this.email = member.getEmail();
+        this.password = member.getPassword();
     }
 }
 

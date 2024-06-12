@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApplicantInfo {
+    private String name;
     private String email;
-    private String username;
 }

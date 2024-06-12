@@ -48,10 +48,10 @@ public class Book {
 
     @Setter
     @ManyToOne
-    private Users users;
+    private Member member;
 
     @Builder
-    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Users users){
+    public Book(String isbn, String title, String image, String author, String publisher, String description, Integer totPage, BookStatus bookStatus, LocalDate startDate, LocalDate endDate, Integer score, Integer readPage, Member member){
         this.isbn = isbn;
         this.title = title;
         this.image = image;
@@ -64,7 +64,7 @@ public class Book {
         this.endDate = endDate;
         this.score = score;
         this.readPage = readPage;
-        this.users = users;
+        this.member = member;
     }
 
 }

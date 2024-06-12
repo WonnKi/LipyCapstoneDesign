@@ -1,5 +1,6 @@
 package com.lipy.book_record.dto;
 
+import com.lipy.book_record.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,16 +8,21 @@ import lombok.Setter;
 @Setter
 public class RegisterRequest {
     private String email;
-    private String username;
     private String password;
+    private String name;
+    private String nickname;
 
-    // 기본 생성자
-    public RegisterRequest() {}
+    public RegisterRequest(Member member) {
+        email = member.getEmail();
+        password = member.getPassword();
+        name = member.getName();
+        nickname = member.getNickname();
+    }
 
-    // 매개변수가 있는 생성자
-    public RegisterRequest(String username, String password, String name, String email) {
+    public RegisterRequest( String email,String password,String nickname, String name) {
         this.email = email;
-        this.username = username;
         this.password = password;
+        this.name = name;
+        this.nickname = nickname;
     }
 }

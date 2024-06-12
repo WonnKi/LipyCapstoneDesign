@@ -3,10 +3,12 @@ package com.lipy.book_record.controller;
 import com.lipy.book_record.dto.LoginRequest;
 import com.lipy.book_record.dto.RegisterRequest;
 import com.lipy.book_record.dto.SocialingListResponse;
-import com.lipy.book_record.entity.Users;
+import com.lipy.book_record.entity.Member;
+import com.lipy.book_record.service.EmailService;
 import com.lipy.book_record.service.MemberService;
+import com.lipy.book_record.service.VerificationService;
 import com.lipy.book_record.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,16 +24,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 public class MemberController {
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final MemberService memberService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final EmailService emailService;
+    private final VerificationService verificationService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -55,14 +56,38 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody RegisterRequest registerRequest) {
         try {
-            Users users = new Users();
-            users.setEmail(registerRequest.getEmail());
-            users.setUsername(registerRequest.getUsername());
-            users.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-            memberService.save(users);
+            Member member = new Member();
+            member.setEmail(registerRequest.getEmail());
+            member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+            member.setName(registerRequest.getName());
+            member.setNickname(registerRequest.getNickname());
+            memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            String verificationCode = verificationService.generateVerificationCode();
+            verificationService.saveVerificationCode(email, verificationCode);
+            emailService.sendVerificationCode(email, verificationCode);
+            return ResponseEntity.ok("Verification code sent successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
+        boolean isVerified = verificationService.verifyCode(email, code);
+        if (isVerified) {
+            return ResponseEntity.ok("Email verified successfully.");
+        } else {
+            return ResponseEntity.status(400).body("Invalid verification code.");
         }
     }
 
@@ -78,10 +103,10 @@ public class MemberController {
         // 현재 로그인한 사용자의 정보를 가져옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        Users users = memberService.findByUsername(username);
+        String email = userDetails.getUsername();
+        Member member = memberService.findByEmail(email);
 
-        memberService.addFavoriteSocialing(users.getId(), socialingId);
+        memberService.addFavoriteSocialing(member.getId(), socialingId);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
@@ -92,8 +117,8 @@ public class MemberController {
 
     @GetMapping("/interest/me")
     public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(Principal principal) {
-        Users users = memberService.findByUsername(principal.getName());
-        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(users.getId());
+        Member member = memberService.findByEmail(principal.getName());
+        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(member.getId());
         return ResponseEntity.ok().body(favoriteSocialings);
     }
 
@@ -104,13 +129,14 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Users users = memberService.findByUsername(userDetails.getUsername());
-
+        Member member = memberService.findByEmail(userDetails.getUsername());
+        
         // 사용자 정보에서 name을 포함하여 반환
         Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("email", users.getEmail());
-        userInfo.put("username", users.getUsername());
+        userInfo.put("Email", member.getEmail());
+        userInfo.put("Nickname", member.getNickname());
 
         return ResponseEntity.ok(userInfo);
     }
+
 }
