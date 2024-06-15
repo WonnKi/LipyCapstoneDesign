@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card";
 import axios from "axios";
 import Col from "react-bootstrap/Col";
 import Sidebar from "../components/BC/Sidebar";
+import Footer from "../components/BC/Footer";
 const Socialing2 = () => {
     const [socialings, setSocialings] = useState([]);
 
@@ -125,11 +126,7 @@ const Socialing2 = () => {
                             </div>
                         </div>
                     </div>
-                    <footer className="sticky-footer">
-                        <div className="container my-auto">
-
-                        </div>
-                    </footer>
+                    <Footer/>
                 </div>
             </div>
         </div>

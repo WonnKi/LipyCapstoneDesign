@@ -4,10 +4,14 @@ import Card from "react-bootstrap/Card";
 import axios from "axios";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import Sidebar from "../components/BC/Sidebar"
+import Sidebar from "../components/BC/Sidebar";
+import Footer from "../components/BC/Footer";
+import Table from "react-bootstrap/Table";
 
 const Home = () => {
     const [socialings, setSocialings] = useState([]);
+    const [readingBooks, setReadingBooks] = useState([]);
+    const userId = 1; // 사용자 ID를 하드코딩합니다.
 
     useEffect(() => {
         const fetchSocialings = async () => {
@@ -19,34 +23,41 @@ const Home = () => {
             }
         };
 
+        const fetchReadingBooks = async () => {
+            try {
+                const token = localStorage.getItem("jwtToken");
+                const response = await axios.get(`/book/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setReadingBooks(response.data);
+            } catch (error) {
+                console.error("현재 읽는 중인 책을 불러오는 중 에러 발생:", error);
+            }
+        };
+
         fetchSocialings();
+        fetchReadingBooks();
     }, []);
 
     return (
         <div>
             <div id="wrapper">
-                <Sidebar/>
-                <div id="content-wrapper" className="d-flex flex-column"
-                     style={{
-                         background:"#D9C5AD"
-                     }}>
+                <Sidebar />
+                <div id="content-wrapper" className="d-flex flex-column" style={{ background: "#D9C5AD" }}>
                     <div id="content">
                         <div className="container-fluid">
-                            <div className="row"
-                                 style={{ marginTop: '20px' }}>
+                            <div className="row" style={{ marginTop: '20px' }}>
                                 <div className="row">
                                     <div className="col-xl-8 col-lg-5">
                                         <div className="card shadow mb-4">
-                                            <div
-                                                className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                                 <h6 className="m-0 font-weight-bold">캘린더</h6>
                                             </div>
                                             <div className="card-body">
                                                 <div>
-                                                    <FullCalendar
-                                                        plugins={[dayGridPlugin]}
-                                                        initialView="dayGridMonth"
-                                                    />
+                                                    <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
                                                 </div>
                                             </div>
                                         </div>
@@ -55,13 +66,28 @@ const Home = () => {
                                         <div className="card shadow mb-4">
                                             <div
                                                 className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                                <h6 className="m-0 font-weight-bold">현재 읽는 중</h6>
+                                                <h6 className="m-0 font-weight-bold">나의 서재</h6>
+                                                <Link to="/secondBookCase2"
+                                                      className="text-primary text-decoration-none">더보기</Link>
                                             </div>
                                             <div className="card-body">
-                                                <div>
-                                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                                                    <br/><br/><br/><br/><br/><br/>
-                                                </div>
+                                                {readingBooks.length > 0 ? (
+                                                    <Table bordered hover>
+                                                        <tbody>
+                                                        {readingBooks.slice(0, 6).map((book) => (
+                                                            <tr key={book.isbn}>
+                                                                <td>
+                                                                    <img src={book.image} alt={book.title}
+                                                                         style={{width: "50px"}}/>
+                                                                </td>
+                                                                <td>{book.title}</td>
+                                                            </tr>
+                                                        ))}
+                                                        </tbody>
+                                                    </Table>
+                                                ) : (
+                                                    <p>서재가 비어있습니다.</p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -82,36 +108,24 @@ const Home = () => {
                                                         <Link to={`/socialing/${socialing.id}`}
                                                               className="text-decoration-none">
                                                             <Card className="h-100">
-                                                                <Card
-                                                                    style={{
-                                                                        background: "white"
-                                                                    }}>
+                                                                <Card style={{background: "white"}}>
                                                                     <h5 className="card-title"
-                                                                        style={{
-                                                                            background:"white"
-                                                                        }}>{socialing.title}</h5>
+                                                                        style={{background: "white"}}>{socialing.title}</h5>
                                                                     <p className="card-text2"
-                                                                       style={{
-                                                                           background:"white"
-                                                                       }}>
+                                                                       style={{background: "white"}}>
                                                                         {socialing.description}
                                                                     </p>
-                                                                    <p
-                                                                        style={{
-                                                                            paddingLeft:15
-                                                                        }}>
-                                                                        {new Date(socialing.date).toLocaleDateString()}<br/>
+                                                                    <p style={{ paddingLeft: 15 }}>
+                                                                        {new Date(socialing.date).toLocaleDateString()}<br />
                                                                         {new Date(socialing.date).toLocaleTimeString()}
                                                                     </p>
-                                                                    <div className="card-footer"
-                                                                         style={{
-                                                                             display:"flex",
-                                                                             justifyContent:"space-between",
-                                                                             alignItems:"center"
-                                                                         }}>
+                                                                    <div className="card-footer" style={{
+                                                                        display: "flex",
+                                                                        justifyContent: "space-between",
+                                                                        alignItems: "center"
+                                                                    }}>
                                                                         <a>{socialing.writer}</a>
                                                                         <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
-
                                                                     </div>
                                                                 </Card>
                                                             </Card>
@@ -124,48 +138,31 @@ const Home = () => {
                                 </div>
                                 <div className="col-lg-12 mb-8">
                                     <div className="card shadow mb-4">
-                                        <div
-                                            className="card-header py-3 d-flex justify-content-between align-items-center">
-                                            <h6 className="m-0 font-weight-bold ">인기 소셜링</h6>
-                                            <Link to="/Socialing"
-                                                  className="text-primary text-decoration-none">더보기</Link>
+                                        <div className="card-header py-3 d-flex justify-content-between align-items-center">
+                                            <h6 className="m-0 font-weight-bold">인기 소셜링</h6>
+                                            <Link to="/Socialing" className="text-primary text-decoration-none">더보기</Link>
                                         </div>
                                         <div className="card-body">
                                             <div className="row">
                                                 {socialings.slice(0, 3).map((socialing) => (
                                                     <div key={socialing.id} className="col-lg-4 col-md-6 mb-8">
-                                                        <Link to={`/socialing/${socialing.id}`}
-                                                              className="text-decoration-none">
-                                                            <Card
-                                                                style={{
-                                                                    background: "white"
-                                                                }}>
-                                                                <h5 className="card-title"
-                                                                    style={{
-                                                                        background:"white"
-                                                                    }}>{socialing.title}</h5>
-                                                                <p className="card-text2"
-                                                                   style={{
-                                                                       background:"white"
-                                                                   }}>
+                                                        <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
+                                                            <Card style={{ background: "white" }}>
+                                                                <h5 className="card-title" style={{ background: "white" }}>{socialing.title}</h5>
+                                                                <p className="card-text2" style={{ background: "white" }}>
                                                                     {socialing.description}
                                                                 </p>
-                                                                <p
-                                                                    style={{
-                                                                        paddingLeft:15
-                                                                    }}>
-                                                                    {new Date(socialing.date).toLocaleDateString()}<br/>
+                                                                <p style={{ paddingLeft: 15 }}>
+                                                                    {new Date(socialing.date).toLocaleDateString()}<br />
                                                                     {new Date(socialing.date).toLocaleTimeString()}
                                                                 </p>
-                                                                <div className="card-footer"
-                                                                     style={{
-                                                                         display:"flex",
-                                                                         justifyContent:"space-between",
-                                                                         alignItems:"center"
-                                                                     }}>
+                                                                <div className="card-footer" style={{
+                                                                    display: "flex",
+                                                                    justifyContent: "space-between",
+                                                                    alignItems: "center"
+                                                                }}>
                                                                     <a>{socialing.writer}</a>
                                                                     <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
-
                                                                 </div>
                                                             </Card>
                                                         </Link>
@@ -178,11 +175,7 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <footer className="sticky-footer">
-                        <div className="container my-auto">
-
-                        </div>
-                    </footer>
+                    <Footer />
                 </div>
             </div>
         </div>

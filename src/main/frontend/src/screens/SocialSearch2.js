@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import SocialSearch from "./SocialSearch";
 import Button from "react-bootstrap/Button";
 import Sidebar from "../components/BC/Sidebar";
+import Footer from "../components/BC/Footer";
 
 const SocialSearch2 = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -96,11 +97,7 @@ const SocialSearch2 = () => {
                             </div>
                         </div>
                     </div>
-                    <footer className="sticky-footer">
-                        <div className="container my-auto">
-
-                        </div>
-                    </footer>
+                    <Footer/>
                 </div>
             </div>
 
