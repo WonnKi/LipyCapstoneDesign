@@ -33,6 +33,8 @@ import MyPage2 from "./screens/MyPage2";
 import SecondBookCase2 from "./screens/secondBookCase2";
 import SearchComponent from "./screens/SearchComponent";
 import Register from "./screens/Register";
+import BookSaveComponent from "./screens/BookSearchComponent";
+import BookListComponent from "./screens/BookListComponent";
 function App() {
   return (
       <BrowserRouter>
@@ -70,6 +72,8 @@ function App() {
             <Route path="/SecondBookCase2" element={ <SecondBookCase2 /> } />
             <Route path="/SearchComponent" element={ <SearchComponent />} />
             <Route path="/Register" element={<Register />} />
+            <Route path="BookSaveComponent" element={<BookSaveComponent />} />
+            <Route path="BookListComponent" element={<BookListComponent />} />
         </Routes>
       </BrowserRouter>
 

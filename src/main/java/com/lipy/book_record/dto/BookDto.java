@@ -1,5 +1,6 @@
 package com.lipy.book_record.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.entity.Member;
@@ -45,9 +46,9 @@ public class BookDto {
     private Integer score;
 
     private Integer readPage;
-
+    @JsonIgnore
     private Member user;
-
+    @JsonIgnore
     private List<Record> records;
 
     public Book toEntity() {

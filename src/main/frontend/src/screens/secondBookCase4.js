@@ -19,11 +19,8 @@ const SecondBookCase = () => {
     const [recordTitle, setRecordTitle] = useState("");
     const [recordContent, setRecordContent] = useState("");
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const [isAddingRecord, setIsAddingRecord] = useState(false);
-    const [updatedRecordTitle, setUpdatedRecordTitle] = useState("");
-    const [updatedRecordContent, setUpdatedRecordContent] = useState("");
 
-    const userId = 1; // Replace with actual user ID
+    const userId = 1;
 
     useEffect(() => {
         const fetchBookList = async () => {
@@ -95,7 +92,6 @@ const SecondBookCase = () => {
             setShowModal(false);
             setRecordTitle("");
             setRecordContent("");
-            setIsAddingRecord(false);
         } catch (error) {
             console.error("Error saving record:", error);
         }
@@ -118,71 +114,13 @@ const SecondBookCase = () => {
 
     const handleViewRecordDetails = (record) => {
         setSelectedRecord(record);
-        setUpdatedRecordTitle(record.title); // Initialize the updated title
-        setUpdatedRecordContent(record.content); // Initialize the updated content
         setShowRecordModal(true);
-    };
-
-    const handleUpdateRecord = async () => {
-        try {
-            const token = localStorage.getItem("jwtToken");
-            await axios.put(
-                `/record/${userId}/${selectedBook.isbn}/${selectedRecord.id}`,
-                {
-                    title: updatedRecordTitle,
-                    content: updatedRecordContent,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            // Update the local record list with the updated record
-            const updatedList = recordList.map((record) =>
-                record.id === selectedRecord.id
-                    ? { ...record, title: updatedRecordTitle, content: updatedRecordContent }
-                    : record
-            );
-            setRecordList(updatedList);
-            setShowRecordModal(false);
-            setSelectedRecord(null);
-        } catch (error) {
-            console.error("Error updating record:", error);
-        }
-    };
-
-    const handleDeleteRecord = async (rId) => {
-        try {
-            const token = localStorage.getItem("jwtToken");
-            await axios.delete(`/record/${userId}/${selectedBook.isbn}/${rId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setRecordList(recordList.filter((record) => record.id !== rId));
-            setSelectedRecord(null);
-        } catch (error) {
-            console.error("Error deleting record:", error);
-        }
     };
 
     const renderRecordButtons = () => {
         return recordList.map((record, index) => (
             <div key={index} style={{ marginBottom: 10 }}>
-                <Button
-                    variant="outline-secondary"
-                    onClick={() => handleViewRecordDetails(record)}
-                    style={{
-                        width: "100%",
-                        textAlign: "center",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                    }}
-                    className="d-flex justify-content-center align-items-center"
-                >
+                <Button variant="outline-secondary" onClick={() => handleViewRecordDetails(record)}>
                     {record.title}
                 </Button>
             </div>
@@ -201,21 +139,22 @@ const SecondBookCase = () => {
                                     <div className="card shadow mb-4">
                                         <div className="card-header py-3 d-flex justify-content-between align-items-center">
                                             <h6 className="m-0 font-weight-bold text-primary">독서 기록</h6>
-                                            <CaseModal2 />
+                                            <CaseModal2/>
                                         </div>
                                         <div className="card-body">
                                             <div className="row">
                                                 <Table bordered hover>
                                                     <thead>
                                                     <tr>
-                                                        <th style={{ width: "27%" }}>제목</th>
+                                                        <th style={{ width: "30%" }}>제목</th>
                                                         <th style={{ width: "5%" }}></th>
                                                         <th style={{ width: "15%" }}>작가</th>
                                                         <th style={{ width: "15%" }}>출판사</th>
                                                         <th style={{ width: "10%" }}>독서 시작일</th>
                                                         <th style={{ width: "10%" }}>전체 페이지</th>
                                                         <th style={{ width: "5%" }}></th>
-                                                        <th style={{ width: "5%" }}>상태</th>
+                                                        <th style={{ width: "5%" }}>상태 변경</th>
+                                                        <th style={{ width: "5%" }}>독서 기록 보기</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -239,7 +178,7 @@ const SecondBookCase = () => {
                                                             <td>{book.totPage}</td>
                                                             <td>
                                                                 <Button variant="danger" onClick={() => handleDeleteBook(book.isbn)}>
-                                                                    x
+                                                                    삭제
                                                                 </Button>
                                                             </td>
                                                             <td>
@@ -253,6 +192,11 @@ const SecondBookCase = () => {
                                                                     <Dropdown.Item eventKey="DONE">완독</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
+                                                            <td>
+                                                                <Button variant="info" onClick={() => handleViewRecords(book.isbn)}>
+                                                                    독서 기록 보기
+                                                                </Button>
+                                                            </td>
                                                         </tr>
                                                     ))}
                                                     </tbody>
@@ -264,118 +208,74 @@ const SecondBookCase = () => {
                             </div>
                         </div>
                     </div>
-                </div
-                >
+                </div>
             </div>
-            <div>
-                {/* 새로운 모달 창 */}
-                <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>도서 기록 상세 정보</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
-                        {selectedRecord ? (
-                            <div>
-                                <input
-                                    type="text"
-                                    placeholder="제목"
-                                    value={updatedRecordTitle}
-                                    onChange={(e) => setUpdatedRecordTitle(e.target.value)}
-                                    style={{ marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px" }}
-                                />
-                                <textarea
-                                    placeholder="내용"
-                                    value={updatedRecordContent}
-                                    onChange={(e) => setUpdatedRecordContent(e.target.value)}
-                                    style={{
-                                        marginBottom: "10px",
-                                        width: "100%",
-                                        padding: "8px",
-                                        fontSize: "16px",
-                                        minHeight: "400px"
-                                    }}
-                                />
-                                <Button variant="info" onClick={handleUpdateRecord} style={{ marginRight: "10px" }}>
-                                    수정
-                                </Button>
-                                <Button variant="danger" onClick={() => handleDeleteRecord(selectedRecord.id)}>
-                                    삭제
-                                </Button>
-                            </div>
-                        ) : (
-                            <div>
-                                {renderRecordButtons()}
-                            </div>
-                        )}
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowRecordModal(false)}>닫기</Button>
-                    </Modal.Footer>
-                </Modal>
 
-                {/* 기존 모달 창 */}
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{selectedBook && selectedBook.title}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
-                        {selectedBook && !isAddingRecord && (
-                            <div>
-                                <Row>
-                                    <Col xs lg="5">
-                                        <img src={selectedBook.image} alt={selectedBook.title} style={{ width: '100%' }} />
-                                    </Col>
-                                    <Col>
-                                        <p>작가: {selectedBook.author}</p>
-                                        <p>출판사: {selectedBook.publisher}</p>
-                                        <p>독서 상태: {selectedBook.status}</p>
-                                        <p>독서 시작일: {selectedBook.startDate}</p>
-                                        <p>전체 페이지: {selectedBook.totPage}</p>
-                                    </Col>
-                                </Row>
-                                <div style={{ marginTop: '10px' }}>
-                                    <Button variant="info" onClick={() => setIsAddingRecord(true)}>독서 기록 추가하기</Button>
-                                    <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)} style={{ marginLeft: '10px' }}>
-                                        메모 보기
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
+            {/* 새로운 모달 창 */}
+            <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>도서 기록 상세 정보</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
+                    {selectedRecord ? (
+                        <div>
+                            <h5>{selectedRecord.title}</h5>
+                            <p>{selectedRecord.content}</p>
+                            <Button variant="outline-primary" onClick={() => setSelectedRecord(null)}>
+                                뒤로가기
+                            </Button>
+                        </div>
+                    ) : (
+                        <div>
+                            {renderRecordButtons()} {/* 독서 기록 버튼 목록 */}
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowRecordModal(false)}>닫기</Button>
+                </Modal.Footer>
+            </Modal>
 
-                        {selectedBook && isAddingRecord && (
-                            <div>
-                                <input
-                                    type="text"
-                                    placeholder="제목"
-                                    value={recordTitle}
-                                    onChange={(e) => setRecordTitle(e.target.value)}
-                                    style={{ marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px" }}
-                                />
-                                <textarea
-                                    placeholder="내용"
-                                    value={recordContent}
-                                    onChange={(e) => setRecordContent(e.target.value)}
-                                    style={{
-                                        marginBottom: "10px",
-                                        width: "100%",
-                                        padding: "8px",
-                                        fontSize: "16px",
-                                        minHeight: "400px"
-                                    }}
-                                />
-                                <Button variant="info" onClick={handleSaveRecord} style={{ marginRight: "10px" }}>
-                                    저장
-                                </Button>
-                                <Button variant="secondary" onClick={() => setIsAddingRecord(false)}>
-                                    취소
-                                </Button>
-                            </div>
-                        )}
-                    </Modal.Body>
-                </Modal>
-            </div>
+            {/* 기존 모달 창 */}
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{selectedBook && selectedBook.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
+                    {selectedBook && (
+                        <div>
+                            <Row>
+                                <Col xs lg="5">
+                                    <img src={selectedBook.image} alt={selectedBook.title} style={{ width: '100%' }} />
+                                </Col>
+                                <Col>
+                                    <p>작가: {selectedBook.author}</p>
+                                    <p>출판사: {selectedBook.publisher}</p>
+                                    <p>독서 상태: {selectedBook.status}</p>
+                                    <p>독서 시작일: {selectedBook.startDate}</p>
+                                    <p>전체 페이지: {selectedBook.totPage}</p>
+                                </Col>
+                            </Row>
+                            <input
+                                type="text"
+                                placeholder="독서 기록 제목"
+                                value={recordTitle}
+                                onChange={(e) => setRecordTitle(e.target.value)}
+                            />
+                            <textarea
+                                placeholder="독서 기록 내용"
+                                value={recordContent}
+                                onChange={(e) => setRecordContent(e.target.value)}
+                            />
+                            <Button variant="info" onClick={handleSaveRecord}>저장</Button>
+                            <Button variant="secondary" onClick={() => setShowModal(false)}>닫기</Button>
+                        </div>
+                    )}
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };
 
 export default SecondBookCase;
+

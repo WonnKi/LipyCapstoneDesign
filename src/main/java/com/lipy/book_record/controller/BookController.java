@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -18,7 +19,7 @@ public class BookController {
     private final BookService saveService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<String> SaveBook(@PathVariable("userId") Long userId, SearchDto info, @RequestBody int page){
+    public ResponseEntity<String> saveBook(@PathVariable("userId") Long userId, @RequestBody SearchDto info, @RequestParam("page") int page){
         return saveService.saveBook(userId, info, page);
     }
     @GetMapping("/{userId}")
@@ -32,7 +33,8 @@ public class BookController {
     }
 
     @PatchMapping("/{userId}/{isbn}")
-    public ResponseEntity<String> changeStatus(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn,@RequestBody String status){
+    public ResponseEntity<String> changeStatus(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn, @RequestBody Map<String, String> request) {
+        String status = request.get("status");
         return saveService.changeStatus(userId, isbn, status);
     }
 
