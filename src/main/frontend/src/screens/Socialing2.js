@@ -51,6 +51,9 @@ const Socialing2 = () => {
                                                 <li className="nav-item">
                                                     <a className="nav-link" href="HotSocialing2">인기</a>
                                                 </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="FavoriteSocialing">관심</a>
+                                                </li>
                                             </ul>
                                         </nav>
                                         <div className="card-body">
@@ -59,32 +62,6 @@ const Socialing2 = () => {
                                                     <Col key={socialing.id} className="col-lg-4 col-md-4 mb-4 ">
                                                         <Link to={`/socialing/${socialing.id}`}
                                                               className="text-decoration-none">
-                                                            {/*<Card className="h-100">*/}
-                                                            {/*    <Card.Title*/}
-                                                            {/*    style={{*/}
-                                                            {/*        background:"white",*/}
-                                                            {/*    }}>*/}
-                                                            {/*        <h5>{socialing.title}</h5>*/}
-                                                            {/*    </Card.Title>*/}
-                                                            {/*    <Card.Body*/}
-                                                            {/*        style={{*/}
-                                                            {/*            background:"white",*/}
-                                                            {/*        }}>*/}
-                                                            {/*        {socialing.description}*/}
-                                                            {/*    </Card.Body>*/}
-                                                            {/*    <Card.Body*/}
-                                                            {/*        style={{*/}
-                                                            {/*            background:"white",*/}
-                                                            {/*        }}>*/}
-                                                            {/*        <div>{new Date(socialing.date).toLocaleDateString()}</div>*/}
-                                                            {/*        <div>*/}
-                                                            {/*            {socialing.currentparticipants}/{socialing.maxparticipants}*/}
-                                                            {/*        </div>*/}
-                                                            {/*    </Card.Body>*/}
-                                                            {/*    <Card.Footer>*/}
-                                                            {/*        dd*/}
-                                                            {/*    </Card.Footer>*/}
-                                                            {/*</Card>*/}
                                                             <Card
                                                                 style={{
                                                                     background: "white"
@@ -126,7 +103,6 @@ const Socialing2 = () => {
                             </div>
                         </div>
                     </div>
-                    <Footer/>
                 </div>
             </div>
         </div>

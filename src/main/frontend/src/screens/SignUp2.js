@@ -68,11 +68,9 @@ const SignUp2 = () => {
                 navigate('/login');
             }
         } catch (error) {
-            setMessage('Registration failed: ' + error.response?.data);
+            (window.confirm("중복된 이메일"));
         }
     };
-
-
 
 
     return <div>

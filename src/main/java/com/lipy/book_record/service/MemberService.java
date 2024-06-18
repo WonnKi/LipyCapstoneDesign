@@ -85,4 +85,15 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return member.getFavoriteSocialings().stream().anyMatch(socialing -> socialing.getId().equals(socialingId));
     }
+
+    public boolean isFavoriteSocialing(Long memberId, Long socialingId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member == null) {
+            throw new IllegalArgumentException("Invalid member ID");
+        }
+
+        // 관심있는 소셜링 목록에서 확인
+        return member.getFavoriteSocialings().stream()
+                .anyMatch(socialing -> socialing.getId().equals(socialingId));
+    }
 }

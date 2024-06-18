@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const FavoriteSocialing = () => {
     const [favoriteSocialings, setFavoriteSocialings] = useState([]);
@@ -45,25 +47,24 @@ const FavoriteSocialing = () => {
     return (
         <div>
             <h2>내가 관심 등록한 게시글</h2>
-            <ul>
+            <Row xs={1} md={2} lg={3} className="g-4">
                 {favoriteSocialings.map((socialing) => (
-                    <li key={socialing.id}>
+                    <Col key={socialing.id}>
                         <Link to={`/socialing/${socialing.id}`} style={{ textDecoration: 'none' }}>
                             <Card style={{ width: '18rem', margin: 20 }}>
-                                {/*<Card.Img variant="top" src={socialing.imageUrl} />*/}
                                 <Card.Body>
                                     <Card.Title>{socialing.title}<br />{new Date(socialing.date).toLocaleDateString()}</Card.Title>
                                     <Card.Text>{socialing.description}<br />{socialing.writer}</Card.Text>
                                     <hr />
                                     <p>참여자 수: {socialing.currentparticipants}</p>
                                     <p>최대 참여자 수: {socialing.maxparticipants}</p>
-                                    <p>번호 : {socialing.id}</p>
+                                    <p>id : {socialing.id}</p>
                                 </Card.Body>
                             </Card>
                         </Link>
-                    </li>
+                    </Col>
                 ))}
-            </ul>
+            </Row>
         </div>
     );
 };

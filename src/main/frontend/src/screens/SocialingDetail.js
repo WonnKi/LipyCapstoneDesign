@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Card, Button, Modal, Spinner, Alert } from 'react-bootstrap';
+import { Container, Card, Button, Modal, Spinner, Alert } from 'react-bootstrap'
+import Sidebar from "../components/BC/Sidebar";
 
 const SocialingDetails = () => {
     const { id } = useParams();
@@ -13,6 +14,8 @@ const SocialingDetails = () => {
     const [showModal, setShowModal] = useState(false);
     const [applicants, setApplicants] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -44,6 +47,13 @@ const SocialingDetails = () => {
                 });
                 setIsApplied(applyResponse.data.isApplied);
                 setApplicationId(applyResponse.data.applicationId);
+
+                const favoriteResponse = await axios.get(`http://localhost:8080/${id}/isFavorite`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setIsFavorite(favoriteResponse.data.isFavorite);
+
+
 
             } catch (error) {
                 setMessage('Error fetching post: ' + (error.response?.data || error.message));
@@ -178,60 +188,71 @@ const SocialingDetails = () => {
 
 
     return (
-        <section className="page-section cta">
-            <Container>
-                <div
-                    style={{
-                        padding:130,
-                    }}>
+        <div>
+            <div id="wrapper">
+                <Sidebar/>
+                <Container>
                     <div
                         style={{
-                            background:"#F2EFE4",
-                            padding:20
+                            padding: 130,
                         }}>
-                        <h2
+                        <div
                             style={{
-                                fontWeight:"bold"
+                                background: "#F2EFE4",
+                                padding: 20
                             }}>
-                            {post?.title}
-                        </h2>
-                        <div className="d-flex justify-content-between">
-                            <span>{post?.writer}</span>
-                            {isAuthor && (
-                                <div>
-                                    <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
-                                    <Button onClick={handleDeleteClick}>삭제</Button>
-                                </div>
-                            )}
-                        </div>
-                        <hr/>
-                        <div className="post-content">
-                            <div dangerouslySetInnerHTML={{ __html: post?.content }} />
-                        </div>
-                        <div style={{ margin: '100px 0' }}></div>
-                        <div className="text-center my-4">
-                            <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
-                        </div>
-                        <hr/>
-                        <p>모집: {post?.currentparticipants}/{post?.maxparticipants}</p>
-                        <div className="d-flex justify-content-between">
-                            <Button onClick={handleShowApplicants}>신청자 보기</Button>
-                            <div>
-                                {isApplied ? (
-                                    <Button onClick={handleCancelClick}>신청 취소</Button>
-                                ) : (
-                                    <Button onClick={handleApplyClick}>신청하기</Button>
+                            <h2
+                                style={{
+                                    fontWeight: "bold"
+                                }}>
+                                {post?.title}
+                            </h2>
+                            <div className="d-flex justify-content-between">
+                                <span>{post?.writer}</span>
+                                {isAuthor && (
+                                    <div>
+                                        <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
+                                        <Button onClick={handleDeleteClick}>삭제</Button>
+                                    </div>
                                 )}
-                                {' '}
-                                <Button onClick={isApplied ? handleRemoveInterestClick : handleAddInterestClick}>
-                                    {isApplied ? "관심 등록 취소" : "관심등록"}
-                                </Button>
                             </div>
+                            <hr/>
+                            <div className="post-content">
+                                <div dangerouslySetInnerHTML={{__html: post?.content}}/>
+                            </div>
+                            <div style={{margin: '100px 0'}}></div>
+                            <div className="text-center my-4">
+                                <span>날짜 : {new Date(post?.date).toLocaleDateString()}</span>
+                            </div>
+                            <hr/>
+                            <p>모집: {post?.currentparticipants}/{post?.maxparticipants}</p>
+                            <div className="d-flex justify-content-between">
+                                {isAuthor && (
+                                    <Button onClick={handleShowApplicants}>신청자 보기</Button>
+                                )}
+                                <div>
+                                    {!isAuthor && (
+                                        <>
+                                            {isApplied ? (
+                                                <Button onClick={handleCancelClick}>신청 취소</Button>
+                                            ) : (
+                                                <Button onClick={handleApplyClick}>신청 하기</Button>
+                                            )}
+                                            {' '}
+                                            {isFavorite ? (
+                                                <Button onClick={handleRemoveInterestClick}>관심 등록 취소</Button>
+                                            ) : (
+                                                <Button onClick={handleAddInterestClick}>관심 등록</Button>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            {message && <Alert variant="info" className="mt-3">{message}</Alert>}
                         </div>
-                        {message && <Alert variant="info" className="mt-3">{message}</Alert>}
                     </div>
-                </div>
-            </Container>
+                </Container>
+            </div>
 
 
             <Modal show={showModal} onHide={handleCloseModal}>
@@ -255,7 +276,8 @@ const SocialingDetails = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </section>
+        </div>
+
     );
 };
 

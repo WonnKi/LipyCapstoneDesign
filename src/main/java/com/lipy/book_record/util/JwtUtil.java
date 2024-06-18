@@ -21,8 +21,9 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, Long memberId) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", memberId); // id 값을 추가
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -64,5 +65,9 @@ public class JwtUtil {
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
+    }
+
+    public Long getIdFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get("id", Long.class));
     }
 }

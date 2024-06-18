@@ -41,10 +41,19 @@ const HotSocialing2 = () => {
                                             <a className="navbar-brand">인기 소셜링</a>
                                             <ul className="nav nav-pills">
                                                 <li className="nav-item">
+                                                    <a className="nav-link" href="/Write">글쓰기</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="/SocialSearch2">검색</a>
+                                                </li>
+                                                <li className="nav-item">
                                                     <a className="nav-link" href="/Socialing2">최신</a>
                                                 </li>
                                                 <li className="nav-item">
                                                     <a className="nav-link" href="HotSocialing2">인기</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="FavoriteSocialing">관심</a>
                                                 </li>
                                             </ul>
                                         </nav>
@@ -52,7 +61,7 @@ const HotSocialing2 = () => {
                                             <div className="row">
                                                 {socialings.map((socialing, index) => (
                                                     <Col key={index} className="col-lg-4 col-md-6 mb-8">
-                                                        <Link to={`/socialing/${socialing.id}`}
+                                                    <Link to={`/socialing/${socialing.id}`}
                                                               className="text-decoration-none">
                                                             <Card
                                                                 style={{

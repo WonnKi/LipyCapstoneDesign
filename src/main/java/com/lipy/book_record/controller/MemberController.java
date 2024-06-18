@@ -46,7 +46,13 @@ public class MemberController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String jwtToken = jwtUtil.generateToken(userDetails);
+            String email = userDetails.getUsername();
+            Member member = memberService.findByUsername(email);
+            Long memberId = member.getId();
+
+            String jwtToken = jwtUtil.generateToken(userDetails,memberId);
+
+
 
             return ResponseEntity.ok().body("login succeed "+jwtToken);
         } catch (Exception e) {
@@ -155,6 +161,27 @@ public class MemberController {
             return ResponseEntity.ok("Email verified successfully.");
         } else {
             return ResponseEntity.status(400).body("Invalid verification code.");
+        }
+    }
+
+    @GetMapping("/{id}/isFavorite")
+    public ResponseEntity<Map<String, Object>> isFavorite(@PathVariable("id") Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // 현재 로그인한 사용자의 정보를 가져옴
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            Member member = memberService.findByUsername(username);
+
+            // 관심있는 소셜링 여부를 확인
+            boolean isFavorite = memberService.isFavoriteSocialing(member.getId(), id);
+            response.put("isFavorite", isFavorite);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("isFavorite", false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

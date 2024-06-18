@@ -11,9 +11,18 @@ import Table from "react-bootstrap/Table";
 const Home = () => {
     const [socialings, setSocialings] = useState([]);
     const [readingBooks, setReadingBooks] = useState([]);
-    const userId = 1; // 사용자 ID를 하드코딩합니다.
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
+        const fetchUserId = () => {
+            const token = localStorage.getItem("jwtToken");
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const userIdFromToken = decodedToken.id;
+                setUserId(userIdFromToken);
+            }
+        };
+
         const fetchSocialings = async () => {
             try {
                 const response = await axios.get('/socialing');
@@ -37,9 +46,20 @@ const Home = () => {
             }
         };
 
+        fetchUserId();
         fetchSocialings();
-        fetchReadingBooks();
-    }, []);
+        if (userId) {
+            fetchReadingBooks();
+        }
+    }, [userId]);
+
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return {};
+        }
+    };
 
     return (
         <div>

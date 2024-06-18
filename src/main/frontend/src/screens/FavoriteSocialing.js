@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
-import Row from "react-bootstrap/Row";
+import axios from "axios";
 import Col from "react-bootstrap/Col";
+import Sidebar from "../components/BC/Sidebar";
+import Footer from "../components/BC/Footer";
 
 const FavoriteSocialing = () => {
     const [favoriteSocialings, setFavoriteSocialings] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchFavoriteSocialings = async () => {
-            setLoading(true);
             try {
                 const token = localStorage.getItem('jwtToken');
                 if (!token) {
-                    setError('No token found, please login again.');
-                    setLoading(false);
+                    console.error('No token found, please login again.');
                     return;
                 }
                 const response = await axios.get('http://localhost:8080/interest/me', {
@@ -26,45 +23,100 @@ const FavoriteSocialing = () => {
                     },
                 });
                 setFavoriteSocialings(response.data);
-                setLoading(false);
             } catch (error) {
-                setError('Error fetching favorite socialings: ' + (error.response?.data || error.message));
-                setLoading(false);
+                console.error('Error fetching favorite socialings:', error);
             }
         };
 
         fetchFavoriteSocialings();
     }, []);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
     return (
         <div>
-            <h2>내가 관심 등록한 게시글</h2>
-            <Row xs={1} md={2} lg={3} className="g-4">
-                {favoriteSocialings.map((socialing) => (
-                    <Col key={socialing.id}>
-                        <Link to={`/socialing/${socialing.id}`} style={{ textDecoration: 'none' }}>
-                            <Card style={{ width: '18rem', margin: 20 }}>
-                                <Card.Body>
-                                    <Card.Title>{socialing.title}<br />{new Date(socialing.date).toLocaleDateString()}</Card.Title>
-                                    <Card.Text>{socialing.description}<br />{socialing.writer}</Card.Text>
-                                    <hr />
-                                    <p>참여자 수: {socialing.currentparticipants}</p>
-                                    <p>최대 참여자 수: {socialing.maxparticipants}</p>
-                                    <p>id : {socialing.id}</p>
-                                </Card.Body>
-                            </Card>
-                        </Link>
-                    </Col>
-                ))}
-            </Row>
+            <div id="wrapper">
+                <Sidebar/>
+                <div id="content-wrapper" className="d-flex flex-column"
+                     style={{
+                         background:"#D9C5AD"
+                     }}>
+                    <div id="content">
+
+                        <div className="container-fluid">
+                            <div className="row"
+                                 style={{ marginTop: '20px' }}>
+                                <div className="col-lg-12 mb-8">
+                                    <div className="card shadow mb-4">
+                                        <nav id="navbar-example2" className="navbar bg-body-tertiary px-3 mb-3">
+                                            <a className="navbar-brand">관심 소셜링</a>
+                                            <ul className="nav nav-pills">
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="/Write">글쓰기</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="/SocialSearch2">검색</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="/Socialing2">최신</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="HotSocialing2">인기</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="FavoriteSocialing">관심</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <div className="card-body">
+                                            <div className="row">
+                                                {favoriteSocialings.map((socialing, index) => (
+                                                    <Col key={index} className="col-lg-4 col-md-6 mb-8">
+                                                        <Link to={`/socialing/${socialing.id}`}
+                                                              className="text-decoration-none">
+                                                            <Card
+                                                                style={{
+                                                                    background: "white"
+                                                                }}>
+                                                                <h5 className="card-title"
+                                                                    style={{
+                                                                        background:"white"
+                                                                    }}>{socialing.title}</h5>
+                                                                <p className="card-text2"
+                                                                   style={{
+                                                                       background:"white"
+                                                                   }}>
+                                                                    {socialing.description}
+                                                                </p>
+                                                                <p
+                                                                    style={{
+                                                                        paddingLeft:15
+                                                                    }}>
+                                                                    {new Date(socialing.date).toLocaleDateString()}<br/>
+                                                                    {new Date(socialing.date).toLocaleTimeString()}
+                                                                </p>
+                                                                <div className="card-footer"
+                                                                     style={{
+                                                                         display:"flex",
+                                                                         justifyContent:"space-between",
+                                                                         alignItems:"center"
+                                                                     }}>
+                                                                    <a>{socialing.writer}</a>
+                                                                    <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
+
+                                                                </div>
+                                                            </Card>
+                                                        </Link>
+                                                    </Col>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <Footer/>
+                </div>
+            </div>
         </div>
     );
 };

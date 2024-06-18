@@ -24,7 +24,7 @@ const SecondBookCase = () => {
     const [isEditingRecord, setIsEditingRecord] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState("ALL");
 
-    const userId = 1;
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const fetchBookList = async () => {
@@ -208,6 +208,47 @@ const SecondBookCase = () => {
     };
 
 
+    useEffect(() => {
+        const fetchUserId = () => {
+            const token = localStorage.getItem("jwtToken");
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const userIdFromToken = decodedToken.id;
+                setUserId(userIdFromToken);
+            }
+        };
+
+        fetchUserId();
+    }, []);
+
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return {};
+        }
+    };
+
+    useEffect(() => {
+        if (userId) {
+            fetchBookList();
+        }
+    }, [userId]);
+
+    const fetchBookList = async () => {
+        try {
+            const token = localStorage.getItem("jwtToken");
+            const response = await axios.get(`/book/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setBookList(response.data);
+        } catch (error) {
+            console.error("Error fetching book list:", error);
+        }
+    };
+
 
     return (
         <div>
@@ -295,7 +336,6 @@ const SecondBookCase = () => {
                             </div>
                         </div>
                     </div>
-                    <Footer/>
                 </div>
             </div>
 
