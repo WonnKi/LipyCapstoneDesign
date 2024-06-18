@@ -17,28 +17,24 @@ const Login = () => {
 
     // --------
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/login', {
-                username,
+                email,
                 password,
             });
-            const token = response.data.split(' ')[2]; // "login succeed <token>"에서 토큰만 추출
+            const token = response.data.split(' ')[2];
             localStorage.setItem('jwtToken', token);
             if (window.confirm("로그인 성공.")) {
                 navigate('/');
             }
         } catch (error) {
-              window.confirm("아이디 또는 비밀번호를 확인하세요.");
+              window.confirm("이메일 또는 비밀번호를 확인하세요.");
         }
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('jwtToken'); // JWT 토큰 삭제
     };
 
     return (
@@ -62,8 +58,8 @@ const Login = () => {
                                                 <div className="form-group">
                                                     <input type="text" className="form-control form-control-user"
                                                            id="exampleInputEmail" aria-describedby="emailHelp"
-                                                           value={username}
-                                                           onChange={(e) => setUsername(e.target.value)}
+                                                           value={email}
+                                                           onChange={(e) => setEmail(e.target.value)}
                                                            placeholder="아이디"/>
                                                 </div>
                                                 <div className="form-group">

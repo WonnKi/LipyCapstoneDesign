@@ -45,8 +45,9 @@
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                handleClose(); // 저장 후 모달 닫기
-                setShowPageInput(false); // 페이지 입력 모달 닫기
+                handleClose();
+                setShowPageInput(false);
+                window.location.reload();
             } catch (error) {
                 console.error('Error saving book:', error);
             }
@@ -57,8 +58,14 @@
             setShowPageInput(true); // 페이지 입력 모달 열기
         };
 
+        const Enter = (e) => {
+            if (e.key === 'Enter') {
+                handleSearch(); // Enter 키가 눌리면 handleSearch 함수 호출
+            }
+        };
+
         return (
-            <>
+            <div>
                 <Button variant="primary" onClick={handleShow}
                         >
                     +
@@ -69,7 +76,8 @@
                         <h2>책 검색</h2>
                         <div style={{ position: "absolute", right: "10%", top: "10%", border: '1px solid black' }}>
                             <input type="text" placeholder="책 제목을 입력하세요" value={bookName}
-                                   onChange={e => setBookName(e.target.value)} />
+                                   onChange={e => setBookName(e.target.value)}
+                                   onKeyDown={Enter}/>
                             <input type="submit" value="검색" onClick={handleSearch} />
                         </div>
                     </Modal.Header>
@@ -127,7 +135,7 @@
                         </Modal.Footer>
                     </Modal>
                 </Modal>
-            </>
+            </div>
         );
     }
     export default CaseModal2;

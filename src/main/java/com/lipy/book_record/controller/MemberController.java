@@ -39,7 +39,7 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(), loginRequest.getPassword());
+                    loginRequest.getEmail(), loginRequest.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 

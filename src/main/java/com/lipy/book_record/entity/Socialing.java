@@ -20,14 +20,11 @@ public class Socialing {
 
     private String title;
     private String description;
-
     private String writer;
     private String content;
     private int maxparticipants; // 최대 참여자 수
     private int currentparticipants; // 현재 참여자 수
     private Date date;
-
-    //private String status; // "Pending", "Accepted", "Rejected"
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -36,7 +33,6 @@ public class Socialing {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
 
 
     // 다대다 관계로 멤버와 연결

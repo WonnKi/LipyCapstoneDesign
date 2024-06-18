@@ -96,4 +96,17 @@ public class BookService {
         }
 
     }
+
+    public List<BookDto> ViewBookList(Long userId, BookStatus status) {
+        return userRep
+                .findById(userId)
+                .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))
+                .getBooks()
+                .stream()
+                .filter(book -> book.getBookStatus().equals(status))
+                .map(BookDto::new)
+                .toList();
+    }
+
+
 }

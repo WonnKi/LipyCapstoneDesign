@@ -2,6 +2,7 @@ package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
+import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,11 @@ public class BookController {
         String status = request.get("status");
         return saveService.changeStatus(userId, isbn, status);
     }
+
+    @GetMapping("/{userId}/detail")
+    public List<BookDto> ViewBookList(@PathVariable("userId") Long userId, @RequestParam("status") BookStatus status){
+        return saveService.ViewBookList(userId, status);
+    }
+
 
 }

@@ -46,18 +46,6 @@
 //             });
 //     };
 //
-//     const handleAddFavorite = () => {
-//         axios.post(`/socialing/${id}/interest`, null, {
-//             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-//         })
-//             .then(response => {
-//                 alert('Added to your favorite socialings');
-//             })
-//             .catch(error => {
-//                 alert('Failed to add to favorite socialings');
-//             });
-//     };
-//
 //     const openModal = () => {
 //         setModalIsOpen(true);
 //     };
@@ -79,8 +67,6 @@
 //             <p>Max Participants: {post.maxparticipants}</p>
 //             <p>Date: {new Date(post.date).toLocaleString()}</p>
 //             <p>Created At: {new Date(post.createdAt).toLocaleString()}</p>
-//             <button onClick={() => navigate(-1)}>Back</button>
-//             <button onClick={handleAddFavorite}>Add to Favorites</button>
 //             {isWriter && (
 //                 <button onClick={openModal}>참여인원 확인하기</button>
 //             )}

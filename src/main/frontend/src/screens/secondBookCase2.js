@@ -22,6 +22,7 @@ const SecondBookCase = () => {
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [isAddingRecord, setIsAddingRecord] = useState(false);
     const [isEditingRecord, setIsEditingRecord] = useState(false);
+    const [selectedStatus, setSelectedStatus] = useState("ALL");
 
     const userId = 1;
 
@@ -42,6 +43,29 @@ const SecondBookCase = () => {
         fetchBookList();
     }, [userId]);
 
+    const fetchBookListByStatus = async (status) => {
+        try {
+            const token = localStorage.getItem("jwtToken");
+            const response = await axios.get(`/book/${userId}/detail?status=${status}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setBookList(response.data);
+        } catch (error) {
+            console.error("Error fetching book list by status:", error);
+        }
+    };
+
+    const handleStatusChange = (status) => {
+        setSelectedStatus(status);
+        if (status === "ALL") {
+            window.location.reload();
+        } else {
+            fetchBookListByStatus(status);
+        }
+    };
+
     const handleDeleteBook = async (isbn) => {
         try {
             const token = localStorage.getItem("jwtToken");
@@ -60,8 +84,9 @@ const SecondBookCase = () => {
         try {
             const token = localStorage.getItem("jwtToken");
             await axios.patch(
-                `/book/${userId}/${isbn}`,
-                { status: newStatus },
+                `/book/${userId}/${isbn}`, {
+                    status: newStatus
+                },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -73,6 +98,7 @@ const SecondBookCase = () => {
                 book.isbn === isbn ? { ...book, status: newStatus } : book
             );
             setBookList(updatedBookList);
+            window.location.reload();
         } catch (error) {
             console.error("Error changing book status:", error);
         }
@@ -181,6 +207,8 @@ const SecondBookCase = () => {
         ));
     };
 
+
+
     return (
         <div>
             <div id="wrapper">
@@ -197,6 +225,17 @@ const SecondBookCase = () => {
                                         </div>
                                         <div className="card-body">
                                             <div className="row">
+                                                <DropdownButton
+                                                    id="dropdown-status-button"
+                                                    title={`상태: ${selectedStatus}`}
+                                                    onSelect={handleStatusChange}
+                                                    style={{ marginBottom: "20px" }}
+                                                >
+                                                    <Dropdown.Item eventKey="ALL">모두</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="WISH">예정</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="READING">독서중</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="DONE">완독</Dropdown.Item>
+                                                </DropdownButton>
                                                 <Table bordered hover>
                                                     <thead>
                                                     <tr>
@@ -237,7 +276,7 @@ const SecondBookCase = () => {
                                                             <td>
                                                                 <DropdownButton
                                                                     id="dropdown-basic-button"
-                                                                    title={book.status}
+                                                                    title={book.bookStatus}
                                                                     onSelect={(eventKey) => handleChangeStatus(book.isbn, eventKey)}
                                                                 >
                                                                     <Dropdown.Item eventKey="WISH">예정</Dropdown.Item>
@@ -335,6 +374,7 @@ const SecondBookCase = () => {
                 </Modal.Footer>
             </Modal>
 
+
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedBook && selectedBook.title}</Modal.Title>
@@ -349,13 +389,13 @@ const SecondBookCase = () => {
                                 <Col>
                                     <p>작가: {selectedBook.author}</p>
                                     <p>출판사: {selectedBook.publisher}</p>
-                                    <p>독서 상태: {selectedBook.status}</p>
+                                    <p>독서 상태: {selectedBook.bookStatus}</p>
                                     <p>독서 시작일: {selectedBook.startDate}</p>
                                     <p>전체 페이지: {selectedBook.totPage}</p>
                                 </Col>
                             </Row>
                             <div style={{marginTop: '10px'}}>
-                                <Button variant="info" onClick={() => setIsAddingRecord(true)}>독서 기록 추가하기</Button>
+                                <Button variant="info" onClick={() => setIsAddingRecord(true)}>메모 하기</Button>
                                 <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)}
                                         style={{marginLeft: '10px'}}>
                                     메모 보기
