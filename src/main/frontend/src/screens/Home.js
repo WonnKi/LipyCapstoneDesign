@@ -10,6 +10,7 @@ import Table from "react-bootstrap/Table";
 
 const Home = () => {
     const [socialings, setSocialings] = useState([]);
+    const [hotSocialings, setHotSocialings] = useState([]);
     const [readingBooks, setReadingBooks] = useState([]);
     const [userId, setUserId] = useState(null);
 
@@ -32,6 +33,15 @@ const Home = () => {
             }
         };
 
+        const fetchHotSocialings = async () => {
+            try {
+                const response = await axios.get('/socialing/hot');
+                setHotSocialings(response.data);
+            } catch (error) {
+                console.error('인기 소셜링을 불러오는 중 에러 발생:', error);
+            }
+        };
+
         const fetchReadingBooks = async () => {
             try {
                 const token = localStorage.getItem("jwtToken");
@@ -48,6 +58,7 @@ const Home = () => {
 
         fetchUserId();
         fetchSocialings();
+        fetchHotSocialings();
         if (userId) {
             fetchReadingBooks();
         }
@@ -164,7 +175,7 @@ const Home = () => {
                                         </div>
                                         <div className="card-body">
                                             <div className="row">
-                                                {socialings.slice(0, 3).map((socialing) => (
+                                                {hotSocialings.slice(0, 3).map((socialing) => (
                                                     <div key={socialing.id} className="col-lg-4 col-md-6 mb-8">
                                                         <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
                                                             <Card style={{ background: "white" }}>
@@ -195,7 +206,6 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <Footer />
                 </div>
             </div>
         </div>

@@ -105,7 +105,6 @@ const HotSocialing2 = () => {
                             </div>
                         </div>
                     </div>
-                    <Footer/>
                 </div>
             </div>
         </div>

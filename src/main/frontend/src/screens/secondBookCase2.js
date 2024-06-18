@@ -342,7 +342,7 @@ const SecondBookCase = () => {
 
             <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>도서 기록 상세 정보</Modal.Title>
+                    <Modal.Title>내 메모</Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
                     {selectedRecord ? (

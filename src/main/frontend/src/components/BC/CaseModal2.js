@@ -9,21 +9,21 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
     const [bookName, setBookName] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [savePage, setSavePage] = useState('');
-    const [showPageInput, setShowPageInput] = useState(false); // 페이지 입력 모달 상태
-    const [selectedBook, setSelectedBook] = useState(null); // 선택된 책 정보 저장
-    const [userId, setUserId] = useState(null); // 사용자 ID 상태
+    const [showPageInput, setShowPageInput] = useState(false);
+    const [selectedBook, setSelectedBook] = useState(null);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const fetchUserId = () => {
             const token = localStorage.getItem('jwtToken');
             if (token) {
                 const decodedToken = parseJwt(token);
-                const userIdFromToken = decodedToken.id; // 예를 들어, 토큰에서 사용자 ID 추출
-                setUserId(userIdFromToken); // 추출된 사용자 ID 설정
+                const userIdFromToken = decodedToken.id;
+                setUserId(userIdFromToken);
             }
         };
 
-        fetchUserId(); // 페이지 로드 시 한 번 호출하여 사용자 ID 설정
+        fetchUserId();
     }, []);
 
     const handleClose = () => {
@@ -59,24 +59,24 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
                 },
             });
             handleClose();
-            window.location.reload(); // 페이지 새로고침은 특정 상황에서만 사용해야 하며, 다른 방법을 사용할 수도 있습니다.
+            window.location.reload();
         } catch (error) {
             console.error('Error saving book:', error);
         }
     };
 
     const handleSaveBookClick = (item) => {
-        setSelectedBook(item); // 선택된 책 정보 저장
-        setShowPageInput(true); // 페이지 입력 모달 열기
+        setSelectedBook(item);
+        setShowPageInput(true);
     };
 
     const Enter = (e) => {
         if (e.key === 'Enter') {
-            handleSearch(); // Enter 키가 눌리면 handleSearch 함수 호출
+            handleSearch();
         }
     };
 
-    // JWT 토큰 해석 함수 예시
+
     const parseJwt = (token) => {
         try {
             return JSON.parse(atob(token.split('.')[1]));
