@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: qkrqld5@gmail.com
+    password: sdhk zdwr ezpg zesi
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000`
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+
+naver:
+  id: "qkNKxrsF41B3NvzTuSbA"
+  secret: "BgGjv1jmJQ"
+jwt:
+  secret: mySuperSecretKey12345
+  expiration: 3600

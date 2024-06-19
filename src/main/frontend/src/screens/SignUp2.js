@@ -90,7 +90,7 @@ const SignUp2 = () => {
                                         <input type="text" className="form-control form-control-user" name="nickname"
                                                placeholder="닉네임" value={formData.nickname} onChange={handleChange} required />
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group d-flex align-items-center">
                                         <input
                                             type="email"
                                             className="form-control form-control-user"
@@ -99,22 +99,33 @@ const SignUp2 = () => {
                                             value={formData.email}
                                             onChange={handleChange}
                                             required
+                                            style={{
+                                                flex:'1'
+                                            }}
                                         />
                                         <button type="button" onClick={handleSendVerificationCode}
-                                                className=" btn-primary">인증 코드 받기</button>
+                                                className=" btn btn-primary btn-user">인증 코드 받기</button>
                                     </div>
 
                                     {isVerificationSent && !isVerified && (
-                                        <div className="form-group">
+                                        <div className="form-group d-flex align-items-center">
                                             <input
                                                 type="text"
                                                 className="form-control form-control-user"
                                                 placeholder="인증 코드 입력"
                                                 value={inputCode}
                                                 onChange={(e) => setInputCode(e.target.value)}
+                                                style={{
+                                                    flex:'1'
+                                                }}
                                             />
-                                            <button type="button" onClick={handleVerifyCode}>인증 확인</button>
-                                            {message && <p>{message}</p>}
+                                            <button className=" btn btn-primary btn-user"
+                                                    style={{
+                                                        background:"gray",
+                                                        border: "none"
+                                                    }}
+                                                type="button" onClick={handleVerifyCode}>인증 확인</button>
+
                                         </div>
                                     )}
 
