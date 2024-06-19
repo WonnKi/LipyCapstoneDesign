@@ -2,6 +2,7 @@ package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
+import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,14 @@ public class BookController {
     public ResponseEntity<String> deleteBook(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn) {
         return saveService.deleteBook(userId, isbn);
     }
-
     @PatchMapping("/{userId}/{isbn}")
     public ResponseEntity<String> changeStatus(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn,@RequestBody String status){
         return saveService.changeStatus(userId, isbn, status);
+    }
+
+    @GetMapping("/{userId}/detail")
+    public List<BookDto> ViewBookList(@PathVariable("userId") Long userId, BookStatus status){
+        return saveService.ViewBookList(userId, status);
     }
 
 }
