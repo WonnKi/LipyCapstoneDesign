@@ -71,7 +71,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.ADMIN;
+    private Role role = Role.MEMBER;
 
     public enum Role {
         MEMBER,

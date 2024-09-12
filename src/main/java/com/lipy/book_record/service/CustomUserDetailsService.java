@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,20 +22,21 @@ public class CustomUserDetailsService implements UserDetailsService {
     private MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Find the member by username
+        Member member = memberRepository.findByUsername(username);
         if (member == null) {
             throw new UsernameNotFoundException("User not found");
         }
 
         return new org.springframework.security.core.userdetails.User(
-                member.getEmail(),
+                member.getUsername(),  // Use username instead of email
                 member.getPassword(),
                 getAuthorities(member)
         );
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Member member) {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + member.getRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + member.getRole()));
     }
 }

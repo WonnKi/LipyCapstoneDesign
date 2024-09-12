@@ -67,7 +67,7 @@ public class MemberController {
             member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             member.setUsername(registerRequest.getUsername());
             member.setNickname(registerRequest.getNickname());
-            member.setRole(Member.Role.ADMIN); // 기본적으로 MEMBER 역할 부여
+            member.setRole(Member.Role.MEMBER); // 기본적으로 MEMBER 역할 부여
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");
         } catch (Exception e) {
