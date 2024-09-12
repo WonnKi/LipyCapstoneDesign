@@ -68,4 +68,13 @@ public class Member {
         this.email = email;
         this.nickname = nickname;
     }
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.ADMIN;
+
+    public enum Role {
+        MEMBER,
+        ADMIN
+    }
 }

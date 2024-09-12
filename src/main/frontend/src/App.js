@@ -35,6 +35,7 @@ import SearchComponent from "./screens/SearchComponent";
 import Register from "./screens/Register";
 import BookSaveComponent from "./screens/BookSearchComponent";
 import BookListComponent from "./screens/BookListComponent";
+import AdminPage from "./screens/AdminPage";
 function App() {
   return (
       <BrowserRouter>
@@ -74,6 +75,7 @@ function App() {
             <Route path="/Register" element={<Register />} />
             <Route path="BookSaveComponent" element={<BookSaveComponent />} />
             <Route path="BookListComponent" element={<BookListComponent />} />
+            <Route path="AdminPage" element={<AdminPage />} />
         </Routes>
       </BrowserRouter>
 

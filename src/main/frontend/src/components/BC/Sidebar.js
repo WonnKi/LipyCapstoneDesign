@@ -1,14 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 
 function Sidebar() {
 
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
         window.location.reload();
     };
 
     const jwtToken = localStorage.getItem('jwtToken');
+
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        const userRole = localStorage.getItem('userRole');
+        setRole(userRole);
+    }, []);
+
 
     return (
         <div className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -41,8 +50,17 @@ function Sidebar() {
                 </Link>
             </div>
             <hr/>
+            <div className="nav-item">
+                {role === "ADMIN" && (
+                    <Link className="nav-link" to="/AdminPage">
+                        <img alt="logo" src="/img/185095-settings-streamline-64.png"
+                             style={{width: '25px', height: '25px'}}/>
+                        관리 페이지
+                    </Link>
+                )}
+            </div>
             <div style={{marginTop: "auto", paddingBottom: "10px"}}>
-            {!jwtToken && (
+                {!jwtToken && (
                     <>
                         <Link className="btn btn-user btn-block font-weight-bold"
                               to="/Login">

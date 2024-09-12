@@ -49,10 +49,9 @@ public class MemberController {
             String email = userDetails.getUsername();
             Member member = memberService.findByUsername(email);
             Long memberId = member.getId();
+            String role = member.getRole().name();
 
-            String jwtToken = jwtUtil.generateToken(userDetails,memberId);
-
-
+            String jwtToken = jwtUtil.generateToken(userDetails,memberId,role);
 
             return ResponseEntity.ok().body("login succeed "+jwtToken);
         } catch (Exception e) {
@@ -63,12 +62,12 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody RegisterRequest registerRequest) {
         try {
-            Member member = new Member(
-                    registerRequest.getUsername(),
-                    passwordEncoder.encode(registerRequest.getPassword()),
-                    registerRequest.getEmail(),
-                    registerRequest.getNickname()
-            );
+            Member member = new Member();
+            member.setEmail(registerRequest.getEmail());
+            member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+            member.setUsername(registerRequest.getUsername());
+            member.setNickname(registerRequest.getNickname());
+            member.setRole(Member.Role.ADMIN); // 기본적으로 MEMBER 역할 부여
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");
         } catch (Exception e) {
@@ -184,6 +183,8 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+
 
 
 

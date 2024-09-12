@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
 
@@ -27,13 +28,31 @@ const Login = () => {
                 email,
                 password,
             });
-            const token = response.data.split(' ')[2];
+
+    //         const token = response.data.split(' ')[2];
+    //         localStorage.setItem('jwtToken', token);
+    //         if (window.confirm("로그인 성공.")) {
+    //             navigate('/');
+    //         }
+    //     } catch (error) {
+    //           window.confirm("이메일 또는 비밀번호를 확인하세요.");
+    //     }
+    // };
+
+            const token = response.data.split(' ')[2]; // 서버에서 받은 JWT 토큰 추출
+            const decodedToken = jwtDecode(token);  // JWT 토큰 디코딩
+            const role = decodedToken.role;
+            const id = decodedToken.id;      // 사용자 ID 추출
+
             localStorage.setItem('jwtToken', token);
+            localStorage.setItem('userRole', role);  // 역할 저장
+            localStorage.setItem('userId', id);      // 사용자 ID 저장
+
             if (window.confirm("로그인 성공.")) {
                 navigate('/');
             }
         } catch (error) {
-              window.confirm("이메일 또는 비밀번호를 확인하세요.");
+            window.alert("로그인 실패: 아이디 또는 비밀번호를 확인하세요.");
         }
     };
 
