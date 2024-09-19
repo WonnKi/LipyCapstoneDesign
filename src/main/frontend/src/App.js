@@ -41,7 +41,7 @@ function App() {
       <BrowserRouter>
         {/*<NavBar/>*/}
         <Routes>
-            <Route path = "/" element={ <Home /> } />
+            <Route path = "/" element={ <Home3 /> } />
             <Route path = "/Bookcase" element={ <Bookcase /> } />
             <Route path = "/Community" element={ <Community /> } />
             <Route path = "/Socialing" element={ <Socialing /> } />
