@@ -4,8 +4,13 @@ import com.lipy.book_record.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Member findByUsername(String username);
-    Member findByEmail(String email);
+    List<Member> findByEmail(String email);
+
+    List<Member> findByUsername(String name);
+
+    List<Member> findByNickname(String nickname);
 }
