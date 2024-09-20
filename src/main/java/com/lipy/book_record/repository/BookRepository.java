@@ -4,13 +4,14 @@ import com.lipy.book_record.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, UUID> {
 
-    void deleteByUserIdAndIsbn(Long userId, String isbn);
-    boolean existsByUserIdAndIsbn(Long userId, String isbn);
+    void deleteByUserIdAndIsbn(UUID userId, String isbn);
+    boolean existsByUserIdAndIsbn(UUID userId, String isbn);
 
-    Book findByUserIdAndIsbn(Long userId, String isbn);
+    Book findByUserIdAndIsbn(UUID userId, String isbn);
 
-    Optional<Book> findByUserId(Long id);
+    Optional<Book> findByUserId(UUID id);
 }
