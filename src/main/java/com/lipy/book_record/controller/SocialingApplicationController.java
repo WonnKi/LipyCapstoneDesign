@@ -7,6 +7,7 @@ import com.lipy.book_record.entity.SocialingApplication;
 import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.service.SocialingApplicationService;
 import com.lipy.book_record.service.SocialingService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +20,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 public class SocialingApplicationController {
-    @Autowired
-    private SocialingApplicationService socialingApplicationService;
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private SocialingService socialingService;
+    private final SocialingApplicationService socialingApplicationService;
+    private final SocialingService socialingService;
+    private final MemberService memberService;
 
     @PostMapping("/socialing/apply")
-    public ResponseEntity<Long> applyForSocialing(@RequestParam("socialingId") Long socialingId) {
+    public ResponseEntity<Long> applyForSocialing(@RequestParam Long socialingId) {
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            String email = userDetails.getUsername();
+            Member member = memberService.findByEmail(email);
 
             Long takeId = socialingApplicationService.applyForSocialing(member.getId(), socialingId);
             return ResponseEntity.ok(takeId);
@@ -43,14 +42,15 @@ public class SocialingApplicationController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @DeleteMapping("/socialing/apply/{applicationId}") // 소셜링 신청 취소
-    public ResponseEntity<String> cancelSocialingApplication(@PathVariable("applicationId") Long applicationId) {
+    public ResponseEntity<String> cancelSocialingApplication(@PathVariable Long applicationId) {
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            String email = userDetails.getUsername();
+            Member member = memberService.findByEmail(email);
 
             // 신청 정보 가져오기
             SocialingApplication application = socialingApplicationService.findById(applicationId);
@@ -67,33 +67,15 @@ public class SocialingApplicationController {
         }
     }
 
-    @GetMapping("/apply/{socialingId}") // 소셜링 신청정보 받기
-    public ResponseEntity<?> getApplicantNamesBySocialingId(@PathVariable("socialingId") Long socialingId) {
-        // 현재 로그인한 사용자의 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        Member member = memberService.findByUsername(username);
-
-        // 소셜링 게시글 작성자인지 확인
-        Socialing socialing = socialingService.findById(socialingId);
-        if (socialing.getWriter().equals(member.getUsername())) {
-            List<ApplicantInfo> applicantInfos = socialingApplicationService.findApplicantInfoBySocialingId(socialingId);
-            return ResponseEntity.ok(applicantInfos);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to view this information.");
-        }
-    }
-
     @GetMapping("/{id}/isApplied")
-    public ResponseEntity<Map<String, Object>> isApplied(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>> isApplied(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            String email = userDetails.getUsername();
+            Member member = memberService.findByEmail(email);
 
             SocialingApplication application = socialingApplicationService.findByMemberAndSocialing(member.getId(), id);
             if (application != null) {
@@ -106,6 +88,24 @@ public class SocialingApplicationController {
         } catch (Exception e) {
             response.put("isApplied", false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/apply/{socialingId}") // 소셜링 신청정보 받기
+    public ResponseEntity<?> getApplicantNamesBySocialingId(@PathVariable Long socialingId) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        Member member = memberService.findByEmail(email);
+
+        // 소셜링 게시글 작성자인지 확인
+        Socialing socialing = socialingService.findById(socialingId);
+        if (socialing.getWriter().equals(member.getNickname())) {
+            List<String> applicantInfos = socialingApplicationService.findApplicantInfoBySocialingId(socialingId);
+            return ResponseEntity.ok(applicantInfos);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to view this information.");
         }
     }
 }

@@ -36,6 +36,8 @@ import Register from "./screens/Register";
 import BookSaveComponent from "./screens/BookSearchComponent";
 import BookListComponent from "./screens/BookListComponent";
 import AdminPage from "./screens/AdminPage";
+import Home4 from "./screens/Home4";
+import Home5 from "./screens/Home5";
 function App() {
   return (
       <BrowserRouter>
@@ -76,6 +78,8 @@ function App() {
             <Route path="BookSaveComponent" element={<BookSaveComponent />} />
             <Route path="BookListComponent" element={<BookListComponent />} />
             <Route path="AdminPage" element={<AdminPage />} />
+            <Route path="Home4" element={<Home4 />} />
+            <Route path="Home5" element={<Home5 />} />
         </Routes>
       </BrowserRouter>
 

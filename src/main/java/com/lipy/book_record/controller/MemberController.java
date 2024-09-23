@@ -9,7 +9,8 @@ import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.service.VerificationService;
 import com.lipy.book_record.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,8 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,6 +37,7 @@ public class MemberController {
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
     private final VerificationService verificationService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -47,8 +51,8 @@ public class MemberController {
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
-            Member member = memberService.findByUsername(email);
-            Long memberId = member.getId();
+            Member member = memberService.findByEmail(email);
+            UUID memberId = member.getId();
             String role = member.getRole().name();
 
             String jwtToken = jwtUtil.generateToken(userDetails,memberId,role);
@@ -67,77 +71,15 @@ public class MemberController {
             member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             member.setUsername(registerRequest.getUsername());
             member.setNickname(registerRequest.getNickname());
+            member.setGender(registerRequest.getGender());
+            member.setRegion(registerRequest.getRegion());
+            member.setAge(registerRequest.getAge());
             member.setRole(Member.Role.MEMBER); // 기본적으로 MEMBER 역할 부여
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
-    }
-
-
-    @DeleteMapping("/logout")
-    public ResponseEntity<?> logout() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-        return ResponseEntity.ok().body("Logout successful");
-    }
-
-    @PostMapping("/socialing/{socialingId}/interest")
-    public ResponseEntity<?> addFavoriteSocialing(@PathVariable("socialingId") Long socialingId) {
-        // 현재 로그인한 사용자의 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        Member member = memberService.findByUsername(username);
-
-        memberService.addFavoriteSocialing(member.getId(), socialingId);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/socialing/{socialingId}/interest")
-    public ResponseEntity<String> removeInterestSocialing(@PathVariable("socialingId") Long socialingId) {
-        // 현재 로그인한 사용자의 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        Member member = memberService.findByUsername(username);
-
-        memberService.cancelFavoriteSocialing(member.getId(), socialingId);
-        return ResponseEntity.ok("Interest socialing removed successfully");
-    }
-    @GetMapping("/interest/me")
-    public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(Principal principal) {
-        Member member = memberService.findByUsername(principal.getName());
-        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(member.getId());
-        return ResponseEntity.ok().body(favoriteSocialings);
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == "anonymousUser") {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-        }
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Member member = memberService.findByUsername(userDetails.getUsername());
-
-        Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("username", member.getUsername());
-        userInfo.put("nickname", member.getNickname());
-
-        return ResponseEntity.ok(userInfo);
-    }
-
-    @GetMapping("/socialing/{socialingId}/is-in terest")
-    public ResponseEntity<Boolean> isInterestSocialing(@PathVariable Long socialingId) {
-        // 현재 로그인한 사용자의 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        Member member = memberService.findByUsername(username);
-
-        boolean isInterest = memberService.isInterestSocialing(member.getId(), socialingId);
-        return ResponseEntity.ok(isInterest);
     }
 
     @PostMapping("/send")
@@ -163,15 +105,58 @@ public class MemberController {
         }
     }
 
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+        // 토큰에서 Bearer 부분 제거
+        String jwtToken = token.replace("Bearer ", "");
+
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Redis에 블랙리스트 등록
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        ops.set(jwtToken, "blacklisted", 1, TimeUnit.HOURS); // 1시간 동안 블랙리스트 유지
+
+        // SecurityContextHolder에서 인증 정보 제거
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        return ResponseEntity.ok("Logout successful");
+    }
+
+    @PostMapping("/socialing/{socialingId}/interest")
+    public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long socialingId) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        Member member = memberService.findByEmail(email);
+
+        memberService.addFavoriteSocialing(member.getId(), socialingId);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
+    public ResponseEntity<String> removeInterestSocialing(@PathVariable UUID memberId, @PathVariable Long socialingId) {
+        memberService.cancelFavoriteSocialing(memberId, socialingId);
+        return ResponseEntity.ok("Interest socialing removed successfully");
+    }
+
+    @GetMapping("/interest/me")
+    public ResponseEntity<List<SocialingListResponse>> getFavoriteSocialings(Principal principal) {
+        Member member = memberService.findByEmail(principal.getName());
+        List<SocialingListResponse> favoriteSocialings = memberService.getFavoriteSocialings(member.getId());
+        return ResponseEntity.ok().body(favoriteSocialings);
+    }
+
     @GetMapping("/{id}/isFavorite")
-    public ResponseEntity<Map<String, Object>> isFavorite(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>> isFavorite(@PathVariable UUID id) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            Member member = memberService.findByUsername(username);
+            String email = userDetails.getUsername();
+            Member member = memberService.findByEmail(email);
 
             // 관심있는 소셜링 여부를 확인
             boolean isFavorite = memberService.isFavoriteSocialing(member.getId(), id);
@@ -184,8 +169,21 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == "anonymousUser") {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Member member = memberService.findByEmail(userDetails.getUsername());
 
+        // 사용자 정보에서 name을 포함하여 반환
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("Email", member.getEmail());
+        userInfo.put("Nickname", member.getNickname());
 
-
+        return ResponseEntity.ok(userInfo);
+    }
 
 }

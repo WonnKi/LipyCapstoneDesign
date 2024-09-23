@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,9 @@ public class BookService {
     private final BookRepository bookRep;
     private final MemberRepository userRep;
 
-    public ResponseEntity<String> saveBook(Long userId, SearchDto info, int page) {
+    public ResponseEntity<String> saveBook(UUID userId, SearchDto info, int page) {
         try{
-            Member userInfo = userRep.findById(userId)
+            Member userInfo = (Member) userRep.findById(userId)
                     .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
 
             MemberDto user = new MemberDto(userInfo);
@@ -58,7 +59,7 @@ public class BookService {
 
     }
 
-    public ResponseEntity<String> deleteBook(Long userId, String isbn){
+    public ResponseEntity<String> deleteBook(UUID userId, String isbn){
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -70,7 +71,7 @@ public class BookService {
         }
     }
 
-    public List<BookDto> ViewBookList(Long userId){
+    public List<BookDto> ViewBookList(UUID userId){
         return userRep
                 .findById(userId)
                 .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))
@@ -80,7 +81,7 @@ public class BookService {
                 .toList();
     }
 
-    public ResponseEntity<String>  changeStatus(Long userId, String isbn, String status) {
+    public ResponseEntity<String>  changeStatus(UUID userId, String isbn, String status) {
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -97,7 +98,7 @@ public class BookService {
 
     }
 
-    public List<BookDto> ViewBookList(Long userId, BookStatus status) {
+    public List<BookDto> ViewBookList(UUID userId, BookStatus status) {
         return userRep
                 .findById(userId)
                 .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))

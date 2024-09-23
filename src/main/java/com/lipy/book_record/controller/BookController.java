@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -20,27 +21,27 @@ public class BookController {
     private final BookService saveService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<String> saveBook(@PathVariable("userId") Long userId, @RequestBody SearchDto info, @RequestParam("page") int page){
+    public ResponseEntity<String> saveBook(@PathVariable("userId") UUID userId, @RequestBody SearchDto info, @RequestParam("page") int page){
         return saveService.saveBook(userId, info, page);
     }
     @GetMapping("/{userId}")
-    public List<BookDto> ViewBookList(@PathVariable("userId") Long userId){
+    public List<BookDto> ViewBookList(@PathVariable("userId") UUID userId){
         return saveService.ViewBookList(userId);
     }
     @DeleteMapping("/{userId}/{isbn}")
     @Transactional
-    public ResponseEntity<String> deleteBook(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn) {
+    public ResponseEntity<String> deleteBook(@PathVariable("userId") UUID userId, @PathVariable("isbn") String isbn) {
         return saveService.deleteBook(userId, isbn);
     }
 
     @PatchMapping("/{userId}/{isbn}")
-    public ResponseEntity<String> changeStatus(@PathVariable("userId") Long userId, @PathVariable("isbn") String isbn, @RequestBody Map<String, String> request) {
+    public ResponseEntity<String> changeStatus(@PathVariable("userId") UUID userId, @PathVariable("isbn") String isbn, @RequestBody Map<String, String> request) {
         String status = request.get("status");
         return saveService.changeStatus(userId, isbn, status);
     }
 
     @GetMapping("/{userId}/detail")
-    public List<BookDto> ViewBookList(@PathVariable("userId") Long userId, @RequestParam("status") BookStatus status){
+    public List<BookDto> ViewBookList(@PathVariable("userId") UUID userId, @RequestParam("status") BookStatus status){
         return saveService.ViewBookList(userId, status);
     }
 

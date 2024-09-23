@@ -41,5 +41,7 @@ public class SocialingListResponse {
         this.maxparticipants = maxparticipants;
         this.date = date;
     }
-}
 
+    public SocialingListResponse(String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
+    }
+}
