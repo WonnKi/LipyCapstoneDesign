@@ -27,7 +27,7 @@ public class BookService {
 
     public ResponseEntity<String> saveBook(UUID userId, SearchDto info, int page) {
         try{
-            Member userInfo = userRep.findById(userId)
+            Member userInfo = (Member) userRep.findById(userId)
                     .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
 
             MemberDto user = new MemberDto(userInfo);

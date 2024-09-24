@@ -26,7 +26,7 @@ public class MemberService  {
     }
 
     public Member findByEmail(String email) {
-        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail(email));
+        Optional<Member> memberOptional = Optional.ofNullable((Member) memberRepository.findByEmail(email));
         return memberOptional.orElse(null);
     }
 

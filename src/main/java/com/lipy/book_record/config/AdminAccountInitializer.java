@@ -37,7 +37,7 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member.setAge(30);
             member.setGender("남");
             member.setRegion("의정부");
-            member.setRole(Member.Role.MEMBER);  // ADMIN 역할 설정
+            member.setRole(Member.Role.MEMBER);  // MEMBER 역할 설정
 
             memberService.save(member);
             memberService.save(admin);
