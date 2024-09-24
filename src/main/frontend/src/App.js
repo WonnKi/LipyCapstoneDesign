@@ -37,7 +37,9 @@ import BookSaveComponent from "./screens/BookSearchComponent";
 import BookListComponent from "./screens/BookListComponent";
 import AdminPage from "./screens/AdminPage";
 import Home4 from "./screens/Home4";
-import Home5 from "./screens/Home5";
+import Home5 from "./screens/Home5"
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 function App() {
   return (
       <BrowserRouter>
