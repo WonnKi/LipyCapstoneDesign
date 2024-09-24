@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
 @Entity
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -29,6 +32,15 @@ public class Member {
 
     @Column(nullable = false ,unique = true)
     private String nickname;
+
+    @Column(nullable = false)
+    private String Gender;
+
+    @Column(nullable = false)
+    private String region;
+
+    @Column(nullable = false)
+    private int age;
 
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -53,7 +65,7 @@ public class Member {
     }
 
     @Builder
-    public Member(Long id, String email, String password, String userName, String nickName, List<Book> books) {
+    public Member(UUID id, String email, String password, String userName, String nickName, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = password;

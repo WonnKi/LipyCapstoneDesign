@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -21,9 +22,9 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(UserDetails userDetails,Long memberId,String role) {
+    public String generateToken(UserDetails userDetails, UUID memberId, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", memberId);
+        claims.put("id", memberId.toString());  // UUID를 String으로 변환하여 저장
         claims.put("role", role);
         return doGenerateToken(claims, userDetails.getUsername());
     }
@@ -51,6 +52,12 @@ public class JwtUtil {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
+    public UUID getIdFromToken(String token) {
+        // JWT에서 id 값을 String으로 추출한 후, UUID로 변환
+        String id = getClaimFromToken(token, claims -> claims.get("id", String.class));  // String으로 추출
+        return UUID.fromString(id);  // String을 UUID로 변환
+    }
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -66,9 +73,5 @@ public class JwtUtil {
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
-    }
-
-    public Long getIdFromToken(String token) {
-        return getClaimFromToken(token, claims -> claims.get("id", Long.class));
     }
 }
