@@ -12,7 +12,6 @@ public class RegisterRequest {
     private String nickname;
     private String email;
     private String gender; // 성별
-    private String region; // 지역
     private int age;       // 나이
 
     public RegisterRequest(Member member) {
@@ -21,17 +20,15 @@ public class RegisterRequest {
         username = member.getUsername();
         nickname = member.getNickname();
         gender = member.getGender();
-        region = member.getRegion();
         age = member.getAge();
     }
 
-    public RegisterRequest( String email,String password,String nickname, String username , String gender, String region, int age) {
+    public RegisterRequest( String email,String password,String nickname, String username , String gender, int age) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.nickname = nickname;
         this.gender = gender;
-        this.region = region;
         this.age = age;
     }
 }

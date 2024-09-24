@@ -72,7 +72,6 @@ public class MemberController {
             member.setUsername(registerRequest.getUsername());
             member.setNickname(registerRequest.getNickname());
             member.setGender(registerRequest.getGender());
-            member.setRegion(registerRequest.getRegion());
             member.setAge(registerRequest.getAge());
             member.setRole(Member.Role.MEMBER); // 기본적으로 MEMBER 역할 부여
             memberService.save(member);
