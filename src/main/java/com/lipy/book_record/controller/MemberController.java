@@ -9,8 +9,6 @@ import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.service.VerificationService;
 import com.lipy.book_record.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,7 +35,8 @@ public class MemberController {
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
     private final VerificationService verificationService;
-    private final RedisTemplate<String, String> redisTemplate;
+
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -72,7 +71,6 @@ public class MemberController {
             member.setUsername(registerRequest.getUsername());
             member.setNickname(registerRequest.getNickname());
             member.setGender(registerRequest.getGender());
-            member.setRegion(registerRequest.getRegion());
             member.setAge(registerRequest.getAge());
             member.setRole(Member.Role.MEMBER); // 기본적으로 MEMBER 역할 부여
             memberService.save(member);
@@ -107,22 +105,12 @@ public class MemberController {
 
 
     @DeleteMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-        // 토큰에서 Bearer 부분 제거
-        String jwtToken = token.replace("Bearer ", "");
-
-        // 현재 로그인한 사용자의 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Redis에 블랙리스트 등록
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        ops.set(jwtToken, "blacklisted", 1, TimeUnit.HOURS); // 1시간 동안 블랙리스트 유지
-
-        // SecurityContextHolder에서 인증 정보 제거
+    public ResponseEntity<?> logout() {
         SecurityContextHolder.getContext().setAuthentication(null);
-
-        return ResponseEntity.ok("Logout successful");
+        return ResponseEntity.ok().body("Logout successful");
     }
+
+
 
     @PostMapping("/socialing/{socialingId}/interest")
     public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long socialingId) {

@@ -26,8 +26,7 @@ public class MemberService  {
     }
 
     public Member findByEmail(String email) {
-        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail(email));
-        return memberOptional.orElse(null);
+        return memberRepository.findByEmail(email);
     }
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {

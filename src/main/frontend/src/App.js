@@ -37,7 +37,9 @@ import BookSaveComponent from "./screens/BookSearchComponent";
 import BookListComponent from "./screens/BookListComponent";
 import AdminPage from "./screens/AdminPage";
 import Home4 from "./screens/Home4";
-import Home5 from "./screens/Home5"
+import Home5 from "./screens/Home5";
+import Home6 from "./screens/Home6";
+
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -82,6 +84,7 @@ function App() {
             <Route path="AdminPage" element={<AdminPage />} />
             <Route path="Home4" element={<Home4 />} />
             <Route path="Home5" element={<Home5 />} />
+            <Route path="Home6" element={<Home6 />} />
         </Routes>
       </BrowserRouter>
 

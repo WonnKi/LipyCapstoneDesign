@@ -34,10 +34,7 @@ public class Member {
     private String nickname;
 
     @Column(nullable = false)
-    private String Gender;
-
-    @Column(nullable = false)
-    private String region;
+    private String gender;
 
     @Column(nullable = false)
     private int age;
@@ -65,12 +62,14 @@ public class Member {
     }
 
     @Builder
-    public Member(UUID id, String email, String password, String userName, String nickName, List<Book> books) {
+    public Member(UUID id, String email, String password, String userName, String nickName,String gender,int age, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = password;
         this.username = userName;
         this.nickname = nickName;
+        this.gender = gender;
+        this.age = age;
         this.books = books;
     }
 
