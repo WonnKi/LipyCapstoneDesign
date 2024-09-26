@@ -2,47 +2,69 @@ import  React, {useEffect, useState} from "react";
 import Sidebar from "../components/BC/Sidebar";
 import Table from "react-bootstrap/Table";
 import {  LineChart, Line, BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import axios from "axios";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+
+
 
 const data = [
-    {
-        name: '1월',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
-    },
-    {
-        name: '2월',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
-    },
-    {
-        name: '3월',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: '4월',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
-    },
-    {
-        name: '5월',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: '6월',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
+    { name: '1월', uv: 4000, pv: 2400, amt: 2400 },
+    { name: '2월', uv: 3000, pv: 1398, amt: 2210 },
+    { name: '3월', uv: 2000, pv: 9800, amt: 2290 },
+    { name: '4월', uv: 2780, pv: 3908, amt: 2000 },
+    { name: '5월', uv: 1890, pv: 4800, amt: 2181 },
+    { name: '6월', uv: 2390, pv: 4500, amt: 2500 },
 ];
 
+
 const AdminPage = () => {
+
+    const [members, setMembers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchOption, setSearchOption] = useState('email');
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+
+    const fetchAllMembers = async () => {
+        try {
+            const response = await axios.get('/manager/');
+            setMembers(response.data);
+        } catch (error) {
+        }
+    };
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get('/manager/detail', {
+                params: {
+                    [searchOption]: searchTerm || null,
+                },
+            });
+            setMembers(response.data);
+        } catch (error) {
+        }
+    };
+
+    const handleRowClick = (member) => {
+        setSelectedMember(member);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    useEffect(() => {
+        fetchAllMembers();
+    }, []);
+
+    // const handleReload = () => {
+    //     window.location.reload();
+    // };
+
 
     return (
         <div>
@@ -216,73 +238,83 @@ const AdminPage = () => {
                         <div className="container-fluid pt-4 px-4">
                             <div className="bg-secondary text-center rounded p-4">
                                 <div className="d-flex align-items-center justify-content-between mb-4">
-                                    <h6 className="mb-0">Recent Salse</h6>
-                                    <a href="">Show All</a>
+                                    <h6 className="mb-0">회원 관리</h6>
+                                    <form onSubmit={handleSearch}>
+                                        <input
+                                            type="text"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            placeholder="검색어 입력"
+                                        />
+
+                                        <select
+                                            value={searchOption}
+                                            onChange={(e) => setSearchOption(e.target.value)}
+                                            style={{ margin: '10px' }}
+                                        >
+                                            <option value="email">이메일</option>
+                                            <option value="name">이름</option>
+                                            <option value="nickname">닉네임</option>
+                                        </select>
+
+                                        <button type="submit">검색</button>
+                                    </form>
                                 </div>
                                 <div className="table-responsive">
                                     <table className="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                         <tr className="text-white">
-
-                                            <th scope="col">닉네임</th>
-                                            <th scope="col">가입일</th>
-                                            <th scope="col">이름</th>
-                                            <th scope="col">이메일</th>
-                                            <th scope="col">작성글</th>
-                                            <th scope="col">상태</th>
+                                            <th>ID</th>
+                                            <th>이메일</th>
+                                            <th>유저네임</th>
+                                            <th>닉네임</th>
+                                            <th>성별</th>
+                                            <th>나이</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-
-                                            <td>a</td>
-                                            <td></td>
-                                            <td>Jhon Doe</td>
-                                            <td>a@a</td>
-                                            <td><a className="btn btn-sm btn-primary" href="">보기</a></td>
-                                            <td><a className="btn btn-sm btn-primary" href="">정상</a></td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>b</td>
-                                            <td></td>
-                                            <td>Jhon Doe</td>
-                                            <td>b@b</td>
-                                            <td><a className="btn btn-sm btn-primary" href="">보기</a></td>
-                                            <td><a className="btn btn-sm btn-primary" href="">정상</a></td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>c</td>
-                                            <td></td>
-                                            <td>Jhon Doe</td>
-                                            <td>c@c</td>
-                                            <td><a className="btn btn-sm btn-primary" href="">보기</a></td>
-                                            <td><a className="btn btn-sm btn-primary" href="">정상</a></td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>d</td>
-                                            <td></td>
-                                            <td>Jhon Doe</td>
-                                            <td>d@d</td>
-                                            <td><a className="btn btn-sm btn-primary" href="">보기</a></td>
-                                            <td><a className="btn btn-sm btn-primary" href="">차단</a></td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>e</td>
-                                            <td></td>
-                                            <td>Jhon Doe</td>
-                                            <td>e@e</td>
-                                            <td><a className="btn btn-sm btn-primary" href="">보기</a></td>
-                                            <td><a className="btn btn-sm btn-primary" href="">정상</a></td>
-                                        </tr>
+                                        {members.map((member) => (
+                                            <tr key={member.id} onClick={() => handleRowClick(member)}
+                                                style={{cursor: 'pointer'}}>
+                                                <td>{member.id}</td>
+                                                <td>{member.email}</td>
+                                                <td>{member.username}</td>
+                                                <td>{member.nickname}</td>
+                                                <td>{member.gender}</td>
+                                                <td>{member.age}</td>
+                                            </tr>
+                                        ))}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                        {selectedMember && (
+                            <Modal show={showModal} onHide={handleCloseModal}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>회원 정보</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <p><strong>ID:</strong> {selectedMember.id}</p>
+                                    <p><strong>이메일:</strong> {selectedMember.email}</p>
+                                    <p><strong>유저네임:</strong> {selectedMember.username}</p>
+                                    <p><strong>닉네임:</strong> {selectedMember.nickname}</p>
+                                    <p><strong>성별:</strong> {selectedMember.gender}</p>
+                                    <p><strong>나이:</strong> {selectedMember.age}</p>
+                                    <p><strong>책 목록:</strong></p>
+                                    {selectedMember.books && selectedMember.books.length > 0 ? (
+                                        <ul>
+                                            {selectedMember.books.map((book, index) => (
+                                                <li key={index}>{book.title}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>없음</p>
+                                    )}
+                                </Modal.Body>
+
+                            </Modal>
+                        )}
                     </div>
                 </div>
 

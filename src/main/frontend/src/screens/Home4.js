@@ -1,6 +1,76 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import {Link} from "react-router-dom";
+import Table from "react-bootstrap/Table";
 
 const Home4 = () => {
+
+    const [socialings, setSocialings] = useState([]);
+    const [hotSocialings, setHotSocialings] = useState([]);
+    const [readingBooks, setReadingBooks] = useState([]);
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const fetchUserId = () => {
+            const token = localStorage.getItem("jwtToken");
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const userIdFromToken = decodedToken.id;
+                setUserId(userIdFromToken);
+            }
+        };
+
+        const fetchSocialings = async () => {
+            try {
+                const response = await axios.get('/socialing');
+                setSocialings(response.data.reverse());
+            } catch (error) {
+                console.error('소셜링을 불러오는 중 에러 발생:', error);
+            }
+        };
+
+        const fetchHotSocialings = async () => {
+            try {
+                const response = await axios.get('/socialing/hot');
+                setHotSocialings(response.data);
+            } catch (error) {
+                console.error('인기 소셜링을 불러오는 중 에러 발생:', error);
+            }
+        };
+
+        const fetchReadingBooks = async () => {
+            try {
+                const token = localStorage.getItem("jwtToken");
+                const response = await axios.get(`/book/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setReadingBooks(response.data);
+            } catch (error) {
+                console.error("현재 읽는 중인 책을 불러오는 중 에러 발생:", error);
+            }
+        };
+
+        fetchUserId();
+        fetchSocialings();
+        fetchHotSocialings();
+        if (userId) {
+            fetchReadingBooks();
+        }
+    }, [userId]);
+
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return {};
+        }
+    };
+
+
     return <div>
 
         <header>
@@ -37,21 +107,44 @@ const Home4 = () => {
                     <div className="col-xl-9 mx-auto">
                         <div className="cta-inner bg-faded text-center rounded">
                             <h2 className="section-heading mb-4">
-                                <span className="section-heading-upper">Our Promise</span>
-                                <span className="section-heading-lower">To You</span>
+                                <span className="section-heading-upper"></span>
+                                <span className="section-heading-lower">BookCase</span>
                             </h2>
-                            <p className="mb-0">When you walk into our shop to start your day, we are dedicated to
-                                providing you with friendly service, a welcoming atmosphere, and above all else,
-                                excellent products made with the highest quality ingredients. If you are not satisfied,
-                                please let us know and we will do whatever we can to make things right!</p>
+                            <div className="row">
+                                <div>
+                                    <div className="card shadow mb-4">
+
+                                        <div className="card-body">
+                                            {readingBooks.length > 0 ? (
+                                                <Table bordered hover>
+                                                    <tbody>
+                                                    {readingBooks.slice(0, 6).map((book) => (
+                                                        <tr key={book.isbn}>
+                                                            <td>
+                                                                <img src={book.image} alt={book.title}
+                                                                     style={{width: "50px"}}/>
+                                                            </td>
+                                                            <td>{book.title}</td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </Table>
+                                            ) : (
+                                                <p>서재가 비어있습니다.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+
                     </div>
+
+
                 </div>
             </div>
         </section>
-
-
-
 
 
     </div>

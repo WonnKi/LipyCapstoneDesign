@@ -8,9 +8,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import Card from "react-bootstrap/Card";
 
 const Home3 = () => {
-
-
-
     const [socialings, setSocialings] = useState([]);
     const [hotSocialings, setHotSocialings] = useState([]);
     const [readingBooks, setReadingBooks] = useState([]);
@@ -73,6 +70,7 @@ const Home3 = () => {
             return {};
         }
     };
+
 
 
 
