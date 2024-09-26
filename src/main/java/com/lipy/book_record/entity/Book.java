@@ -1,5 +1,6 @@
 package com.lipy.book_record.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -49,6 +50,7 @@ public class Book {
 
     private Integer readPage;
 
+    @JsonIgnore
     @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")

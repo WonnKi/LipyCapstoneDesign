@@ -9,8 +9,6 @@ import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.service.VerificationService;
 import com.lipy.book_record.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,7 +34,6 @@ public class MemberController {
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
     private final VerificationService verificationService;
-    private final RedisTemplate<String, String> redisTemplate;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -107,19 +103,7 @@ public class MemberController {
 
     @DeleteMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-        // 토큰에서 Bearer 부분 제거
-        String jwtToken = token.replace("Bearer ", "");
-
-        // 현재 로그인한 사용자의 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Redis에 블랙리스트 등록
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        ops.set(jwtToken, "blacklisted", 1, TimeUnit.HOURS); // 1시간 동안 블랙리스트 유지
-
-        // SecurityContextHolder에서 인증 정보 제거
         SecurityContextHolder.getContext().setAuthentication(null);
-
         return ResponseEntity.ok("Logout successful");
     }
 
