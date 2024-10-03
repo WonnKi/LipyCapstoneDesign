@@ -4,6 +4,8 @@ import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.service.BookService;
+import com.lipy.book_record.service.UserActivityLogService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +21,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookController {
     private final BookService saveService;
+    private final UserActivityLogService userActivityLogService;;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<String> saveBook(@PathVariable("userId") UUID userId, @RequestBody SearchDto info, @RequestParam("page") int page){
-        return saveService.saveBook(userId, info, page);
+    public ResponseEntity<String> saveBook(@PathVariable("userId") UUID userId, @RequestBody SearchDto info, @RequestParam("page") int page, HttpServletRequest request) {
+        // 책 저장 로직 실행
+        ResponseEntity<String> response = saveService.saveBook(userId, info, page);
+
+        // IP 주소 가져오기
+        String ipAddress = request.getRemoteAddr();
+
+        // 로그 저장
+        userActivityLogService.logActivity(userId, "SAVE_BOOK","User saved a book with title: " + info.getTitle() + ", on page: " + page, ipAddress);
+        return response;
     }
     @GetMapping("/{userId}")
     public List<BookDto> ViewBookList(@PathVariable("userId") UUID userId){
