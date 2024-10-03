@@ -6,8 +6,10 @@ import com.lipy.book_record.dto.SocialingListResponse;
 import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.service.EmailService;
 import com.lipy.book_record.service.MemberService;
+import com.lipy.book_record.service.UserActivityLogService;
 import com.lipy.book_record.service.VerificationService;
 import com.lipy.book_record.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,11 +36,10 @@ public class MemberController {
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
     private final VerificationService verificationService;
-
-
+    private final UserActivityLogService userActivityLogService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginRequest.getEmail(), loginRequest.getPassword());
@@ -54,14 +54,18 @@ public class MemberController {
             UUID memberId = member.getId();
             String role = member.getRole().name();
 
-            String jwtToken = jwtUtil.generateToken(userDetails,memberId,role);
+            String jwtToken = jwtUtil.generateToken(userDetails, memberId, role);
 
-            return ResponseEntity.ok().body("login succeed "+jwtToken);
+            // IP 주소 정보 가져오기
+            String ipAddress = request.getRemoteAddr();
+            userActivityLogService.logActivity(memberId, "LOGIN_SUCCESS", "User logged in successfully", ipAddress);
+            return ResponseEntity.ok().body("login succeed " + jwtToken);
         } catch (Exception e) {
+            String ipAddress = request.getRemoteAddr();
+            userActivityLogService.logActivity(null, "LOGIN_FAILED", "Login attempt failed for email: " + loginRequest.getEmail(), ipAddress);
             return ResponseEntity.status(401).body("login failed: " + e.getMessage());
         }
     }
-
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody RegisterRequest registerRequest) {
         try {
@@ -105,12 +109,10 @@ public class MemberController {
 
 
     @DeleteMapping("/logout")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
         SecurityContextHolder.getContext().setAuthentication(null);
-        return ResponseEntity.ok().body("Logout successful");
+        return ResponseEntity.ok("Logout successful");
     }
-
-
 
     @PostMapping("/socialing/{socialingId}/interest")
     public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long socialingId) {

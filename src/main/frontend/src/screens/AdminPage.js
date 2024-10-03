@@ -5,6 +5,7 @@ import {  LineChart, Line, BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import UserLogs from "../components/Log/UserLogs";
 
 
 
@@ -22,9 +23,12 @@ const AdminPage = () => {
 
     const [members, setMembers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchOption, setSearchOption] = useState('email');
+    const [searchOption, setSearchOption] = useState('name');
     const [selectedMember, setSelectedMember] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+    const [showMemberModal, setShowMemberModal] = useState(false);
+    const [showLogsModal, setShowLogsModal] = useState(false);
+    const [genderFilter, setGenderFilter] = useState('');
+    const [ageFilter, setAgeFilter] = useState('');
 
 
     const fetchAllMembers = async () => {
@@ -50,20 +54,33 @@ const AdminPage = () => {
 
     const handleRowClick = (member) => {
         setSelectedMember(member);
-        setShowModal(true);
+        setShowMemberModal(true);
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
+    const handleCloseMemberModal = () => {
+        setShowMemberModal(false);
+    };
+
+    const handleOpenLogsModal = () => {
+        setShowLogsModal(true);
+    };
+
+    const handleCloseLogsModal = () => {
+        setShowLogsModal(false);
+    };
+
+    const handleGenderFilterChange = (e) => {
+        setGenderFilter(e.target.value);
     };
 
     useEffect(() => {
         fetchAllMembers();
     }, []);
 
-    // const handleReload = () => {
-    //     window.location.reload();
-    // };
+    const filteredMembers = members.filter(member => {
+        if (!genderFilter) return true;
+        return member.gender === genderFilter;
+    });
 
 
     return (
@@ -244,22 +261,22 @@ const AdminPage = () => {
                                             type="text"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            placeholder="검색어 입력"
                                         />
 
                                         <select
                                             value={searchOption}
                                             onChange={(e) => setSearchOption(e.target.value)}
-                                            style={{ margin: '10px' }}
+                                            style={{margin: '10px'}}
                                         >
-                                            <option value="email">이메일</option>
                                             <option value="name">이름</option>
                                             <option value="nickname">닉네임</option>
+                                            <option value="email">이메일</option>
                                         </select>
 
                                         <button type="submit">검색</button>
                                     </form>
                                 </div>
+
                                 <div className="table-responsive">
                                     <table className="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
@@ -268,52 +285,75 @@ const AdminPage = () => {
                                             <th>이메일</th>
                                             <th>유저네임</th>
                                             <th>닉네임</th>
-                                            <th>성별</th>
+                                            <th>
+                                                <select value={genderFilter} onChange={handleGenderFilterChange}>
+                                                    <option value="">성별</option>
+                                                    <option value="남">남</option>
+                                                    <option value="여">여</option>
+                                               </select>
+                                            </th>
                                             <th>나이</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {members.map((member) => (
-                                            <tr key={member.id} onClick={() => handleRowClick(member)}
-                                                style={{cursor: 'pointer'}}>
-                                                <td>{member.id}</td>
-                                                <td>{member.email}</td>
-                                                <td>{member.username}</td>
-                                                <td>{member.nickname}</td>
-                                                <td>{member.gender}</td>
-                                                <td>{member.age}</td>
-                                            </tr>
-                                        ))}
+                                            {filteredMembers.map((member) => (
+                                                <tr key={member.id} onClick={() => handleRowClick(member)}
+                                                    style={{cursor: 'pointer'}}>
+                                                    <td>{member.id}</td>
+                                                    <td>{member.email}</td>
+                                                    <td>{member.username}</td>
+                                                    <td>{member.nickname}</td>
+                                                    <td>{member.gender}</td>
+                                                    <td>{member.age}</td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        {selectedMember && (
-                            <Modal show={showModal} onHide={handleCloseModal}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>회원 정보</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <p><strong>ID:</strong> {selectedMember.id}</p>
-                                    <p><strong>이메일:</strong> {selectedMember.email}</p>
-                                    <p><strong>유저네임:</strong> {selectedMember.username}</p>
-                                    <p><strong>닉네임:</strong> {selectedMember.nickname}</p>
-                                    <p><strong>성별:</strong> {selectedMember.gender}</p>
-                                    <p><strong>나이:</strong> {selectedMember.age}</p>
-                                    <p><strong>책 목록:</strong></p>
-                                    {selectedMember.books && selectedMember.books.length > 0 ? (
-                                        <ul>
-                                            {selectedMember.books.map((book, index) => (
-                                                <li key={index}>{book.title}</li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p>없음</p>
-                                    )}
-                                </Modal.Body>
 
-                            </Modal>
+                        {selectedMember && (
+                            <>
+                                {/* 회원 정보 모달 */}
+                                <Modal show={showMemberModal} onHide={handleCloseMemberModal}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>회원 정보</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <p><strong>ID:</strong> {selectedMember.id}</p>
+                                        <p><strong>이메일:</strong> {selectedMember.email}</p>
+                                        <p><strong>유저네임:</strong> {selectedMember.username}</p>
+                                        <p><strong>닉네임:</strong> {selectedMember.nickname}</p>
+                                        <p><strong>성별:</strong> {selectedMember.gender}</p>
+                                        <p><strong>나이:</strong> {selectedMember.age}</p>
+                                        <p><strong>책 목록:</strong></p>
+                                        {selectedMember.books && selectedMember.books.length > 0 ? (
+                                            <ul>
+                                                {selectedMember.books.map((book, index) => (
+                                                    <li key={index}>{book.title}</li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <p>없음</p>
+                                        )}
+                                        {/* 로그 버튼 추가 */}
+                                        <Button variant="primary" onClick={handleOpenLogsModal}>
+                                            로그 보기
+                                        </Button>
+                                    </Modal.Body>
+                                </Modal>
+
+                                {/* 로그 모달 */}
+                                <Modal show={showLogsModal} onHide={handleCloseLogsModal} size="lg">
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Log</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <UserLogs userId={selectedMember.id} />
+                                    </Modal.Body>
+                                </Modal>
+                            </>
                         )}
                     </div>
                 </div>
