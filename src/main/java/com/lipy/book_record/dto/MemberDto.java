@@ -21,6 +21,7 @@ public class MemberDto {
     private String nickname;
     private String gender;
     private int age;
+    private String phonenumber;
     private List<Book> books;
 
     public void addBook(Book book){
@@ -41,6 +42,7 @@ public class MemberDto {
                 .nickName(this.nickname)
                 .gender(this.gender)
                 .age(this.age)
+                .phonenumber(this.phonenumber)
                 .books(this.books)
                 .build();
         if (this.books != null) {
@@ -59,6 +61,7 @@ public class MemberDto {
         this.nickname = user.getNickname();
         this.gender = user.getGender();
         this.age = user.getAge();
+        this.phonenumber = user.getPhonenumber();
         this.books = user.getBooks();
     }
 }

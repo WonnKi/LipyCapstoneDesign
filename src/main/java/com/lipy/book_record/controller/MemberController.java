@@ -76,6 +76,7 @@ public class MemberController {
             member.setNickname(registerRequest.getNickname());
             member.setGender(registerRequest.getGender());
             member.setAge(registerRequest.getAge());
+            member.setPhonenumber(registerRequest.getPhonenumber());
             member.setRole(Member.Role.MEMBER); // 기본적으로 MEMBER 역할 부여
             memberService.save(member);
             return ResponseEntity.ok().body("Membership registration successful");
@@ -115,19 +116,36 @@ public class MemberController {
     }
 
     @PostMapping("/socialing/{socialingId}/interest")
-    public ResponseEntity<?> addFavoriteSocialing(@PathVariable Long socialingId) {
+    public ResponseEntity<?> addInterestSocialing(@PathVariable Long socialingId, HttpServletRequest request) {
         // 현재 로그인한 사용자의 정보를 가져옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
         Member member = memberService.findByEmail(email);
 
+        // 관심 소셜링 추가
         memberService.addFavoriteSocialing(member.getId(), socialingId);
+
+        // IP 주소 가져오기
+        String ipAddress = request.getRemoteAddr();
+
+        // 로그 저장
+        userActivityLogService.logActivity(member.getId(), "ADD_INTEREST_SOCIALING", "User added interest for socialing ID: " + socialingId, ipAddress);
+
         return ResponseEntity.ok().build();
     }
+
     @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
-    public ResponseEntity<String> removeInterestSocialing(@PathVariable UUID memberId, @PathVariable Long socialingId) {
+    public ResponseEntity<String> removeInterestSocialing(@PathVariable UUID memberId, @PathVariable Long socialingId, HttpServletRequest request) {
+        // 관심 소셜링 삭제
         memberService.cancelFavoriteSocialing(memberId, socialingId);
+
+        // IP 주소 가져오기
+        String ipAddress = request.getRemoteAddr();
+
+        // 로그 저장
+        userActivityLogService.logActivity(memberId, "REMOVE_INTEREST_SOCIALING", "User removed interest for socialing ID: " + socialingId, ipAddress);
+
         return ResponseEntity.ok("Interest socialing removed successfully");
     }
 
