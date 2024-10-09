@@ -1,5 +1,6 @@
 package com.lipy.book_record.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class Record {
 
     private LocalDate recordDate;
 
+    @JsonIgnore
     @Setter
     @ManyToOne
     @JoinColumn(name = "book_Id")

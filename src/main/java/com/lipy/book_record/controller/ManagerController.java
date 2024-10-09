@@ -1,14 +1,15 @@
 package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.MemberDto;
+import com.lipy.book_record.entity.Record;
 import com.lipy.book_record.service.Manager_SearchService;
+import com.lipy.book_record.service.RecordService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/manager")
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class ManagerController {
     private final Manager_SearchService Manager_SearchService;
+    private final RecordService RecordService;
 
     @GetMapping("/")
     public List<MemberDto> getAllMembers(){
@@ -28,5 +30,14 @@ public class ManagerController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String nickname) {
             return Manager_SearchService.searchDetail(email, name, nickname);
+    }
+
+    @GetMapping("/record/{userId}")
+    public ResponseEntity<List<Record>> getRecordsByUserId(@PathVariable UUID userId) {
+        List<Record> records = RecordService.getRecordsByUserId(userId);
+        if (records.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(records);
     }
 }
