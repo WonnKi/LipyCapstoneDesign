@@ -1,8 +1,6 @@
 package com.lipy.book_record.controller;
 
-import com.lipy.book_record.dto.LoginRequest;
-import com.lipy.book_record.dto.RegisterRequest;
-import com.lipy.book_record.dto.SocialingListResponse;
+import com.lipy.book_record.dto.*;
 import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.service.EmailService;
 import com.lipy.book_record.service.MemberService;
@@ -192,6 +190,12 @@ public class MemberController {
         userInfo.put("Nickname", member.getNickname());
 
         return ResponseEntity.ok(userInfo);
+    }
+
+    @PutMapping("members/{userId}")
+    public ResponseEntity<MemberDto> updateMember(@PathVariable UUID userId, @RequestBody UpdateMemberRequest updateMemberRequest) {
+        MemberDto updatedMember = memberService.updateMember(userId, updateMemberRequest);
+        return ResponseEntity.ok(updatedMember);
     }
 
 }

@@ -5,6 +5,7 @@ import com.lipy.book_record.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class MemberDto {
     private UUID id;
     private String email;

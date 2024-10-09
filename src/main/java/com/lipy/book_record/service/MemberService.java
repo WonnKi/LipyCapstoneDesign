@@ -1,11 +1,14 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.MemberDto;
 import com.lipy.book_record.dto.SocialingListResponse;
+import com.lipy.book_record.dto.UpdateMemberRequest;
 import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.MemberRepository;
 import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -84,5 +87,27 @@ public class MemberService  {
         // 멤버의 즐겨찾기에 소셜링 추가
         member.getFavoriteSocialings().add(socialing);
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public MemberDto updateMember(UUID userId, UpdateMemberRequest updateMemberRequest) {
+        // 기존 회원 정보 조회
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        // 수정할 정보를 DTO로 변환 후 업데이트
+        MemberDto memberDto = new MemberDto(member);
+        memberDto.setEmail(updateMemberRequest.getEmail());
+        memberDto.setUsername(updateMemberRequest.getUsername());
+        memberDto.setNickname(updateMemberRequest.getNickname());
+        memberDto.setGender(updateMemberRequest.getGender());
+        memberDto.setAge(updateMemberRequest.getAge());
+        memberDto.setPhonenumber(updateMemberRequest.getPhonenumber());
+
+        // 엔티티 변환 후 저장
+        Member updatedMember = memberDto.toEntity();
+        memberRepository.save(updatedMember);
+
+        return new MemberDto(updatedMember);
     }
 }
