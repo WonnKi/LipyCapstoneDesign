@@ -26,4 +26,6 @@ public class UpdateMemberRequest {
     @NotBlank
     private String phonenumber;
 
+    @NotBlank
+    private String password;
 }

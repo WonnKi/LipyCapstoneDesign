@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class MemberService  {
     private final MemberRepository memberRepository;
     private final SocialingRepository socialingRepository;
+    private final PasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 PasswordEncoder
 
     public void save(Member member) {
         memberRepository.save(member);
@@ -102,6 +104,12 @@ public class MemberService  {
         member.setGender(updateMemberRequest.getGender());
         member.setAge(updateMemberRequest.getAge());
         member.setPhonenumber(updateMemberRequest.getPhonenumber());
+
+        // 비밀번호가 제공된 경우 비밀번호 업데이트
+        if (updateMemberRequest.getPassword() != null && !updateMemberRequest.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(updateMemberRequest.getPassword());
+            member.setPassword(encodedPassword); // 비밀번호 암호화 후 저장
+        }
 
         memberRepository.save(member);
         return new MemberDto(member);
