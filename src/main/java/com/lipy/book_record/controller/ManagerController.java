@@ -1,6 +1,7 @@
 package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.MemberDto;
+import com.lipy.book_record.dto.RecordDto;
 import com.lipy.book_record.entity.Record;
 import com.lipy.book_record.service.Manager_SearchService;
 import com.lipy.book_record.service.RecordService;
@@ -33,8 +34,8 @@ public class ManagerController {
     }
 
     @GetMapping("/record/{userId}")
-    public ResponseEntity<List<Record>> getRecordsByUserId(@PathVariable UUID userId) {
-        List<Record> records = RecordService.getRecordsByUserId(userId);
+    public ResponseEntity<List<RecordDto>> getRecordsByUserId(@PathVariable UUID userId) {
+        List<RecordDto> records = RecordService.getRecordsByUserId(userId);
         if (records.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

@@ -95,19 +95,15 @@ public class MemberService  {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
-        // 수정할 정보를 DTO로 변환 후 업데이트
-        MemberDto memberDto = new MemberDto(member);
-        memberDto.setEmail(updateMemberRequest.getEmail());
-        memberDto.setUsername(updateMemberRequest.getUsername());
-        memberDto.setNickname(updateMemberRequest.getNickname());
-        memberDto.setGender(updateMemberRequest.getGender());
-        memberDto.setAge(updateMemberRequest.getAge());
-        memberDto.setPhonenumber(updateMemberRequest.getPhonenumber());
+        // 회원 정보 업데이트
+        member.setEmail(updateMemberRequest.getEmail());
+        member.setUsername(updateMemberRequest.getUsername());
+        member.setNickname(updateMemberRequest.getNickname());
+        member.setGender(updateMemberRequest.getGender());
+        member.setAge(updateMemberRequest.getAge());
+        member.setPhonenumber(updateMemberRequest.getPhonenumber());
 
-        // 엔티티 변환 후 저장
-        Member updatedMember = memberDto.toEntity();
-        memberRepository.save(updatedMember);
-
-        return new MemberDto(updatedMember);
+        memberRepository.save(member);
+        return new MemberDto(member);
     }
 }
