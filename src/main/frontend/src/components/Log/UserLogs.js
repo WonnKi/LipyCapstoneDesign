@@ -30,7 +30,6 @@ const UserLogs = ({ userId }) => {
                 <table className="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>행동</th>
                         <th>상세</th>
                         <th>시간</th>
@@ -40,10 +39,18 @@ const UserLogs = ({ userId }) => {
                     <tbody>
                     {logs.map((log) => (
                         <tr key={log.id}>
-                            <td>{log.id}</td>
                             <td>{log.action}</td>
                             <td>{log.details}</td>
-                            <td>{new Date(log.timestamp).toLocaleString()}</td>
+                            <td style={{width: '200px'}}>
+                                {new Date(log.timestamp).toLocaleString('ko-KR', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit',
+                                    hour12: false
+                                })}</td>
                             <td>{log.ipAddress || 'N/A'}</td>
                         </tr>
                     ))}

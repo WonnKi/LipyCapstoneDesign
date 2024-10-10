@@ -7,6 +7,8 @@ import com.lipy.book_record.entity.SocialingApplication;
 import com.lipy.book_record.service.MemberService;
 import com.lipy.book_record.service.SocialingApplicationService;
 import com.lipy.book_record.service.SocialingService;
+import com.lipy.book_record.service.UserActivityLogService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +28,10 @@ public class SocialingApplicationController {
     private final SocialingApplicationService socialingApplicationService;
     private final SocialingService socialingService;
     private final MemberService memberService;
+    private final UserActivityLogService userActivityLogService;
 
     @PostMapping("/socialing/apply")
-    public ResponseEntity<Long> applyForSocialing(@RequestParam Long socialingId) {
+    public ResponseEntity<Long> applyForSocialing(@RequestParam Long socialingId, HttpServletRequest request) {
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,6 +40,13 @@ public class SocialingApplicationController {
             Member member = memberService.findByEmail(email);
 
             Long takeId = socialingApplicationService.applyForSocialing(member.getId(), socialingId);
+
+            // IP 주소 가져오기
+            String ipAddress = request.getRemoteAddr();
+
+            // 로그 저장
+            userActivityLogService.logActivity(member.getId(), "APPLY_SOCIALING", "User applied for socialing with ID: " + socialingId, ipAddress);
+
             return ResponseEntity.ok(takeId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
@@ -44,7 +54,7 @@ public class SocialingApplicationController {
     }
 
     @DeleteMapping("/socialing/apply/{applicationId}") // 소셜링 신청 취소
-    public ResponseEntity<String> cancelSocialingApplication(@PathVariable Long applicationId) {
+    public ResponseEntity<String> cancelSocialingApplication(@PathVariable Long applicationId, HttpServletRequest request) {
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -61,6 +71,13 @@ public class SocialingApplicationController {
             }
 
             socialingApplicationService.cancelSocialingApplication(applicationId);
+
+            // IP 주소 가져오기
+            String ipAddress = request.getRemoteAddr();
+
+            // 로그 저장
+            userActivityLogService.logActivity(member.getId(), "CANCEL_SOCIALING", "User canceled socialing application with ID: " + applicationId, ipAddress);
+
             return ResponseEntity.ok("Socialing application canceled successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());

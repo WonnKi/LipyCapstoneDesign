@@ -1,14 +1,18 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.MemberDto;
 import com.lipy.book_record.dto.SocialingListResponse;
+import com.lipy.book_record.dto.UpdateMemberRequest;
 import com.lipy.book_record.entity.Member;
 import com.lipy.book_record.entity.Socialing;
 import com.lipy.book_record.repository.MemberRepository;
 import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,13 +24,15 @@ import java.util.UUID;
 public class MemberService  {
     private final MemberRepository memberRepository;
     private final SocialingRepository socialingRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void save(Member member) {
         memberRepository.save(member);
     }
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email);
+        Optional<Member> memberOptional = Optional.ofNullable((Member) memberRepository.findByEmail(email));
+        return memberOptional.orElse(null);
     }
 
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
@@ -83,5 +89,28 @@ public class MemberService  {
         // 멤버의 즐겨찾기에 소셜링 추가
         member.getFavoriteSocialings().add(socialing);
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public MemberDto updateMember(UUID userId, UpdateMemberRequest updateMemberRequest) {
+        // 기존 회원 정보 조회
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        // 회원 정보 업데이트
+        member.setEmail(updateMemberRequest.getEmail());
+        member.setUsername(updateMemberRequest.getUsername());
+        member.setNickname(updateMemberRequest.getNickname());
+        member.setGender(updateMemberRequest.getGender());
+        member.setAge(updateMemberRequest.getAge());
+        member.setPhonenumber(updateMemberRequest.getPhonenumber());
+
+        if (updateMemberRequest.getPassword() != null && !updateMemberRequest.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(updateMemberRequest.getPassword());
+            member.setPassword(encodedPassword); // 비밀번호 암호화 후 저장
+        }
+
+        memberRepository.save(member);
+        return new MemberDto(member);
     }
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const Home5 = ({ userId }) => {
+const Memo = ({ userId }) => {
     const [records, setRecords] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
@@ -32,23 +32,21 @@ const Home5 = ({ userId }) => {
 
     return (
         <div>
-            <h3>Records for User {userId}</h3>
             <table className="table">
                 <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Actions</th>
+                    <th>책 제목</th>
+                    <th>메모 제목</th>
+                    <th>날짜</th>
+
                 </tr>
                 </thead>
                 <tbody>
                 {records.map((record) => (
                     <tr key={record.id} onClick={() => handleRowClick(record)}>
+                        <td>{record.bookTitle || '제목을 찾을 수 없습니다'}</td>
                         <td>{record.title}</td>
                         <td>{record.recordDate}</td>
-                        <td>
-                            <Button onClick={() => handleRowClick(record)}>View</Button>
-                        </td>
                     </tr>
                 ))}
                 </tbody>
@@ -61,18 +59,13 @@ const Home5 = ({ userId }) => {
                         <Modal.Title>{selectedRecord.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p><strong>Date:</strong> {selectedRecord.recordDate}</p>
-                        <p><strong>Content:</strong> {selectedRecord.content}</p>
+                        <p><strong>날짜:</strong> {selectedRecord.recordDate}</p>
+                        <p><strong>내용:</strong> {selectedRecord.content}</p>
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseModal}>
-                            Close
-                        </Button>
-                    </Modal.Footer>
                 </Modal>
             )}
         </div>
     );
 };
 
-export default Home5;
+export default Memo;

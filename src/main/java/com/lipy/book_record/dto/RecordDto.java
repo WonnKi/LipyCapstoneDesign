@@ -30,6 +30,8 @@ public class RecordDto {
 
     private LocalDate recordDate;
 
+    private String bookTitle;
+
     @Setter
     @ManyToOne
     @JsonIgnore
@@ -41,6 +43,7 @@ public class RecordDto {
         this.content = record.getContent();
         this.recordDate = record.getRecordDate();
         this.book = record.getBooks();
+        this.bookTitle = record.getBooks().getTitle();
     }
 
     public Record toEntity(){
@@ -50,6 +53,7 @@ public class RecordDto {
                 .content(this.content)
                 .recordDate(this.recordDate)
                 .book(this.book)
+                .bookTitle(this.bookTitle)
                 .build();
     }
 }

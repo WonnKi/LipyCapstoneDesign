@@ -39,6 +39,9 @@ public class Member {
     @Column(nullable = false)
     private int age;
 
+    @Column(nullable = false)
+    private String phonenumber;
+
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
@@ -62,7 +65,7 @@ public class Member {
     }
 
     @Builder
-    public Member(UUID id, String email, String password, String userName, String nickName,String gender,int age, List<Book> books) {
+    public Member(UUID id, String email, String password, String userName, String nickName,String gender,int age,String phonenumber, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = password;
@@ -70,6 +73,7 @@ public class Member {
         this.nickname = nickName;
         this.gender = gender;
         this.age = age;
+        this.phonenumber = phonenumber;
         this.books = books;
     }
 

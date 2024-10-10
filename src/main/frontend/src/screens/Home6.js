@@ -33,7 +33,10 @@ const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, set
                     </Button>
                     <DropdownButton
                         id="dropdown-basic-button"
-                        title={book.bookStatus}
+                        title={book.bookStatus === 'WISH' ? '예정' :
+                                book.bookStatus === 'READING' ? '독서중' :
+                                book.bookStatus === 'DONE' ? '완독' :
+                                book.bookStatus}
                         onSelect={(eventKey) => handleChangeStatus(book.isbn, eventKey)}
                     >
                         <Dropdown.Item eventKey="WISH">예정</Dropdown.Item>
@@ -325,27 +328,22 @@ const Home6 = () => {
                                 <span className="section-heading-upper"></span>
                                 <span className="section-heading-lower">BookCase</span>
                             </h2>
-                            <div className="row">
-                                <div>
-                                    <CaseModal2/>
-                                    <div className="wrapper">
-                                        <div className="content">
-                                            <div className="grid">
-                                                {bookList.map((book, index) => (
-                                                    <Card
-                                                        key={index}
-                                                        book={book}
-                                                        handleChangeStatus={handleChangeStatus}
-                                                        handleDeleteBook={handleDeleteBook}
-                                                        setSelectedBook={setSelectedBook}
-                                                        setShowModal={setShowModal}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
+                            <div>
+                                <div className="grid">
+                                    {bookList.map((book, index) => (
+                                        <Card
+                                            key={index}
+                                            book={book}
+                                            handleChangeStatus={handleChangeStatus}
+                                            handleDeleteBook={handleDeleteBook}
+                                            setSelectedBook={setSelectedBook}
+                                            setShowModal={setShowModal}
+                                        />
+                                    ))}
+                                    <div className="card2">
+                                        <CaseModal2/>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

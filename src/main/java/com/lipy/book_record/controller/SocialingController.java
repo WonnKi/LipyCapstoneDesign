@@ -64,15 +64,43 @@ public class SocialingController {
         return ResponseEntity.ok(sortedSocialings);
     }
     @DeleteMapping("/socialing/{socialingId}") // 게시글 삭제
-    public ResponseEntity<Void> deleteForSocialing(@PathVariable Long socialingId){
+    public ResponseEntity<Void> deleteForSocialing(@PathVariable Long socialingId, HttpServletRequest request) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        Member member = memberService.findByEmail(email);
+
         socialingService.deleteForSocialing(socialingId);
+
+        // IP 주소 가져오기
+        String ipAddress = request.getRemoteAddr();
+
+        // 로그 저장
+        userActivityLogService.logActivity(member.getId(), "DELETE_SOCIALING", "User deleted socialing with ID: " + socialingId, ipAddress);
+
         return ResponseEntity.noContent().build();
     }
+
     @PutMapping("/socialing/{socialingId}") // 게시글 수정
-    public ResponseEntity<Socialing> updateForSocialing(@PathVariable long socialingId, @RequestBody UpdateSocialingRequest request){
-        Socialing socialing = socialingService.update(socialingId, request);
+    public ResponseEntity<Socialing> updateForSocialing(@PathVariable long socialingId, @RequestBody UpdateSocialingRequest updateRequest, HttpServletRequest httpRequest) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        Member member = memberService.findByEmail(email);
+
+        Socialing socialing = socialingService.update(socialingId, updateRequest);
+
+        // IP 주소 가져오기
+        String ipAddress = httpRequest.getRemoteAddr();
+
+        // 로그 저장
+        userActivityLogService.logActivity(member.getId(), "UPDATE_SOCIALING", "User updated socialing with ID: " + socialingId, ipAddress);
+
         return ResponseEntity.ok().body(socialing);
     }
+
     @PostMapping("/socialing/post") // 게시글 생성
     public ResponseEntity<Socialing> createSocialingPost(@RequestBody Socialing socialing, HttpServletRequest request) {
         // 현재 로그인한 사용자의 정보를 가져옴

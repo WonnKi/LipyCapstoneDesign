@@ -5,6 +5,7 @@ import com.lipy.book_record.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class MemberDto {
     private UUID id;
     private String email;
@@ -21,6 +23,7 @@ public class MemberDto {
     private String nickname;
     private String gender;
     private int age;
+    private String phonenumber;
     private List<Book> books;
 
     public void addBook(Book book){
@@ -41,6 +44,7 @@ public class MemberDto {
                 .nickName(this.nickname)
                 .gender(this.gender)
                 .age(this.age)
+                .phonenumber(this.phonenumber)
                 .books(this.books)
                 .build();
         if (this.books != null) {
@@ -59,6 +63,7 @@ public class MemberDto {
         this.nickname = user.getNickname();
         this.gender = user.getGender();
         this.age = user.getAge();
+        this.phonenumber = user.getPhonenumber();
         this.books = user.getBooks();
     }
 }

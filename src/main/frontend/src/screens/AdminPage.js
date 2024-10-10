@@ -6,7 +6,8 @@ import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import UserLogs from "../components/Log/UserLogs";
-
+import Memo from "../components/Log/Memo";
+import EditMember from "../components/Log/EditMember";
 
 
 const data = [
@@ -29,6 +30,16 @@ const AdminPage = () => {
     const [showLogsModal, setShowLogsModal] = useState(false);
     const [genderFilter, setGenderFilter] = useState('');
     const [ageFilter, setAgeFilter] = useState('');
+    const [showRecordsModal, setShowRecordsModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+
+    const handleOpenRecordsModal = () => {
+        setShowRecordsModal(true);
+    };
+
+    const handleCloseRecordsModal = () => {
+        setShowRecordsModal(false);
+    };
 
 
     const fetchAllMembers = async () => {
@@ -72,6 +83,19 @@ const AdminPage = () => {
     const handleGenderFilterChange = (e) => {
         setGenderFilter(e.target.value);
     };
+
+    const handleOpenEditModal = () => {
+        setShowEditModal(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setShowEditModal(false);
+    };
+
+    const handleUpdateMemberList = () => {
+        fetchAllMembers();
+    };
+
 
     useEffect(() => {
         fetchAllMembers();
@@ -281,16 +305,15 @@ const AdminPage = () => {
                                     <table className="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                         <tr className="text-white">
-                                            <th>ID</th>
+                                            <th>이름</th>
                                             <th>이메일</th>
-                                            <th>유저네임</th>
                                             <th>닉네임</th>
                                             <th>
                                                 <select value={genderFilter} onChange={handleGenderFilterChange}>
                                                     <option value="">성별</option>
                                                     <option value="남">남</option>
                                                     <option value="여">여</option>
-                                               </select>
+                                                </select>
                                             </th>
                                             <th>나이</th>
                                         </tr>
@@ -299,9 +322,8 @@ const AdminPage = () => {
                                             {filteredMembers.map((member) => (
                                                 <tr key={member.id} onClick={() => handleRowClick(member)}
                                                     style={{cursor: 'pointer'}}>
-                                                    <td>{member.id}</td>
-                                                    <td>{member.email}</td>
                                                     <td>{member.username}</td>
+                                                    <td>{member.email}</td>
                                                     <td>{member.nickname}</td>
                                                     <td>{member.gender}</td>
                                                     <td>{member.age}</td>
@@ -321,9 +343,8 @@ const AdminPage = () => {
                                         <Modal.Title>회원 정보</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <p><strong>ID:</strong> {selectedMember.id}</p>
+                                        <p><strong>이름:</strong> {selectedMember.username}</p>
                                         <p><strong>이메일:</strong> {selectedMember.email}</p>
-                                        <p><strong>유저네임:</strong> {selectedMember.username}</p>
                                         <p><strong>닉네임:</strong> {selectedMember.nickname}</p>
                                         <p><strong>성별:</strong> {selectedMember.gender}</p>
                                         <p><strong>나이:</strong> {selectedMember.age}</p>
@@ -331,21 +352,46 @@ const AdminPage = () => {
                                         {selectedMember.books && selectedMember.books.length > 0 ? (
                                             <ul>
                                                 {selectedMember.books.map((book, index) => (
-                                                    <li key={index}>{book.title}</li>
+                                                    <li key={index}>
+                                                        {book.title} -
+                                                        <strong>
+                                                            {book.bookStatus === 'WISH' ? '예정' :
+                                                             book.bookStatus === 'READING' ? '독서중' :
+                                                             book.bookStatus === 'DONE' ? '완독' :
+                                                             book.bookStatus}
+                                                        </strong>
+                                                    </li>
                                                 ))}
                                             </ul>
                                         ) : (
                                             <p>없음</p>
                                         )}
+
                                         {/* 로그 버튼 추가 */}
                                         <Button variant="primary" onClick={handleOpenLogsModal}>
                                             로그 보기
                                         </Button>
+                                        <Button variant="primary" onClick={handleOpenRecordsModal}
+                                                style={{
+                                                    margin: 5
+                                                }}>
+                                            기록 보기
+                                        </Button>
+                                        <Button variant="primary" onClick={handleOpenEditModal}>정보 수정</Button>
                                     </Modal.Body>
                                 </Modal>
 
+                                {selectedMember && (
+                                    <EditMember
+                                        userId={selectedMember.id}
+                                        show={showEditModal}
+                                        handleClose={handleCloseEditModal}
+                                        handleUpdate={handleUpdateMemberList}
+                                    />
+                                )}
+
                                 {/* 로그 모달 */}
-                                <Modal show={showLogsModal} onHide={handleCloseLogsModal} size="lg">
+                                <Modal show={showLogsModal} onHide={handleCloseLogsModal} size="xl">
                                     <Modal.Header closeButton>
                                         <Modal.Title>Log</Modal.Title>
                                     </Modal.Header>
@@ -353,6 +399,16 @@ const AdminPage = () => {
                                         <UserLogs userId={selectedMember.id} />
                                     </Modal.Body>
                                 </Modal>
+
+                                <Modal show={showRecordsModal} onHide={handleCloseRecordsModal} size="lg">
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>기록 보기</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Memo userId={selectedMember.id} />
+                                    </Modal.Body>
+                                </Modal>
+
                             </>
                         )}
                     </div>

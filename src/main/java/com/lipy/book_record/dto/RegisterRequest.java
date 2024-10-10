@@ -13,6 +13,7 @@ public class RegisterRequest {
     private String email;
     private String gender; // 성별
     private int age;       // 나이
+    private String phonenumber;
 
     public RegisterRequest(Member member) {
         email = member.getEmail();
@@ -21,14 +22,16 @@ public class RegisterRequest {
         nickname = member.getNickname();
         gender = member.getGender();
         age = member.getAge();
+        phonenumber = member.getPhonenumber();
     }
 
-    public RegisterRequest( String email,String password,String nickname, String username , String gender, int age) {
+    public RegisterRequest( String email,String password,String nickname, String username , String gender, int age , String phonenumber) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.nickname = nickname;
         this.gender = gender;
         this.age = age;
+        this.phonenumber = phonenumber;
     }
 }
