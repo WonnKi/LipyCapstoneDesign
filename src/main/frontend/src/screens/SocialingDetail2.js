@@ -34,7 +34,7 @@ const SocialingDetails = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                const loggedInName = userResponse.data.nickname;
+                const loggedInName = userResponse.data.Nickname;
                 setIsAuthor(postResponse.data.writer === loggedInName);
 
                 const applyResponse = await axios.get(`http://localhost:8080/${id}/isApplied`, {
@@ -244,7 +244,7 @@ const SocialingDetails = () => {
                     ) : (
                         <ul>
                             {applicants.map((applicant, index) => (
-                                <li key={index}>{applicant.name} - {applicant.email}</li>
+                                <li key={index}>{applicant}</li> // applicant 자체가 문자열이므로 그대로 출력
                             ))}
                         </ul>
                     )}
