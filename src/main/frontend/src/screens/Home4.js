@@ -1,307 +1,203 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid"
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import dayGridPlugin from "@fullcalendar/daygrid";
+import {Link} from "react-router-dom";
+import Table from "react-bootstrap/Table";
 import Card from "react-bootstrap/Card";
 
-const Home = () => {
+const Home4 = () => {
+
+    const [socialings, setSocialings] = useState([]);
+    const [hotSocialings, setHotSocialings] = useState([]);
+    const [readingBooks, setReadingBooks] = useState([]);
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const fetchUserId = () => {
+            const token = localStorage.getItem("jwtToken");
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const userIdFromToken = decodedToken.id;
+                setUserId(userIdFromToken);
+            }
+        };
+
+        const fetchSocialings = async () => {
+            try {
+                const response = await axios.get('/socialing');
+                setSocialings(response.data.reverse());
+            } catch (error) {
+                console.error('소셜링을 불러오는 중 에러 발생:', error);
+            }
+        };
+
+        const fetchHotSocialings = async () => {
+            try {
+                const response = await axios.get('/socialing/hot');
+                setHotSocialings(response.data);
+            } catch (error) {
+                console.error('인기 소셜링을 불러오는 중 에러 발생:', error);
+            }
+        };
+
+        const fetchReadingBooks = async () => {
+            try {
+                const token = localStorage.getItem("jwtToken");
+                const response = await axios.get(`/book/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setReadingBooks(response.data);
+            } catch (error) {
+                console.error("현재 읽는 중인 책을 불러오는 중 에러 발생:", error);
+            }
+        };
+
+        fetchUserId();
+        fetchSocialings();
+        fetchHotSocialings();
+        if (userId) {
+            fetchReadingBooks();
+        }
+    }, [userId]);
+
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return {};
+        }
+    };
+
 
     return <div>
-        {/*<FullCalendar*/}
-        {/*    plugins={[dayGridPlugin]}*/}
-        {/*    initialView="dayGridMonth"*/}
-        {/*/>*/}
-
-        <meta charSet="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-        <meta name="description" content=""/>
-        <meta name="author" content=""/>
-        <title>Business Casual - Start Bootstrap Theme</title>
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
-
-        <link
-            href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet"/>
-
-        <link href="css/styles.css" rel="stylesheet"/>
 
         <header>
             <h1 className="site-heading text-center text-faded d-none d-lg-block">
-                <span className="site-heading-upper text-primary mb-3">Literature & Insights Platform for You</span>
+                <span className="site-heading-upper text-primary mb-3"></span>
                 <span className="site-heading-lower">LIPY</span>
             </h1>
         </header>
 
-        <section className="page-section cta">
-
-            <div className="col">
-                <div className="col-xl-11 mx-auto">
-
-                    <div className="row g-5">
-
-                        <div className="col-md-7">
-                            <article className="blog-post">
-                                <div className="row featurette">
-                                    <div className="cta-inner bg-faded text-center rounded">
-                                        <FullCalendar
-                                            plugins={[dayGridPlugin]}
-                                            initialView="dayGridMonth"
-                                        />
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-
-                        <div className="col-md-5">
-                            <article className="blog-post">
-                                <div className="row featurette">
-                                    <div className="cta-inner bg-faded text-center rounded"
-                                         style={{
-                                             height: 620
-                                         }}>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        <div className="row-md-5">
-                            <article className="blog-post">
-                                <div className="row featurette">
-                                    <div className="cta-inner bg-faded text-center rounded">
-                                        <Container>
-                                            <Row>
-                                                <Col>
-                                                    <Card style={{ width: '20rem', margin: 10 }}>
-                                                        <Card.Img variant="top" src="https://velog.velcdn.com/images/oneoneone/post/b80ef382-273f-46fb-8cd4-700a136fc3c1/image.png" />
-                                                        <Card.Body>
-                                                            <Card.Title
-                                                            style={{
-                                                                width:"300px",
-                                                                overflow:"hidden",
-                                                                whiteSpace:"nowrap",
-                                                                textOverflow:"ellipsis",
-                                                            }}>[TOP 10] 개발자들이 많이 읽은 아티클 모음 - 5월 1주차</Card.Title>
-                                                            <Card.Text
-                                                            style={{
-                                                                textAlign:"left",
-                                                                height:100,
-                                                                fontSize:15
-                                                            }}>
-                                                                IT 제품 팀을 위한 감도 높은 정보 큐레이션 플랫폼 일일일에서 한 주간 개발자들이 많이 읽은 상위 10개의 아티클들을 소개합니다.
-                                                            </Card.Text>
-                                                            <Card.Footer></Card.Footer>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>
-                                                <Col>
-                                                    <Card style={{ width: '20rem', margin: 10 }}>
-                                                        <Card.Img variant="top" src="https://velog.velcdn.com/images/surim014/post/bf98b93c-8b93-4b49-bcdd-642866e51e8d/image.png" />
-                                                        <Card.Body>
-                                                            <Card.Title
-                                                                style={{
-                                                                    width:"300px",
-                                                                    overflow:"hidden",
-                                                                    whiteSpace:"nowrap",
-                                                                    textOverflow:"ellipsis",
-                                                                }}>[번역] 소프트웨어 개발의 미래에 대한 생각</Card.Title>
-                                                            <Card.Text
-                                                            style={{
-                                                                textAlign:"left",
-                                                                height:100,
-                                                                fontSize:15
-                                                            }}>
-                                                                원문 : https://www.sheshbabu.com/posts/thoughts-on-the-future-of-software-development
-                                                            </Card.Text>
-                                                            <Card.Footer></Card.Footer>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>
-                                                <Col>
-                                                    <Card style={{ width: '20rem', margin: 10 }}>
-                                                        <Card.Img variant="top" src="https://velog.velcdn.com/images/wijoonwu/post/b62dca0d-c782-492f-9c0e-409dd0e086d9/image.jpg" />
-                                                        <Card.Body>
-                                                            <Card.Title
-                                                                style={{
-                                                                    width:"300px",
-                                                                    overflow:"hidden",
-                                                                    whiteSpace:"nowrap",
-                                                                    textOverflow:"ellipsis",
-                                                                }}>2024 정보처리기사 실기 1회차 후기(+공부 방법)</Card.Title>
-                                                            <Card.Text
-                                                                style={{
-                                                                    textAlign:"left",
-                                                                    height:100,
-                                                                    fontSize:15
-                                                                }}>
-                                                                1회차는 쉽다고 했는데..
-                                                            </Card.Text>
-                                                            <Card.Footer></Card.Footer>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>
-                                            </Row>
-                                        </Container>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-
-
-                        {/*// 옆 게시판*/}
-                        {/*<div className="col-md-4">*/}
-                        {/*    <div className="position-sticky">*/}
-
-                        {/*        <div>*/}
-                        {/*            <h4 className="fst-italic">최신 게시물</h4>*/}
-                        {/*            <ul className="cta-inner bg-faded text-center rounded">*/}
-                        {/*                <li>*/}
-                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-                        {/*                       href="#">*/}
-                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
-                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
-                        {/*                        </svg>*/}
-                        {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">CaseModal blog post title</h6>*/}
-                        {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
-                        {/*                        </div>*/}
-                        {/*                    </test>*/}
-                        {/*                </li>*/}
-                        {/*                <li>*/}
-                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-                        {/*                       href="#">*/}
-                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
-                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
-                        {/*                        </svg>*/}
-                        {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">This is another blog post title</h6>*/}
-                        {/*                            <small className="text-body-secondary">January 14, 2024</small>*/}
-                        {/*                        </div>*/}
-                        {/*                    </test>*/}
-                        {/*                </li>*/}
-                        {/*                <li>*/}
-                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-                        {/*                       href="#">*/}
-                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
-                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
-                        {/*                        </svg>*/}
-                        {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">Longer blog post title: This one has*/}
-                        {/*                                multiple*/}
-                        {/*                                lines!</h6>*/}
-                        {/*                            <small className="text-body-secondary">January 13, 2024</small>*/}
-                        {/*                        </div>*/}
-                        {/*                    </test>*/}
-                        {/*                </li>*/}
-                        {/*            </ul>*/}
-                        {/*        </div>*/}
-
-                        {/*        <div>*/}
-                        {/*            <h4 className="fst-italic">최신 소셜링</h4>*/}
-                        {/*            <ul className="cta-inner bg-faded text-center rounded">*/}
-                        {/*                <li>*/}
-                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-                        {/*                       href="#">*/}
-                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
-                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
-                        {/*                        </svg>*/}
-                        {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">CaseModal blog post title</h6>*/}
-                        {/*                            <small className="text-body-secondary">January 15, 2024</small>*/}
-                        {/*                        </div>*/}
-                        {/*                    </test>*/}
-                        {/*                </li>*/}
-                        {/*                <li>*/}
-                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-                        {/*                       href="#">*/}
-                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
-                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
-                        {/*                        </svg>*/}
-                        {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">This is another blog post title</h6>*/}
-                        {/*                            <small className="text-body-secondary">January 14, 2024</small>*/}
-                        {/*                        </div>*/}
-                        {/*                    </test>*/}
-                        {/*                </li>*/}
-                        {/*                <li>*/}
-                        {/*                    <test className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"*/}
-                        {/*                       href="#">*/}
-                        {/*                        <svg className="bd-placeholder-img" width="100%" height="96"*/}
-                        {/*                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true"*/}
-                        {/*                             preserveAspectRatio="xMidYMid slice" focusable="false">*/}
-                        {/*                            <rect width="100%" height="100%" fill="#777"/>*/}
-                        {/*                        </svg>*/}
-                        {/*                        <div className="col-lg-8">*/}
-                        {/*                            <h6 className="mb-0">Longer blog post title: This one has*/}
-                        {/*                                multiple*/}
-                        {/*                                lines!</h6>*/}
-                        {/*                            <small className="text-body-secondary">January 13, 2024</small>*/}
-                        {/*                        </div>*/}
-                        {/*                    </test>*/}
-                        {/*                </li>*/}
-                        {/*            </ul>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-                    </div>
-
+        <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+            <div className="container">
+                <a className="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav mx-auto">
+                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                            href="index.html">Home</a></li>
+                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                            href="about.html">BookCase</a></li>
+                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                            href="products.html">Socialing</a></li>
+                        {/*<li className="nav-item px-lg-4"><a className="nav-link text-uppercase"*/}
+                        {/*                                    href="store.html">Store</a></li>*/}
+                    </ul>
                 </div>
-
             </div>
-        </section>
-        <footer className="footer text-faded text-center py-5">
+        </nav>
+
+        <section className="page-section cta">
             <div className="container">
                 <div className="row">
-                    <div className="col-lg-4 mb-5 mb-lg-0">
-                        <h4 className="text-uppercase mb-4">LIPY</h4>
-                        <p className="lead mb-0"
-                           style={{
-                               fontSize: 15
-                           }}>
-                            소개
-                            <br/>
-                            FAQ
-                            <br/>
-                        </p>
-                    </div>
+                    <div className="col-xl-9 mx-auto">
+                        <div className="cta-inner bg-faded text-center rounded">
+                            <h2 className="section-heading mb-4">
+                                <span className="section-heading-upper"></span>
+                                <span className="section-heading-lower">BookCase</span>
+                            </h2>
+                            <div className="row">
+                                <div>
+                                    <div className="card shadow mb-4">
 
-                    <div className="col-lg-4 mb-5 mb-lg-0">
-                        <h4 className="text-uppercase mb-4">오시는 길</h4>
-                        <p className="lead mb-0"
-                           style={{
-                               fontSize: 15
-                           }}>
-                            경기도 의정부시 서부로 545
-                        </p>
-                    </div>
-
-                    <div className="col-lg-4 mb-5 mb-lg-0">
-                        <h4 className="text-uppercase mb-4">업무 시간</h4>
-                        <p className="lead mb-0"
-                           style={{
-                               fontSize: 15
-                           }}>
-                            평일 : 오전 10시 ~ 오후 7시
-                            <br/>
-                            토요일 : 오전 10시 ~ 오후 8시
-                        </p>
+                                        <div className="card-body">
+                                            {readingBooks.length > 0 ? (
+                                                <Table bordered hover>
+                                                    <tbody>
+                                                    {readingBooks.slice(0, 6).map((book) => (
+                                                        <tr key={book.isbn}>
+                                                            <td>
+                                                                <img src={book.image} alt={book.title}
+                                                                     style={{width: "50px"}}/>
+                                                            </td>
+                                                            <td>{book.title}</td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </Table>
+                                            ) : (
+                                                <p>서재가 비어있습니다.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section className="page-section cta">
+            <div>
+                <div className="row">
+                    <div className="col-xl-9 mx-auto">
+                        <div className="cta-inner bg-faded text-center rounded">
+                            <h2 className="section-heading mb-4">
+                                <span className="section-heading-upper"></span>
+                                <span className="section-heading-lower">최신 소셜링</span>
+                            </h2>
+                            <div className="card-body">
+                                <div className="row">
+                                    {socialings.slice(0, 3).map((socialing) => (
+                                        <div key={socialing.id} className="col-lg-4 col-md-6 mb-8">
+                                            <Link to={`/socialing/${socialing.id}`}
+                                                  className="text-decoration-none">
+                                                <Card className="h-100">
+                                                    <Card style={{background: "white"}}>
+                                                        <h5 className="card-title"
+                                                            style={{background: "white"}}>{socialing.title}</h5>
+                                                        <p className="card-text2"
+                                                           style={{background: "white"}}>
+                                                            {socialing.description}
+                                                        </p>
+                                                        <p style={{paddingLeft: 15}}>
+                                                            {new Date(socialing.date).toLocaleDateString()}<br/>
+                                                            {new Date(socialing.date).toLocaleTimeString()}
+                                                        </p>
+                                                        <div className="card-footer" style={{
+                                                            display: "flex",
+                                                            justifyContent: "space-between",
+                                                            alignItems: "center"
+                                                        }}>
+                                                            <a>{socialing.writer}</a>
+                                                            <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
+                                                        </div>
+                                                    </Card>
+                                                </Card>
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            .
         </footer>
+
 
     </div>
 };
 
-export default Home;
+export default Home4;

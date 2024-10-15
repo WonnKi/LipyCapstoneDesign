@@ -36,12 +36,18 @@ import Register from "./screens/Register";
 import BookSaveComponent from "./screens/BookSearchComponent";
 import BookListComponent from "./screens/BookListComponent";
 import AdminPage from "./screens/AdminPage";
+import Home4 from "./screens/Home4";
+import Home5 from "./screens/Home5";
+import Home6 from "./screens/Home6";
+
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 function App() {
   return (
       <BrowserRouter>
         {/*<NavBar/>*/}
         <Routes>
-            <Route path = "/" element={ <Home /> } />
+            <Route path = "/" element={ <Home3 /> } />
             <Route path = "/Bookcase" element={ <Bookcase /> } />
             <Route path = "/Community" element={ <Community /> } />
             <Route path = "/Socialing" element={ <Socialing /> } />
@@ -76,6 +82,9 @@ function App() {
             <Route path="BookSaveComponent" element={<BookSaveComponent />} />
             <Route path="BookListComponent" element={<BookListComponent />} />
             <Route path="AdminPage" element={<AdminPage />} />
+            <Route path="Home4" element={<Home4 />} />
+            <Route path="Home5" element={<Home5 />} />
+            <Route path="Home6" element={<Home6 />} />
         </Routes>
       </BrowserRouter>
 

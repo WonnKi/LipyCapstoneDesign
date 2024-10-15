@@ -36,8 +36,12 @@ public class Manager_SearchService {
     }
 
     private List<MemberDto> searchByEmail(String email) {
-        List<Member> members = MemberRep.findByEmail(email);
-        return members.stream().map(MemberDto::new).toList();
+        Member member = MemberRep.findByEmail(email);  // 단일 Member 객체 반환
+        if (member != null) {
+            return List.of(new MemberDto(member));  // 단일 MemberDto를 리스트로 감싸서 반환
+        } else {
+            return List.of();  // 멤버가 없을 경우 빈 리스트 반환
+        }
     }
 
     private List<MemberDto> searchByName(String name) {

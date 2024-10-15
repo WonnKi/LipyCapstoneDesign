@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -86,5 +87,10 @@ public class RecordService {
         }else return ResponseEntity.badRequest().body(userId + "유저에" + isbn + "책이 없습니다.");
 
         return ResponseEntity.badRequest().body("심각한 오류입니다. 개발자에게 문의하세요");
+    }
+
+    public List<RecordDto> getRecordsByUserId(UUID userId) {
+        List<Record> records = recordRep.findByBooksUserId(userId);
+        return records.stream().map(RecordDto::new).collect(Collectors.toList());
     }
 }
