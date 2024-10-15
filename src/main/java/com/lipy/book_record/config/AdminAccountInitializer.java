@@ -26,7 +26,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             admin.setNickname("Administrator");
             admin.setAge(22);
             admin.setGender("남");
-            admin.setPhonenumber("010-1234-5678");
             admin.setRole(Member.Role.ADMIN);  // ADMIN 역할 설정
 
             Member member = new Member();
@@ -36,7 +35,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member.setNickname("의정부사람");
             member.setAge(30);
             member.setGender("남");
-            member.setPhonenumber("010-1234-5678");
             member.setRole(Member.Role.MEMBER);  // MEMBER 역할 설정
 
             Member member1 = new Member();
@@ -46,7 +44,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member1.setNickname("서울사람1");
             member1.setAge(25);
             member1.setGender("남");
-            member1.setPhonenumber("010-1234-5678");
             member1.setRole(Member.Role.MEMBER);
 
             Member member2 = new Member();
@@ -56,7 +53,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member2.setNickname("부산사람2");
             member2.setAge(30);
             member2.setGender("여");
-            member2.setPhonenumber("010-1234-5678");
             member2.setRole(Member.Role.MEMBER);
 
             Member member3 = new Member();
@@ -66,7 +62,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member3.setNickname("대구사람3");
             member3.setAge(28);
             member3.setGender("남");
-            member3.setPhonenumber("010-1234-5678");
             member3.setRole(Member.Role.MEMBER);
 
             Member member4 = new Member();
@@ -76,7 +71,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member4.setNickname("인천사람4");
             member4.setAge(22);
             member4.setGender("여");
-            member4.setPhonenumber("010-1234-5678");
             member4.setRole(Member.Role.MEMBER);
 
             Member member5 = new Member();
@@ -86,7 +80,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member5.setNickname("대전사람5");
             member5.setAge(35);
             member5.setGender("남");
-            member5.setPhonenumber("010-1234-5678");
             member5.setRole(Member.Role.MEMBER);
 
             Member member6 = new Member();
@@ -96,7 +89,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member6.setNickname("광주사람6");
             member6.setAge(29);
             member6.setGender("여");
-            member6.setPhonenumber("010-1234-5678");
             member6.setRole(Member.Role.MEMBER);
 
             Member member7 = new Member();
@@ -106,7 +98,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member7.setNickname("울산사람7");
             member7.setAge(24);
             member7.setGender("남");
-            member7.setPhonenumber("010-1234-5678");
             member7.setRole(Member.Role.MEMBER);
 
             Member member8 = new Member();
@@ -116,7 +107,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member8.setNickname("경기사람8");
             member8.setAge(32);
             member8.setGender("여");
-            member8.setPhonenumber("010-1234-5678");
             member8.setRole(Member.Role.MEMBER);
 
             Member member9 = new Member();
@@ -126,7 +116,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member9.setNickname("강원사람9");
             member9.setAge(27);
             member9.setGender("남");
-            member9.setPhonenumber("010-1234-5678");
             member9.setRole(Member.Role.MEMBER);
 
             Member member10 = new Member();
@@ -136,7 +125,6 @@ public class AdminAccountInitializer implements CommandLineRunner {
             member10.setNickname("제주사람10");
             member10.setAge(31);
             member10.setGender("여");
-            member10.setPhonenumber("010-1234-5678");
             member10.setRole(Member.Role.MEMBER);
 
             /*List<Member> members = new ArrayList<>();

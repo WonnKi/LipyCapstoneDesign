@@ -97,7 +97,13 @@ public class MemberController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verifyEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
+    public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+
+        if (email == null || code == null) {
+            return ResponseEntity.status(400).body("Email and code are required.");
+        }
         boolean isVerified = verificationService.verifyCode(email, code);
         if (isVerified) {
             return ResponseEntity.ok("Email verified successfully.");

@@ -13,5 +13,3 @@ public interface SocialingApplicationRepository extends JpaRepository<SocialingA
     Optional<SocialingApplication> findByMemberIdAndSocialingId(UUID memberId, Long socialingId);
 
 }
-
-

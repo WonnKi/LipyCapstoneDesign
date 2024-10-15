@@ -9,7 +9,6 @@ import Sidebar from "../components/BC/Sidebar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CaseModal2 from "../components/BC/CaseModal2";
-import Footer from "../components/BC/Footer";
 
 const SecondBookCase = () => {
     const [showModal, setShowModal] = useState(false);

@@ -29,12 +29,14 @@ public class Record {
     @JoinColumn(name = "book_Id")
     private Book books;
 
+    private String bookTitle;
     @Builder
-    public Record(String id, String title, String content, LocalDate recordDate, Book book){
+    public Record(String id, String title, String content, LocalDate recordDate, Book book, String bookTitle){
         this.id = id;
         this.title = title;
         this.content = content;
         this.recordDate = recordDate;
         this.books = book;
+        this.bookTitle = bookTitle;
     }
 }

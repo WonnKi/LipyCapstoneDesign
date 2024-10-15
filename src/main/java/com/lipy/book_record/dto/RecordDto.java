@@ -53,6 +53,7 @@ public class RecordDto {
                 .content(this.content)
                 .recordDate(this.recordDate)
                 .book(this.book)
+                .bookTitle(this.bookTitle)
                 .build();
     }
 }

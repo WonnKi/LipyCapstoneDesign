@@ -44,16 +44,14 @@ const Register = () => {
     const handleVerifyCode = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/verify', null, {
-                params: {
-                    email,
-                    code: inputCode,
-                },
+            const response = await axios.post('http://localhost:8080/verify', {
+                email,
+                code: inputCode
             });
             setMessage('Email verification successful. You can now complete your registration.');
             setIsVerified(true);
         } catch (error) {
-            setMessage('Email verification failed: ' + error.response.data);
+            setMessage('Email verification failed: ' + error.response?.data || error.message);
         }
     };
 

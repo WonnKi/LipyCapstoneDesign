@@ -30,7 +30,7 @@ public class ManagerController {
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String nickname) {
-            return Manager_SearchService.searchDetail(email, name, nickname);
+        return Manager_SearchService.searchDetail(email, name, nickname);
     }
 
     @GetMapping("/record/{userId}")

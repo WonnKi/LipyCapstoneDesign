@@ -28,4 +28,5 @@ public class UpdateMemberRequest {
 
     @NotBlank
     private String password;
+
 }
