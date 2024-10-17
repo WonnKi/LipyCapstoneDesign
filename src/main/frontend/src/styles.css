@@ -10923,7 +10923,9 @@ form.user .form-control-user {
     font-size: 0.8rem;
     border-radius: 10rem;
     padding: 1.5rem 1rem;
+
 }
+
 
 form.user .btn-user {
     font-size: 0.8rem;
@@ -22506,6 +22508,7 @@ html, body {
     height: 300px;
     margin: 15px 12px 30px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    background-color: gray;
 }
 
 .card2:hover .overlay {
@@ -22550,7 +22553,7 @@ html, body {
 .product-name {
     font-family: 'Lato', sans-serif;
     font-weight: bold;
-    color: #FF2C55;
+    color: black;
     margin-top: 10px;
 }
 

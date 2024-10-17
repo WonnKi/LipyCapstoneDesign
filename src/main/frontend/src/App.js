@@ -41,6 +41,7 @@ import Home5 from "./screens/Home5";
 import Home6 from "./screens/Home6";
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import PasswordReset from "./screens/PasswordReset";
 
 function App() {
   return (
@@ -85,6 +86,7 @@ function App() {
             <Route path="Home4" element={<Home4 />} />
             <Route path="Home5" element={<Home5 />} />
             <Route path="Home6" element={<Home6 />} />
+            <Route path="PasswordReset" element={<PasswordReset />} />
         </Routes>
       </BrowserRouter>
 
