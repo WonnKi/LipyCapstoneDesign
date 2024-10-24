@@ -1,5 +1,6 @@
 package com.lipy.book_record.controller;
 
+import com.lipy.book_record.dto.BookCountDto;
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.entity.BookStatus;
@@ -80,5 +81,12 @@ public class BookController {
         return saveService.ViewBookList(userId, status);
     }
 
-
+    @GetMapping("/all")
+    public ResponseEntity<List<BookCountDto>> getAllBooksAndCount() {
+        List<BookCountDto> books = saveService.getAllBooksAndCount();
+        if (books.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(books);
+    }
 }

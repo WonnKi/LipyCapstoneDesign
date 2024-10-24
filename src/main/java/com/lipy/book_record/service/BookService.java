@@ -1,5 +1,6 @@
 package com.lipy.book_record.service;
 
+import com.lipy.book_record.dto.BookCountDto;
 import com.lipy.book_record.dto.BookDto;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.dto.MemberDto;
@@ -14,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -108,5 +112,18 @@ public class BookService {
                 .toList();
     }
 
+    public List<BookCountDto> getAllBooksAndCount() {
+        List<Object[]> results = bookRep.findAllBooksWithCount();
+        return results.stream()
+                .map(result -> new BookCountDto(
+                        (String) result[0],  // isbn
+                        (String) result[1],  // title
+                        (String) result[2],  // author
+                        (String) result[3],  // publisher
+                        (String) result[4],  // image
+                        ((Number) result[5]).longValue()  // saveCount
+                ))
+                .collect(Collectors.toList());
+    }
 
 }
