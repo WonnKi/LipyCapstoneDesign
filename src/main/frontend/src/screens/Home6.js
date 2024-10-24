@@ -8,6 +8,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import {Link} from "react-router-dom";
 
 
 const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, setShowModal }) => {
@@ -288,6 +289,21 @@ const Home6 = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        window.location.reload();
+    };
+
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        const userRole = localStorage.getItem('userRole');
+        setRole(userRole);
+    }, []);
+
+    const jwtToken = localStorage.getItem('jwtToken');
+
     return <div>
 
         <header>
@@ -306,14 +322,36 @@ const Home6 = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto">
+
+                        <div className="nav-item">
+                            {role === "ADMIN" && (
+                                <Link className="nav-link" to="/AdminPage">
+                                    관리 페이지
+                                </Link>
+                            )}
+                        </div>
+
+
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="index.html">Home</a></li>
+                                                            href="home">Home</a></li>
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="about.html">BookCase</a></li>
+                                                            href="home6">BookCase</a></li>
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="products.html">Socialing</a></li>
-                        {/*<li className="nav-item px-lg-4"><a className="nav-link text-uppercase"*/}
-                        {/*                                    href="store.html">Store</a></li>*/}
+                                                            href="socialing2">Socialing</a></li>
+                        <div style={{marginTop: "auto", paddingBottom: "10px"}}>
+                            {!jwtToken && (
+                                <>
+                                    <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                                        href="Login">로그인</a></li>
+                                </>
+                            )}
+                            {jwtToken && (
+                                <li className="nav-item px-lg-4"><a onClick={handleLogout}
+                                                                    className="btn btn-user btn-block nav-link text-uppercase">
+                                    로그아웃
+                                </a></li>
+                            )}
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -324,7 +362,7 @@ const Home6 = () => {
                 <div className="row">
                     <div className="col-xl-9 mx-auto">
                         <div className="cta-inner bg-faded text-center rounded">
-                            <h2 className="section-heading mb-4">
+                        <h2 className="section-heading mb-4">
                                 <span className="section-heading-upper"></span>
                                 <span className="section-heading-lower">BookCase</span>
                             </h2>

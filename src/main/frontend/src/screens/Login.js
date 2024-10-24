@@ -50,7 +50,7 @@ const Login = () => {
             localStorage.setItem('userId', id);      // 사용자 ID 저장
 
             if (window.confirm("로그인 성공.")) {
-                navigate('/');
+                navigate('../Home');
             }
         } catch (error) {
             window.alert("로그인 실패: 이메일 또는 비밀번호를 확인하세요.");

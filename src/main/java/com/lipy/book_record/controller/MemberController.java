@@ -204,6 +204,4 @@ public class MemberController {
         return ResponseEntity.ok(updatedMember);
     }
 
-
-
 }

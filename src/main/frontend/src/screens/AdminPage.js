@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import UserLogs from "../components/Log/UserLogs";
 import Memo from "../components/Log/Memo";
 import EditMember from "../components/Log/EditMember";
+import BookCount from "../components/AdminPageCo/BookCount";
 
 
 const data = [
@@ -115,7 +116,6 @@ const AdminPage = () => {
                     <div id="content">
 
 
-
                         <div className="container-fluid pt-4 px-4">
                             <div className="row g-4">
                                 <div className="col-sm-6 col-xl-3">
@@ -163,7 +163,7 @@ const AdminPage = () => {
 
                         <div className="container-fluid pt-4 px-4">
                             <div className="row g-4">
-                                <div className="col-sm-12 col-xl-6" style={{ height: "300px"}}>
+                                <div className="col-sm-12 col-xl-6" style={{height: "300px"}}>
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart
                                             width={500}
@@ -176,17 +176,19 @@ const AdminPage = () => {
                                                 bottom: 5,
                                             }}
                                         >
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="name" />
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Legend />
-                                            <Bar dataKey="pv" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-                                            <Bar dataKey="uv" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+                                            <CartesianGrid strokeDasharray="3 3"/>
+                                            <XAxis dataKey="name"/>
+                                            <YAxis/>
+                                            <Tooltip/>
+                                            <Legend/>
+                                            <Bar dataKey="pv" fill="#8884d8"
+                                                 activeBar={<Rectangle fill="pink" stroke="blue"/>}/>
+                                            <Bar dataKey="uv" fill="#82ca9d"
+                                                 activeBar={<Rectangle fill="gold" stroke="purple"/>}/>
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
-                                <div className="col-sm-12 col-xl-6" style={{ height: "300px"}}>
+                                <div className="col-sm-12 col-xl-6" style={{height: "300px"}}>
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart
                                             width={500}
@@ -199,13 +201,13 @@ const AdminPage = () => {
                                                 bottom: 5,
                                             }}
                                         >
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="name" />
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Legend />
-                                            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-                                            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                                            <CartesianGrid strokeDasharray="3 3"/>
+                                            <XAxis dataKey="name"/>
+                                            <YAxis/>
+                                            <Tooltip/>
+                                            <Legend/>
+                                            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{r: 8}}/>
+                                            <Line type="monotone" dataKey="uv" stroke="#82ca9d"/>
                                         </LineChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -213,7 +215,12 @@ const AdminPage = () => {
                         </div>
 
                         <div className="container-fluid pt-4 px-4">
+                            <BookCount/>
+                        </div>
+
+                        <div className="container-fluid pt-4 px-4">
                             <div className="bg-secondary text-center rounded p-4">
+
                                 <div className="d-flex align-items-center justify-content-between mb-4">
                                     <h6 className="mb-0">회원 관리</h6>
                                     <form onSubmit={handleSearch}>
@@ -237,10 +244,12 @@ const AdminPage = () => {
                                     </form>
                                 </div>
 
-                                <div className="table-responsive">
+                                <div className="table-responsive" style={{ maxHeight: '500px', overflowY: 'auto' }}>
                                     <table className="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
-                                        <tr className="text-white">
+                                        <tr className="text-white"
+                                            style={{position: 'sticky', top: 0, backgroundColor: '#343a40', zIndex: 1}}>
+
                                             <th>이름</th>
                                             <th>이메일</th>
                                             <th>닉네임</th>
@@ -325,7 +334,7 @@ const AdminPage = () => {
                                         <Button variant="primary" onClick={handleOpenLogsModal}>
                                             로그 보기
                                         </Button>
-                                        <Button variant="primary" onClick={handleOpenRecordsModal} style={{ margin: 5 }}>
+                                        <Button variant="primary" onClick={handleOpenRecordsModal} style={{margin: 5}}>
                                             기록 보기
                                         </Button>
                                         <Button variant="primary" onClick={handleOpenEditModal}>정보 수정</Button>
@@ -354,7 +363,7 @@ const AdminPage = () => {
                                         <Modal.Title>Log</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <UserLogs userId={selectedMember.id} />
+                                        <UserLogs userId={selectedMember.id}/>
                                     </Modal.Body>
                                 </Modal>
 
@@ -363,7 +372,7 @@ const AdminPage = () => {
                                         <Modal.Title>기록 보기</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <Memo userId={selectedMember.id} />
+                                        <Memo userId={selectedMember.id}/>
                                     </Modal.Body>
                                 </Modal>
 

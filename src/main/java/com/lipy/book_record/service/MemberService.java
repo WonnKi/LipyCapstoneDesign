@@ -31,7 +31,7 @@ public class MemberService  {
     }
 
     public Member findByEmail(String email) {
-        Optional<Member> memberOptional = Optional.ofNullable((Member) memberRepository.findByEmail(email));
+        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail(email));
         return memberOptional.orElse(null);
     }
 
@@ -47,7 +47,7 @@ public class MemberService  {
     }
 
     public boolean isFavoriteSocialing(UUID memberId, UUID socialingId) {
-        Member member = (Member) memberRepository.findById(memberId).orElse(null);
+        Member member =  memberRepository.findById(memberId).orElse(null);
         if (member == null) {
             throw new IllegalArgumentException("Invalid member ID");
         }
@@ -58,7 +58,7 @@ public class MemberService  {
     }
 
     public List<SocialingListResponse> getFavoriteSocialings(UUID memberId) { //관심있는 소셜링 가져오기
-        Member member = (Member) memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
 
         return member.getFavoriteSocialings().stream()
@@ -69,7 +69,7 @@ public class MemberService  {
     public void cancelFavoriteSocialing(UUID memberId, Long socialingId) {
         Socialing socialing = socialingRepository.findById(socialingId)
                 .orElseThrow(() -> new RuntimeException("소셜링을 찾을 수 없습니다."));
-        Member member = (Member) memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다."));
 
         socialing.removeInterestedMember(member);
@@ -80,7 +80,7 @@ public class MemberService  {
     }
 
     public void addFavoriteSocialing(UUID memberId, Long socialingId) {
-        Member member = (Member) memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + memberId));
 
         Socialing socialing = socialingRepository.findById(socialingId)

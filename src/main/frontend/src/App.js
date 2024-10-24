@@ -48,7 +48,7 @@ function App() {
       <BrowserRouter>
         {/*<NavBar/>*/}
         <Routes>
-            <Route path = "/" element={ <Home3 /> } />
+            <Route path = "/" element={ <Home /> } />
             <Route path = "/Bookcase" element={ <Bookcase /> } />
             <Route path = "/Community" element={ <Community /> } />
             <Route path = "/Socialing" element={ <Socialing /> } />
@@ -87,6 +87,8 @@ function App() {
             <Route path="Home5" element={<Home5 />} />
             <Route path="Home6" element={<Home6 />} />
             <Route path="PasswordReset" element={<PasswordReset />} />
+
+            <Route path="Home" element={<Home/>}/>
         </Routes>
       </BrowserRouter>
 

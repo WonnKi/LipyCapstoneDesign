@@ -1,205 +1,97 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Card from "react-bootstrap/Card";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import Sidebar from "../components/BC/Sidebar";
-import Footer from "../components/BC/Footer";
-import Table from "react-bootstrap/Table";
+import BookCount2 from "../components/AdminPageCo/BookCount2";
+import Socialing1 from "../components/AdminPageCo/Socialing1";
+import {Link} from "react-router-dom";
 
 const Home = () => {
-    const [socialings, setSocialings] = useState([]);
-    const [hotSocialings, setHotSocialings] = useState([]);
-    const [readingBooks, setReadingBooks] = useState([]);
-    const [userId, setUserId] = useState(null);
 
-    useEffect(() => {
-        const fetchUserId = () => {
-            const token = localStorage.getItem("jwtToken");
-            if (token) {
-                const decodedToken = parseJwt(token);
-                const userIdFromToken = decodedToken.id;
-                setUserId(userIdFromToken);
-            }
-        };
 
-        const fetchSocialings = async () => {
-            try {
-                const response = await axios.get('/socialing');
-                setSocialings(response.data.reverse());
-            } catch (error) {
-                console.error('소셜링을 불러오는 중 에러 발생:', error);
-            }
-        };
-
-        const fetchHotSocialings = async () => {
-            try {
-                const response = await axios.get('/socialing/hot');
-                setHotSocialings(response.data);
-            } catch (error) {
-                console.error('인기 소셜링을 불러오는 중 에러 발생:', error);
-            }
-        };
-
-        const fetchReadingBooks = async () => {
-            try {
-                const token = localStorage.getItem("jwtToken");
-                const response = await axios.get(`/book/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setReadingBooks(response.data);
-            } catch (error) {
-                console.error("현재 읽는 중인 책을 불러오는 중 에러 발생:", error);
-            }
-        };
-
-        fetchUserId();
-        fetchSocialings();
-        fetchHotSocialings();
-        if (userId) {
-            fetchReadingBooks();
-        }
-    }, [userId]);
-
-    const parseJwt = (token) => {
-        try {
-            return JSON.parse(atob(token.split('.')[1]));
-        } catch (e) {
-            return {};
-        }
+    const handleLogout = () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        window.location.reload();
     };
 
-    return (
-        <div>
-            <div id="wrapper">
-                <Sidebar />
-                <div id="content-wrapper" className="d-flex flex-column" style={{ background: "#D9C5AD" }}>
-                    <div id="content">
-                        <div className="container-fluid">
-                            <div className="row" style={{ marginTop: '20px' }}>
-                                <div className="row">
-                                    <div className="col-xl-8 col-lg-5">
-                                        <div className="card shadow mb-4">
-                                            <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                                <h6 className="m-0 font-weight-bold">캘린더</h6>
-                                            </div>
-                                            <div className="card-body">
-                                                <div>
-                                                    <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-4 col-lg-3">
-                                        <div className="card shadow mb-4">
-                                            <div
-                                                className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                                <h6 className="m-0 font-weight-bold">나의 서재</h6>
-                                                <Link to="/secondBookCase2"
-                                                      className="text-primary text-decoration-none">더보기</Link>
-                                            </div>
-                                            <div className="card-body">
-                                                {readingBooks.length > 0 ? (
-                                                    <Table bordered hover>
-                                                        <tbody>
-                                                        {readingBooks.slice(0, 6).map((book) => (
-                                                            <tr key={book.isbn}>
-                                                                <td>
-                                                                    <img src={book.image} alt={book.title}
-                                                                         style={{width: "50px"}}/>
-                                                                </td>
-                                                                <td>{book.title}</td>
-                                                            </tr>
-                                                        ))}
-                                                        </tbody>
-                                                    </Table>
-                                                ) : (
-                                                    <p>서재가 비어있습니다.</p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+    const jwtToken = localStorage.getItem('jwtToken');
 
-                                <div className="col-lg-12 mb-8">
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        const userRole = localStorage.getItem('userRole');
+        setRole(userRole);
+    }, []);
+
+
+    return <div>
+
+        <header>
+            <h1 className="site-heading text-center text-faded d-none d-lg-block">
+                <span className="site-heading-upper text-primary mb-3"></span>
+                <span className="site-heading-lower">LIPY</span>
+            </h1>
+        </header>
+
+        <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+            <div className="container">
+                <a className="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav mx-auto">
+
+                        <div className="nav-item">
+                            {role === "ADMIN" && (
+                                <Link className="nav-link" to="/AdminPage">
+                                    관리 페이지
+                                </Link>
+                            )}
+                        </div>
+
+                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                            href="home">Home</a></li>
+                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                            href="home6">BookCase</a></li>
+                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                            href="socialing2">Socialing</a></li>
+                        <div style={{marginTop: "auto", paddingBottom: "10px"}}>
+                            {!jwtToken && (
+                                <>
+                                    <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
+                                                                        href="Login">로그인</a></li>
+                                </>
+                            )}
+                            {jwtToken && (
+                                <li className="nav-item px-lg-4"><a onClick={handleLogout}
+                                                                    className="btn btn-user btn-block nav-link text-uppercase">
+                                    로그아웃
+                                </a></li>
+                            )}
+                        </div>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <section className="page-section cta">
+            <div>
+                <div className="row">
+                    <div className="col-xl-9 mx-auto">
+                        <div className="cta-inner bg-faded text-center rounded">
+                            <h2 className="section-heading mb-4">
+                            <span className="section-heading-upper"></span>
+                                <span className="section-heading-lower">인기 도서</span>
+                            </h2>
+                            <div className="row">
+                                <div>
                                     <div className="card shadow mb-4">
-                                        <div
-                                            className="card-header py-3 d-flex justify-content-between align-items-center">
-                                            <h6 className="m-0 font-weight-bold">최신 소셜링</h6>
-                                            <Link to="/Socialing"
-                                                  className="text-primary text-decoration-none">더보기</Link>
-                                        </div>
+
                                         <div className="card-body">
-                                            <div className="row">
-                                                {socialings.slice(0, 3).map((socialing) => (
-                                                    <div key={socialing.id} className="col-lg-4 col-md-6 mb-8">
-                                                        <Link to={`/socialing/${socialing.id}`}
-                                                              className="text-decoration-none">
-                                                            <Card className="h-100">
-                                                                <Card style={{background: "white"}}>
-                                                                    <h5 className="card-title"
-                                                                        style={{background: "white"}}>{socialing.title}</h5>
-                                                                    <p className="card-text2"
-                                                                       style={{background: "white"}}>
-                                                                        {socialing.description}
-                                                                    </p>
-                                                                    <p style={{ paddingLeft: 15 }}>
-                                                                        {new Date(socialing.date).toLocaleDateString()}<br />
-                                                                        {new Date(socialing.date).toLocaleTimeString()}
-                                                                    </p>
-                                                                    <div className="card-footer" style={{
-                                                                        display: "flex",
-                                                                        justifyContent: "space-between",
-                                                                        alignItems: "center"
-                                                                    }}>
-                                                                        <a>{socialing.writer}</a>
-                                                                        <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
-                                                                    </div>
-                                                                </Card>
-                                                            </Card>
-                                                        </Link>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-12 mb-8">
-                                    <div className="card shadow mb-4">
-                                        <div className="card-header py-3 d-flex justify-content-between align-items-center">
-                                            <h6 className="m-0 font-weight-bold">인기 소셜링</h6>
-                                            <Link to="/Socialing" className="text-primary text-decoration-none">더보기</Link>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="row">
-                                                {hotSocialings.slice(0, 3).map((socialing) => (
-                                                    <div key={socialing.id} className="col-lg-4 col-md-6 mb-8">
-                                                        <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
-                                                            <Card style={{ background: "white" }}>
-                                                                <h5 className="card-title" style={{ background: "white" }}>{socialing.title}</h5>
-                                                                <p className="card-text2" style={{ background: "white" }}>
-                                                                    {socialing.description}
-                                                                </p>
-                                                                <p style={{ paddingLeft: 15 }}>
-                                                                    {new Date(socialing.date).toLocaleDateString()}<br />
-                                                                    {new Date(socialing.date).toLocaleTimeString()}
-                                                                </p>
-                                                                <div className="card-footer" style={{
-                                                                    display: "flex",
-                                                                    justifyContent: "space-between",
-                                                                    alignItems: "center"
-                                                                }}>
-                                                                    <a>{socialing.writer}</a>
-                                                                    <a>{socialing.currentparticipants}/{socialing.maxparticipants}</a>
-                                                                </div>
-                                                            </Card>
-                                                        </Link>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                          <BookCount2/>
                                         </div>
                                     </div>
                                 </div>
@@ -208,8 +100,40 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </section>
+
+        <section className="page-section cta">
+
+            <div>
+                <div className="row">
+                    <div className="col-xl-9 mx-auto">
+                        <div className="cta-inner bg-faded text-center rounded">
+                            <h2 className="section-heading mb-4">
+                                <span className="section-heading-upper"></span>
+                                <span className="section-heading-lower">최신 소셜링</span>
+                            </h2>
+                            <div className="row">
+                                <div>
+                                    <div className="card shadow mb-4">
+
+                                        <div className="card-body">
+                                            <Socialing1/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            .
+        </footer>
+
+
+    </div>
 };
 
 export default Home;
