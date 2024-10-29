@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 
 public class EmailService {
-
+    
     @Autowired
     private JavaMailSender emailSender;
-
+    
     public void sendVerificationCode(String to, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
