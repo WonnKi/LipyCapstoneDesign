@@ -1,9 +1,6 @@
 package com.lipy.book_record.service;
 
-import com.lipy.book_record.dto.BookCountDto;
-import com.lipy.book_record.dto.BookDto;
-import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.MemberDto;
+import com.lipy.book_record.dto.*;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.entity.Member;
@@ -126,4 +123,15 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
+    public List<BookUserStatusDto> getBookStatusByUsers(String isbn) {
+        List<Object[]> results = bookRep.findBookStatusByUsers(isbn);
+        return results.stream()
+                .map(result -> new BookUserStatusDto(
+                        (String) result[0],  // username
+                        (String) result[1],  // nickname
+                        (String) result[2],  // email
+                        (BookStatus) result[3] // bookStatus
+                ))
+                .collect(Collectors.toList());
+    }
 }
