@@ -1,0 +1,45 @@
+.bookcase-container {
+    background-color: #f4e3c1;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.book-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.book-card {
+    background-color: #f4e3c1;
+    padding: 15px;
+    border-radius: 10px;
+    width: 233px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.book-cover {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.book-card h3 {
+    font-size: 16px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.book-card p {
+    font-size: 14px;
+    margin: 5px 0;
+}

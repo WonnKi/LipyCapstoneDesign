@@ -71,12 +71,6 @@ const Home3 = () => {
         }
     };
 
-
-
-
-
-
-
     return (
         <div>
             <div id="wrapper">

@@ -54,9 +54,8 @@ const SocialingDetails = () => {
                 setIsFavorite(favoriteResponse.data.isFavorite);
 
 
-
             } catch (error) {
-                setMessage('Error fetching post: ' + (error.response?.data || error.message));
+
             }
         };
         fetchPost();

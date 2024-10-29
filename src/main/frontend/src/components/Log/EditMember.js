@@ -4,31 +4,30 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const EditMember = ({ userId, show, handleClose, handleUpdate }) => {
+const EditMember = ({ userId, show, handleClose, handleUpdate, memberData, email,password, username, nickname, gender, age,phonenumber}) => {
     const [member, setMember] = useState({
-        email: '',
-        password: '',
-        username: '',
-        nickname: '',
-        gender: '',
-        age: 0,
-        phonenumber: ''
+        email: email,
+        password: password,
+        username: username,
+        nickname: nickname,
+        gender: gender,
+        age: age,
+        phonenumber: phonenumber
     });
 
-    const fetchMemberDetails = async (userId) => {
-        try {
-            const response = await axios.get(`/admin/members/${userId}`);
-            setMember(response.data);
-        } catch (error) {
-            console.error("Error fetching member details:", error);
-        }
-    };
-
     useEffect(() => {
-        if (show && userId) {
-            fetchMemberDetails(userId);
+        if (show) {
+            setMember({
+                email:email,
+                password: password,
+                username: username,
+                nickname: nickname,
+                gender: gender,
+                age: age,
+                phonenumber: phonenumber
+            });
         }
-    }, [userId, show]);
+    }, [show, memberData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -39,14 +38,16 @@ const EditMember = ({ userId, show, handleClose, handleUpdate }) => {
         e.preventDefault();
         try {
             await axios.put(`/members/${userId}`, member);
-            alert('Member updated successfully!');
-            handleUpdate();  // Call parent update handler
-            handleClose();    // Close the modal
+            alert('회원 정보가 수정되었습니다.');
+            handleUpdate();
+            handleClose();
+            window.location.reload();
         } catch (error) {
             console.error("Error updating member:", error);
             alert('Failed to update member.');
         }
     };
+
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -69,7 +70,7 @@ const EditMember = ({ userId, show, handleClose, handleUpdate }) => {
                     <Form.Group controlId="formPassword">
                         <Form.Label>비밀번호</Form.Label>
                         <Form.Control
-                            type="password"
+                            type="text"
                             name="password"
                             value={member.password}
                             onChange={handleChange}
