@@ -1,71 +1,108 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import axios from 'axios';
-import Card from "react-bootstrap/Card";
+import SocialingPage from "../components/AdminPageCo/SocialingPage";
 
-const Socialing = () => {
-    const [socialings, setSocialings] = useState([]);
+const Home = () => {
+    const handleLogout = () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        window.location.reload();
+    };
+
+    const jwtToken = localStorage.getItem('jwtToken');
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
-        const fetchSocialings = async () => {
-            try {
-                const response = await axios.get('/socialing');
-                setSocialings(response.data.reverse());
-            } catch (error) {
-                console.error('소셜링을 불러오는 중 에러 발생:', error);
-            }
-        };
-
-        fetchSocialings();
+        const userRole = localStorage.getItem('userRole');
+        setRole(userRole);
     }, []);
 
     return (
-        <div style={{ position: "relative" }}>
-            <section className="page-section cta">
-                <Container>
-                    <Row className="justify-content-end">
-                        <Col xs="auto" className="mb-2">
-                            <Link to="/HotSocialing">
-                                <Button>인기순</Button>
-                            </Link>
-                        </Col>
-                        <Col xs="auto" >
-                            <Link to="/SocialSearch">
-                                <Button>검색</Button>
-                            </Link>
-                        </Col>
-                        <Col xs="auto">
-                            <Link to="/Write">
-                                <Button>글쓰기</Button>
-                            </Link>
-                        </Col>
-                    </Row>
-                    <Row xs={1} md={2} lg={3} className="g-4">
-                        {socialings.map((socialing, index) => (
-                            <Col key={index}>
-                                <Link to={`/socialing/${socialing.id}`} style={{ textDecoration: 'none' }}>
-                                    <Card style={{ width: '18rem', margin: 20 }}>
-                                        {/*<Card.Img variant="top" src={socialing.imageUrl} />*/}
-                                        <Card.Body>
-                                            <Card.Title>{socialing.title}<br />{new Date(socialing.date).toLocaleDateString()}</Card.Title>
-                                            <Card.Text>{socialing.description}<br />{socialing.writer}</Card.Text>
-                                            <hr />
-                                            <p>참여자 수: {socialing.currentparticipants}</p>
-                                            <p>최대 참여자 수: {socialing.maxparticipants}</p>
-                                        </Card.Body>
-                                    </Card>
+        <div>
+            <header>
+                <h1 className="site-heading text-center text-faded d-none d-lg-block">
+                    <span className="site-heading-upper text-primary mb-3"></span>
+                    <span className="site-heading-lower">LIPY</span>
+                </h1>
+            </header>
+
+            <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+                <div className="container">
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul className="navbar-nav mx-auto">
+                            {role === "ADMIN" && (
+                                <Link className="nav-link" to="/AdminPage">
+                                    관리 페이지
                                 </Link>
-                            </Col>
-                        ))}
-                    </Row>
-                </Container>
+                            )}
+                            <li className="nav-item px-lg-4"><a className="nav-link text-uppercase" href="home">Home</a></li>
+                            <li className="nav-item px-lg-4"><a className="nav-link text-uppercase" href="home6">BookCase</a></li>
+                            <li className="nav-item px-lg-4"><a className="nav-link text-uppercase" href="socialing2">Socialing</a></li>
+                            {!jwtToken && (
+                                <li className="nav-item px-lg-4"><a className="nav-link text-uppercase" href="Login">로그인</a></li>
+                            )}
+                            {jwtToken && (
+                                <li className="nav-item px-lg-4"><a onClick={handleLogout} className="btn btn-user btn-block nav-link text-uppercase">로그아웃</a></li>
+                            )}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <section className="page-section cta">
+                <div>
+                    <div className="row">
+                        <div className="col-xl-9 mx-auto">
+                            <div className="cta-inner bg-faded text-center rounded">
+                                <h2 className="section-heading mb-4">
+                                    <span className="section-heading-lower">소셜링</span>
+                                </h2>
+
+
+                                <ul className="nav nav-pills justify-content-center mb-4">
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/Write">글쓰기</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/SocialSearch2">검색</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/Socialing2">최신</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/HotSocialing2">인기</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/FavoriteSocialing">관심</a>
+                                    </li>
+                                </ul>
+
+                                {/* 소셜링 콘텐츠 */}
+                                <div className="row">
+                                    <div>
+                                        <div className="card shadow mb-4">
+                                            <div className="card-body">
+                                                <SocialingPage />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
+
+            <footer>
+                .
+            </footer>
         </div>
     );
 };
 
-export default Socialing;
+export default Home;

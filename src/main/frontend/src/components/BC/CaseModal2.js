@@ -87,7 +87,12 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
 
     return (
         <div>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={handleShow}
+            style={{
+                backgroundColor:"white",
+                color:"black",
+                borderColor:"#F2F1E9"
+            }}>
                 +
             </Button>
 

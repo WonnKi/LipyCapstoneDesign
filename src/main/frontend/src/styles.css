@@ -4019,7 +4019,16 @@ input[type="button"].btn-block {
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
+
 }
+
+.nav-link-So {
+    display: block;
+    padding: 0.5rem 1rem;
+
+}
+
+
 
 .nav-link:hover, .nav-link:focus {
     text-decoration: none;
@@ -4067,6 +4076,8 @@ input[type="button"].btn-block {
 
 .nav-pills .nav-link {
     border-radius: 0.35rem;
+    color: black;
+
 }
 
 .nav-pills .nav-link.active,
@@ -22508,7 +22519,7 @@ html, body {
     height: 300px;
     margin: 15px 12px 30px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-    background-color: gray;
+    background-color: #f4e3c1;
 }
 
 .card2:hover .overlay {

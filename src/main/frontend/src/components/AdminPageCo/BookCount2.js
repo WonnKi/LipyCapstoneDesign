@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './BookCount2.css'; // CSS 파일을 따로 관리
+import './BookCount2.css';
 
 const BookCount2 = () => {
     const [books, setBooks] = useState([]);

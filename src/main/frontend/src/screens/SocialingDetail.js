@@ -189,7 +189,7 @@ const SocialingDetails = () => {
     return (
         <div>
             <div id="wrapper">
-                <Sidebar/>
+
                 <Container>
                     <div
                         style={{
@@ -210,6 +210,7 @@ const SocialingDetails = () => {
                                 <span>{post?.writer}</span>
                                 {isAuthor && (
                                     <div>
+                                        <Button onClick={() => navigate(`/socialing`)}>뒤로가기</Button>{' '}
                                         <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
                                         <Button onClick={handleDeleteClick}>삭제</Button>
                                     </div>

@@ -337,7 +337,7 @@ const Home6 = () => {
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
                                                             href="home6">BookCase</a></li>
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="socialing2">Socialing</a></li>
+                                                            href="socialing">Socialing</a></li>
                         <div style={{marginTop: "auto", paddingBottom: "10px"}}>
                             {!jwtToken && (
                                 <>
@@ -367,7 +367,10 @@ const Home6 = () => {
                                 <span className="section-heading-lower">BookCase</span>
                             </h2>
                             <div>
-                                <div className="grid">
+                                <div className="grid"
+                                style={{
+                                    backgroundColor:"#F2F1E9"
+                                }}>
                                     {bookList.map((book, index) => (
                                         <Card
                                             key={index}
@@ -394,10 +397,13 @@ const Home6 = () => {
         </footer>
 
         <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton
+                          style={{
+                              backgroundColor:"#EBDDCC"
+                          }}>
                 <Modal.Title>내 메모</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
+            <Modal.Body style={{ overflow: "auto", maxHeight: "80vh",backgroundColor:"#F2E3D5" }}>
                 {selectedRecord ? (
                     <div style={{ textAlign: "center" }}>
                         {!isEditingRecord ? (
@@ -462,32 +468,48 @@ const Home6 = () => {
                 )}
             </Modal.Body>
 
-            <Modal.Footer>
+            <Modal.Footer
+                style={{
+                    backgroundColor:"#EBDDCC"
+                }}>
                 <Button variant="secondary" onClick={() => setShowRecordModal(false)}>닫기</Button>
             </Modal.Footer>
         </Modal>
 
 
         <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton
+            style={{
+                backgroundColor:"#EBDDCC"
+            }}>
                 <Modal.Title>{selectedBook && selectedBook.title}</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
+            <Modal.Body  style={{
+                overflow: "auto",
+                maxHeight: "80vh",
+                backgroundSize: "100% 30px",
+                backgroundColor:"#F2E3D5",
+                fontWeight:"bold"
+
+            }}>
                 {selectedBook && !isAddingRecord &&  (
                     <div>
                         <Row>
-                            <Col xs lg="5">
-                                <img src={selectedBook.image} alt={selectedBook.title} style={{width: '100%'}}/>
+                            <Col xs lg="5" style={{ marginLeft: '30px' }}>
+                                <img src={selectedBook.image} alt={selectedBook.title} style={{ width: '100%' }} />
                             </Col>
                             <Col>
                                 <p>작가: {selectedBook.author}</p>
                                 <p>출판사: {selectedBook.publisher}</p>
-                                <p>독서 상태: {selectedBook.bookStatus}</p>
+                                <p>독서 상태: {selectedBook.bookStatus === 'WISH' ? '예정' :
+                                    selectedBook.bookStatus === 'READING' ? '독서중' :
+                                        selectedBook.bookStatus === 'DONE' ? '완독' :
+                                            selectedBook.bookStatus}</p>
                                 <p>독서 시작일: {selectedBook.startDate}</p>
                                 <p>전체 페이지: {selectedBook.totPage}</p>
                             </Col>
                         </Row>
-                        <div style={{marginTop: '10px'}}>
+                        <div style={{marginTop: '10px', display: 'flex', justifyContent: 'center'}}>
                             <Button variant="info" onClick={() => setIsAddingRecord(true)}>메모 하기</Button>
                             <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)}
                                     style={{marginLeft: '10px'}}>
@@ -495,6 +517,7 @@ const Home6 = () => {
                             </Button>
                         </div>
                     </div>
+
                 )}
 
                 {selectedBook && isAddingRecord && (
@@ -504,7 +527,8 @@ const Home6 = () => {
                             placeholder="제목"
                             value={recordTitle}
                             onChange={(e) => setRecordTitle(e.target.value)}
-                            style={{marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px"}}
+                            style={{marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px",
+                                backgroundColor:"#F2F1EB"}}
                         />
                         <textarea
                             placeholder="내용"
@@ -513,17 +537,24 @@ const Home6 = () => {
                             style={{
                                 marginBottom: "10px",
                                 width: "100%",
-                                padding: "8px",
-                                fontSize: "16px",
-                                minHeight: "400px"
+                                padding: "5px",
+                                fontSize: "17px",
+                                minHeight: "400px",
+                                lineHeight: "30px",
+                                backgroundSize: "100% 30px",
+                                backgroundColor:"#F2F1EB"
+
+
                             }}
                         />
+                        <div style={{ display: 'flex', justifyContent: 'center'}}>
                         <Button variant="info" onClick={handleSaveRecord} style={{marginRight: "10px"}}>
                             저장
                         </Button>
                         <Button variant="secondary" onClick={() => setIsAddingRecord(false)}>
                             취소
                         </Button>
+                        </div>
                     </div>
                 )}
             </Modal.Body>

@@ -55,7 +55,7 @@ const Home = () => {
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
                                                             href="home6">BookCase</a></li>
                         <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="socialing2">Socialing</a></li>
+                                                            href="socialing">Socialing</a></li>
                         <div style={{marginTop: "auto", paddingBottom: "10px"}}>
                             {!jwtToken && (
                                 <>
