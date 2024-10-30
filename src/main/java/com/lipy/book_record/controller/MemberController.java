@@ -139,16 +139,22 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/socialing/{socialingId}/interest/{memberId}")
-    public ResponseEntity<String> removeInterestSocialing(@PathVariable UUID memberId, @PathVariable Long socialingId, HttpServletRequest request) {
+    @DeleteMapping("/socialing/{socialingId}/interest")
+    public ResponseEntity<String> removeInterestSocialing(@PathVariable Long socialingId, HttpServletRequest request) {
+        // 현재 로그인한 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        Member member = memberService.findByEmail(email);
+
         // 관심 소셜링 삭제
-        memberService.cancelFavoriteSocialing(memberId, socialingId);
+        memberService.cancelFavoriteSocialing(member.getId(), socialingId);
 
         // IP 주소 가져오기
         String ipAddress = request.getRemoteAddr();
 
         // 로그 저장
-        userActivityLogService.logActivity(memberId, "REMOVE_INTEREST_SOCIALING", "User removed interest for socialing ID: " + socialingId, ipAddress);
+        userActivityLogService.logActivity(member.getId(), "REMOVE_INTEREST_SOCIALING", "User removed interest for socialing ID: " + socialingId, ipAddress);
 
         return ResponseEntity.ok("Interest socialing removed successfully");
     }
@@ -161,7 +167,7 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/isFavorite")
-    public ResponseEntity<Map<String, Object>> isFavorite(@PathVariable UUID id) {
+    public ResponseEntity<Map<String, Object>> isFavorite(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 현재 로그인한 사용자의 정보를 가져옴
