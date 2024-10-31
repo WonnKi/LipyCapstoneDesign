@@ -210,4 +210,23 @@ public class MemberController {
         return ResponseEntity.ok(updatedMember);
     }
 
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam String email) {
+        boolean isAvailable = memberService.isEmailAvailable(email);
+        if (isAvailable) {
+            return ResponseEntity.ok().body("사용 가능한 이메일입니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일입니다.");
+        }
+    }
+
+    @GetMapping("/check-nickname")
+    public ResponseEntity<?> checkNickname(@RequestParam String nickname) {
+        boolean isAvailable = memberService.isNicknameAvailable(nickname);
+        if (isAvailable) {
+            return ResponseEntity.ok().body("사용 가능한 닉네임입니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 닉네임입니다.");
+        }
+    }
 }

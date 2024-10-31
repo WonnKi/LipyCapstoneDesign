@@ -33,6 +33,13 @@ public class MemberService  {
         return memberOptional.orElse(null);
     }
 
+    public boolean isEmailAvailable(String email) {
+        return !memberRepository.existsByEmail(email);
+    }
+    public boolean isNicknameAvailable(String nickname) {
+        return !memberRepository.existsByNickname(nickname);
+    }
+
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
         return new SocialingListResponse(
                 socialing.getId(),
