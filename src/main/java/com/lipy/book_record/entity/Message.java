@@ -13,6 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 public class Message {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
@@ -41,7 +42,7 @@ public class Message {
         this.deletedBySender = true;
     }
 
-    public void deletedByReceiver(){
+    public void deleteByReceiver(){
         this.deletedByReceiver = true;
     }
 

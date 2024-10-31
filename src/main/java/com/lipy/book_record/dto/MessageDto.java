@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +20,8 @@ public class MessageDto {
         return new MessageDto(
                 message.getTitle(),
                 message.getContent(),
-                message.getSender().getUsername(),
-                message.getReceiver().getUsername()
+                message.getSender().getNickname(),
+                message.getReceiver().getNickname()
         );
     }
 }
