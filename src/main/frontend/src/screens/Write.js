@@ -90,6 +90,9 @@ function Write() {
                                 rows={5}
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
+                                style={{
+                                    height:"400px"
+                                }}
                             />
                         </Form.Group>
                         <Form.Group controlId="formMaxParticipants" className="mt-3">

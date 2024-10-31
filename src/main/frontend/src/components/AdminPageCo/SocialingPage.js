@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './BookCount2.css'; // CSS 파일을 따로 관리
+import './BookCount2.css';
 
 const SocialingPage = () => {
     const [socialings, setSocialings] = useState([]);
@@ -13,7 +13,7 @@ const SocialingPage = () => {
             try {
                 const response = await axios.get('http://localhost:8080/socialing');
                 const sortedSocialings = response.data.reverse();
-                setSocialings(sortedSocialings.slice(0, 5));
+                setSocialings(sortedSocialings);
                 setLoading(false);
             } catch (err) {
                 setError(err.message || 'Error fetching socialings');

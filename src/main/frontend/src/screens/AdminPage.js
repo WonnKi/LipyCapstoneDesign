@@ -10,6 +10,7 @@ import Memo from "../components/Log/Memo";
 import EditMember from "../components/Log/EditMember";
 import BookCount from "../components/AdminPageCo/BookCount";
 import {Link} from "react-router-dom";
+import BookDetails from "../components/AdminPageCo/BookDetails";
 
 
 const data = [
@@ -288,6 +289,7 @@ const AdminPage = () => {
                                 <div className="container-fluid pt-4 px-4">
                                     <BookCount/>
                                 </div>
+
 
                                 <div className="container-fluid pt-4 px-4">
                                     <div className="bg-secondary text-center rounded p-4">

@@ -1969,7 +1969,7 @@ textarea.form-control {
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 8px;
 }
 
 .form-text {
@@ -7721,6 +7721,7 @@ button.bg-dark:focus {
 .mt-1,
 .my-1 {
     margin-top: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
 }
 
 .mr-1,
@@ -10915,7 +10916,7 @@ a:focus {
 }
 
 .bg-register-image {
-    background: url("./img/SignUpImg.jpg");
+    background: url("./img/SingUpImg_2.png");
     background-position: center;
     background-size: cover;
 }

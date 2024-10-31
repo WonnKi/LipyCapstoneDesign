@@ -10,8 +10,6 @@ import com.lipy.book_record.repository.SocialingRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +33,16 @@ public class MemberService  {
         return memberOptional.orElse(null);
     }
 
+    public boolean isEmailAvailable(String email) {
+        return !memberRepository.existsByEmail(email);
+    }
+    public boolean isNicknameAvailable(String nickname) {
+        return !memberRepository.existsByNickname(nickname);
+    }
+
     private SocialingListResponse mapToSocialingListResponse(Socialing socialing) {
         return new SocialingListResponse(
+                socialing.getId(),
                 socialing.getTitle(),
                 socialing.getDescription(),
                 socialing.getWriter(),
@@ -46,7 +52,7 @@ public class MemberService  {
         );
     }
 
-    public boolean isFavoriteSocialing(UUID memberId, UUID socialingId) {
+    public boolean isFavoriteSocialing(UUID memberId, Long socialingId) {
         Member member =  memberRepository.findById(memberId).orElse(null);
         if (member == null) {
             throw new IllegalArgumentException("Invalid member ID");

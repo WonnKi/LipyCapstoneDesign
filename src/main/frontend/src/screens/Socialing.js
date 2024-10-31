@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import SocialingPage from "../components/AdminPageCo/SocialingPage";
 
-const Home = () => {
+const Socialing = () => {
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('userRole');
@@ -60,7 +60,7 @@ const Home = () => {
                         <div className="col-xl-9 mx-auto">
                             <div className="cta-inner bg-faded text-center rounded">
                                 <h2 className="section-heading mb-4">
-                                    <span className="section-heading-lower">소셜링</span>
+                                    <span className="section-heading-lower">최신 소셜링</span>
                                 </h2>
 
 
@@ -72,7 +72,7 @@ const Home = () => {
                                         <a className="nav-link" href="/SocialSearch2">검색</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/Socialing2">최신</a>
+                                        <a className="nav-link" href="/Socialing">최신</a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="/HotSocialing2">인기</a>
@@ -105,4 +105,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Socialing;

@@ -2,6 +2,7 @@ package com.lipy.book_record.controller;
 
 import com.lipy.book_record.dto.BookCountDto;
 import com.lipy.book_record.dto.BookDto;
+import com.lipy.book_record.dto.BookUserStatusDto;
 import com.lipy.book_record.dto.SearchDto;
 import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.service.BookService;
@@ -88,5 +89,14 @@ public class BookController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/{isbn}/users")
+    public ResponseEntity<List<BookUserStatusDto>> getBookStatusByUsers(@PathVariable String isbn) {
+        List<BookUserStatusDto> userStatusList = saveService.getBookStatusByUsers(isbn);
+        if (userStatusList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(userStatusList);
     }
 }

@@ -11,12 +11,9 @@ h2 {
 }
 
 .book-grid {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
-
-
 }
 
 .book-card {
@@ -27,6 +24,8 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+
+
 
 .book-cover {
     width: 200px;
@@ -51,6 +50,6 @@ h2 {
 }
 
 .book-card a {
-    color: black; /* 원하는 색상으로 변경 */
-    text-decoration: none; /* 밑줄 제거 */
+    color: black;
+    text-decoration: none;
 }

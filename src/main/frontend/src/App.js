@@ -91,6 +91,7 @@ function App() {
 
             <Route path="Home" element={<Home/>}/>
             <Route path="AdminPage2" element={<AdminPage2/>}/>
+            <Route path="BookDetails" element={<BookDetail/>}/>
         </Routes>
       </BrowserRouter>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, Link} from 'react-router-dom';
 import { Container, Card, Button, Modal, Spinner, Alert } from 'react-bootstrap'
 import Sidebar from "../components/BC/Sidebar";
 
@@ -191,6 +191,7 @@ const SocialingDetails = () => {
             <div id="wrapper">
 
                 <Container>
+
                     <div
                         style={{
                             padding: 130,
@@ -210,7 +211,6 @@ const SocialingDetails = () => {
                                 <span>{post?.writer}</span>
                                 {isAuthor && (
                                     <div>
-                                        <Button onClick={() => navigate(`/socialing`)}>뒤로가기</Button>{' '}
                                         <Button onClick={() => navigate(`/socialing/${id}/edit`)}>수정</Button>{' '}
                                         <Button onClick={handleDeleteClick}>삭제</Button>
                                     </div>
@@ -246,6 +246,7 @@ const SocialingDetails = () => {
                                             )}
                                         </>
                                     )}
+                                    {' '}<Button onClick={() => navigate('/socialing')}>소셜링으로</Button>
                                 </div>
                             </div>
                             {message && <Alert variant="info" className="mt-3">{message}</Alert>}

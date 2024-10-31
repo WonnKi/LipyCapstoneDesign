@@ -27,11 +27,6 @@ public class SocialingListResponse {
         this.date = socialing.getDate();
     }
 
-    public SocialingListResponse() {
-
-    }
-
-
     public SocialingListResponse(Long id, String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
         this.id = id;
         this.title = title;
@@ -43,5 +38,11 @@ public class SocialingListResponse {
     }
 
     public SocialingListResponse(String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
+        this.title = title;
+        this.description = description;
+        this.writer = writer;
+        this.currentparticipants = currentparticipants;
+        this.maxparticipants = maxparticipants;
+        this.date = date;
     }
 }

@@ -10,6 +10,7 @@ import com.lipy.book_record.service.UserActivityLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,9 @@ public class SocialingController {
     private final MemberService memberService;
     private final UserActivityLogService userActivityLogService;
 
+    @Value("${image.path}") // application.yml에서 지정한 이미지 저장 경로
+    private String imagePath;
+
     @GetMapping("/socialing/search") // 게시글 검색
     public ResponseEntity<List<SocialingListResponse>> searchSocialingByTitle(@RequestParam String title) {
         List<SocialingListResponse> socialings = socialingService.searchSocialingByTitle(title);
@@ -49,7 +53,7 @@ public class SocialingController {
         return ResponseEntity.ok()
                 .body(new SocialingResponse(socialing));
     }
-    
+
     @GetMapping("/socialing") //게시글 목록 조회
     public ResponseEntity<List<SocialingListResponse>> findAllSocialing(){
         List<SocialingListResponse> socialing = socialingService.findAllSocialings()
@@ -125,4 +129,23 @@ public class SocialingController {
         return ResponseEntity.ok(createdPost);
     }
 
+    @PostMapping("/socialing/uploadImage")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            // 파일명 생성
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path path = Paths.get(imagePath + fileName);
+
+            Files.createDirectories(path.getParent());
+
+            // 파일 저장
+            Files.write(path, file.getBytes());
+
+            // 반환할 파일 URL 설정
+            String fileUrl = "/images/" + fileName;
+            return ResponseEntity.ok(fileUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to upload image");
+        }
+    }
 }
