@@ -66,6 +66,7 @@ const Home6 = () => {
 
     const [userId, setUserId] = useState(null);
 
+
     useEffect(() => {
         const fetchBookList = async () => {
             try {
@@ -100,7 +101,7 @@ const Home6 = () => {
     const handleStatusChange = (status) => {
         setSelectedStatus(status);
         if (status === "ALL") {
-            window.location.reload();
+            fetchBookList();
         } else {
             fetchBookListByStatus(status);
         }
@@ -362,15 +363,75 @@ const Home6 = () => {
                 <div className="row">
                     <div className="col-xl-9 mx-auto">
                         <div className="cta-inner bg-faded text-center rounded">
-                        <h2 className="section-heading mb-4">
+                            <h2 className="section-heading mb-4">
                                 <span className="section-heading-upper"></span>
                                 <span className="section-heading-lower">BookCase</span>
                             </h2>
+
+                            <div style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}>
+                                <button
+                                    onClick={() => handleStatusChange("ALL")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'ALL' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    전체
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange("WISH")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'WISH' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    예정
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange("READING")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'READING' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    독서중
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange("DONE")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'DONE' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    완독
+                                </button>
+                            </div>
+
                             <div>
                                 <div className="grid"
-                                style={{
-                                    backgroundColor:"#F2F1E9"
-                                }}>
+                                     style={{
+                                         backgroundColor: "#F2F1E9"
+                                     }}>
                                     {bookList.map((book, index) => (
                                         <Card
                                             key={index}
@@ -399,24 +460,25 @@ const Home6 = () => {
         <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
             <Modal.Header closeButton
                           style={{
-                              backgroundColor:"#EBDDCC"
+                              backgroundColor: "#EBDDCC"
                           }}>
                 <Modal.Title>내 메모</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ overflow: "auto", maxHeight: "80vh",backgroundColor:"#F2E3D5" }}>
+            <Modal.Body style={{overflow: "auto", maxHeight: "80vh", backgroundColor: "#F2E3D5"}}>
                 {selectedRecord ? (
-                    <div style={{ textAlign: "center" }}>
+                    <div style={{textAlign: "center"}}>
                         {!isEditingRecord ? (
                             <div>
                                 <h5>{selectedRecord.title}</h5>
                                 <hr/>
-                                <p style={{ whiteSpace: "pre-wrap" }}>{selectedRecord.content}</p>
-                                <div style={{ textAlign: "left" }}>
+                                <p style={{whiteSpace: "pre-wrap"}}>{selectedRecord.content}</p>
+                                <div style={{textAlign: "left"}}>
                                     <Button variant="outline-primary" onClick={() => setSelectedRecord(null)}>
                                         뒤로가기
                                     </Button>
-                                    <Button variant="danger" onClick={() => handleDeleteRecord(selectedRecord.id)} style={{ marginLeft: 10 }}>
-                                        삭제
+                                    <Button variant="danger" onClick={() => handleDeleteRecord(selectedRecord.id)}
+                                            style={{marginLeft: 10}}>
+                                    삭제
                                     </Button>
                                     <Button variant="info" onClick={() => {
                                         setIsEditingRecord(true);
@@ -476,7 +538,6 @@ const Home6 = () => {
             </Modal.Footer>
         </Modal>
 
-
         <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton
             style={{
@@ -490,7 +551,6 @@ const Home6 = () => {
                 backgroundSize: "100% 30px",
                 backgroundColor:"#F2E3D5",
                 fontWeight:"bold"
-
             }}>
                 {selectedBook && !isAddingRecord &&  (
                     <div>
@@ -543,8 +603,6 @@ const Home6 = () => {
                                 lineHeight: "30px",
                                 backgroundSize: "100% 30px",
                                 backgroundColor:"#F2F1EB"
-
-
                             }}
                         />
                         <div style={{ display: 'flex', justifyContent: 'center'}}>
@@ -559,8 +617,6 @@ const Home6 = () => {
                 )}
             </Modal.Body>
         </Modal>
-
-
     </div>
 };
 
