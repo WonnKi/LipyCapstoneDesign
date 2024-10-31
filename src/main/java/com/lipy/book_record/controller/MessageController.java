@@ -57,14 +57,7 @@ public class MessageController {
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
         try {
-            ResponseEntity<?> result = (ResponseEntity<?>) messageService.deleteMessageByReceiver(mId, member);
-
-            if (result.getStatusCode() == HttpStatus.OK) {
-                return ResponseEntity.ok("Message Id : " + mId + " 쪽지를 성공적으로 삭제했습니다.");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("메시지를 삭제하는 중 예상치 못한 오류가 발생했습니다.");
-            }
+            return messageService.deleteMessageByReceiver(mId, member);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
@@ -79,14 +72,7 @@ public class MessageController {
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
         try {
-            ResponseEntity<?> result = (ResponseEntity<?>) messageService.deleteMessageBySender(mId, member);
-
-            if (result.getStatusCode() == HttpStatus.OK) {
-                return ResponseEntity.ok("Message Id : " + mId + " 쪽지를 성공적으로 삭제했습니다.");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("메시지를 삭제하는 중 예상치 못한 오류가 발생했습니다.");
-            }
+            return messageService.deleteMessageBySender(mId, member);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {

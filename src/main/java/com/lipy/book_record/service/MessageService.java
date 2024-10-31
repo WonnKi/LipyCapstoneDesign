@@ -73,35 +73,35 @@ public class MessageService {
 
     // 받은 편지 삭제
     @Transactional
-    public Object deleteMessageByReceiver(int mId, Member member){
+    public ResponseEntity<String> deleteMessageByReceiver(int mId, Member member){
         Message message = messageRepository.findById(mId).orElseThrow(()->
                 new IllegalArgumentException("메시지를 찾을 수 없습니다."));
 
-        if(member == message.getReceiver()) {
+        if(member.equals(message.getReceiver())) {
             message.deleteByReceiver();
             if (message.isDeleted()) {
                 messageRepository.delete(message);
             }
-            return ResponseEntity.ok();
+            return ResponseEntity.ok("Message Id : " + mId + " 쪽지를 성공적으로 삭제했습니다.");
         }else {
-            return new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
+            throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
     }
 
     // 보낸 편지 삭제
     @Transactional
-    public Object deleteMessageBySender(int mId, Member member){
+    public ResponseEntity<String> deleteMessageBySender(int mId, Member member){
         Message message = messageRepository.findById(mId).orElseThrow(()->
                 new IllegalArgumentException("메시지를 찾을 수 없습니다."));
 
-        if(member == message.getSender()) {
+        if(member.equals(message.getSender())) {
             message.deleteBySender();
             if (message.isDeleted()) {
                 messageRepository.delete(message);
             }
-            return ResponseEntity.ok();
+            return ResponseEntity.ok("Message Id : " + mId + " 쪽지를 성공적으로 삭제했습니다.");
         }else {
-            return new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
+            throw  new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
     }
 
