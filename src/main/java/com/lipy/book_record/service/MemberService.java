@@ -33,6 +33,7 @@ public class MemberService  {
         return memberOptional.orElse(null);
     }
 
+
     public boolean isEmailAvailable(String email) {
         return !memberRepository.existsByEmail(email);
     }
@@ -118,5 +119,20 @@ public class MemberService  {
 
         memberRepository.save(member);
         return new MemberDto(member);
+    }
+
+    @Transactional
+    public void writeMemo(UUID memberId, String content) {
+        // 회원 조회
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+        // 메모 작성
+        member.setMemo(content);
+        memberRepository.save(member);
+    }
+
+    public Optional<Member> findById(UUID memberId) {
+        return memberRepository.findById(memberId);
     }
 }

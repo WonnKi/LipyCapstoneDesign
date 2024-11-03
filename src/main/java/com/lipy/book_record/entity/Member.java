@@ -46,6 +46,9 @@ public class Member {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
 
+    @Column
+    private String memo;
+
     // 즐겨찾기한 소셜링 정보를 저장하기 위한 필드
     @ManyToMany
     @JoinTable(
