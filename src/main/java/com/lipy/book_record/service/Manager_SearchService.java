@@ -25,17 +25,10 @@ public class Manager_SearchService {
     }
 
     public List<MemberDto> searchDetail(String email, String name, String nickname) {
-        if (email != null) {
-            return searchByEmail(email);
-        } else if (name != null) {
-            return searchByName(name);
-        } else if (nickname != null) {
-            List<MemberDto> list = new ArrayList<>();
-            list.add(searchByNickname(nickname));
-            return list;
-        } else {
-            throw new IllegalArgumentException("검색 조건이 제공되지 않았습니다.");
-        }
+        List<Member> members = MemberRep.searchMembers(email, name, nickname);
+        return members.stream()
+                .map(member -> new MemberDto(member)) // Member 엔티티를 MemberDto로 변환
+                .collect(Collectors.toList());
     }
 
     private List<MemberDto> searchByEmail(String email) {
