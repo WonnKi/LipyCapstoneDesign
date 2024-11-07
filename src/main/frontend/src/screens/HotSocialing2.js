@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import '../components/AdminPageCo/BookCount2.css'
+import {Dropdown} from "react-bootstrap";
+import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
 
 const HotSocialing2 = () => {
     const [socialings, setSocialings] = useState([]);
@@ -11,6 +13,45 @@ const HotSocialing2 = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [role, setRole] = useState(null);
     const jwtToken = localStorage.getItem('jwtToken');
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [newMessages, setNewMessages] = useState(false);
+    const [receivedMessages, setReceivedMessages] = useState([]);
+
+    const fetchReceivedMessages = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/messages/received', {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            });
+            setReceivedMessages(response.data);
+            return response.data;
+        } catch (error) {
+            console.error("받은 쪽지를 가져오는 중 오류가 발생했습니다.", error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            const messages = await fetchReceivedMessages();
+            if (messages.length > receivedMessages.length) {
+                setNewMessages(true);
+            }
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [receivedMessages.length]);
+
+    const handleShowMessageModal = () => {
+        setShowMessageModal(true);
+    };
+
+    // 모달 닫기
+    const handleCloseMessageModal = () => {
+        setShowMessageModal(false);
+    };
+
 
     const handleSearch = async () => {
         try {
@@ -57,9 +98,6 @@ const HotSocialing2 = () => {
         return <div className="alert alert-danger">{error}</div>;
     }
 
-    if (socialings.length === 0) {
-        return <div className="alert alert-info">소셜링이 없습니다.</div>;
-    }
 
     return (
         <div>
@@ -73,10 +111,12 @@ const HotSocialing2 = () => {
 
             <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
                 <div className="container">
+                    <a className="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
                     </button>
+
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mx-auto">
                             {role === "ADMIN" && (
@@ -84,23 +124,43 @@ const HotSocialing2 = () => {
                                     관리 페이지
                                 </Link>
                             )}
-                            <li className="nav-item px-lg-4"><a className="nav-link text-uppercase" href="home">Home</a>
+                            <li className="nav-item px-lg-4">
+                                <a className="nav-link text-uppercase" href="home">Home</a>
                             </li>
-                            <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                                href="home6">BookCase</a></li>
-                            <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                                href="socialing2">Socialing</a></li>
+                            {jwtToken ? (
+                                <li className="nav-item px-lg-4">
+                                    <a className="nav-link text-uppercase" href="home6">BookCase</a>
+                                </li>
+                            ) : (
+                                <li className="nav-item px-lg-4">
+                                    <span className="nav-link text-uppercase text-secondary">BookCase</span>
+                                </li>
+                            )}
+                            <li className="nav-item px-lg-4">
+                                <a className="nav-link text-uppercase" href="socialing">Socialing</a>
+                            </li>
                             {!jwtToken && (
-                                <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                                    href="Login">로그인</a></li>
+                                <li className="nav-item px-lg-4">
+                                    <a className="nav-link text-uppercase" href="Login">로그인</a>
+                                </li>
                             )}
                             {jwtToken && (
-                                <li className="nav-item px-lg-4"><a onClick={handleLogout}
-                                                                    className="btn btn-user btn-block nav-link text-uppercase">로그아웃</a>
+                                <li className="nav-item px-lg-4">
+                                    <Dropdown>
+                                        <Dropdown.Toggle className="profile-icon nav-link" id="dropdown-basic">
+                                            {newMessages ? "회원 🔔" : "회원"}
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item onClick={handleShowMessageModal}>받은 쪽지</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                 </li>
                             )}
                         </ul>
                     </div>
+
                 </div>
             </nav>
 
@@ -115,35 +175,53 @@ const HotSocialing2 = () => {
                                 </h2>
 
                                 <ul className="nav nav-pills justify-content-center mb-4">
+                                    {jwtToken ? (
+                                        <li className="nav-item">
+                                            <Link className="nav-link" to="/Write">글쓰기</Link>
+                                        </li>
+                                    ) : (
+                                        <li className="nav-item">
+                                            <span className="nav-link text-muted">글쓰기</span>
+                                        </li>
+                                    )}
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/Write">글쓰기</a>
+                                        <Link className="nav-link" to="/Socialing">최신</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/SocialSearch2">검색</a>
+                                        <Link className="nav-link" to="/HotSocialing2">인기</Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="/Socialing">최신</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="/HotSocialing2">인기</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="/FavoriteSocialing">관심</a>
-                                    </li>
+                                    {jwtToken ? (
+                                        <li className="nav-item">
+                                            <Link className="nav-link" to="/FavoriteSocialing">관심</Link>
+                                        </li>
+                                    ) : (
+                                        <li className="nav-item">
+                                            <span className="nav-link text-muted">관심</span>
+                                        </li>
+                                    )}
                                 </ul>
 
                                 <div className="card shadow mb-4">
                                     <div className="card-body">
-                                        <div className="book-grid">
+                                        <div className="socialing-grid">
                                             {socialings.map((socialing) => (
-                                                <div key={socialing.id} className="book-card">
-                                                    <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
-                                                        <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의
-                                                            회원이 신청했어요</p>
-                                                        <h4>{socialing.title}</h4>
-                                                        <h3>{socialing.description}</h3>
-                                                        <p>{socialing.writer}</p>
-                                                        <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                                                <div key={socialing.id} className="socialing-card">
+                                                    <Link to={`/socialing/${socialing.id}`}
+                                                          className="text-decoration-none">
+                                                        <div
+                                                            style={{height: '180px', backgroundColor: '#f4e3c1'}}></div>
+
+                                                        <div className="socialing-card-content">
+                                                            <h4>{socialing.title}</h4>
+                                                            <h3>{socialing.description}</h3>
+                                                            <p>
+                                                                <b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의
+                                                                회원이 신청했어요</p>
+                                                        </div>
+                                                        <div className="socialing-card-footer">
+                                                            <p>{socialing.writer}</p>
+                                                            <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                                                        </div>
                                                     </Link>
                                                 </div>
                                             ))}
@@ -155,6 +233,8 @@ const HotSocialing2 = () => {
                     </div>
                 </div>
             </section>
+
+            <ReceivedMessageComponent show={showMessageModal} handleClose={handleCloseMessageModal}/>
         </div>
     );
 };

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,15 +25,10 @@ public class Manager_SearchService {
     }
 
     public List<MemberDto> searchDetail(String email, String name, String nickname) {
-        if (email != null) {
-            return searchByEmail(email);
-        } else if (name != null) {
-            return searchByName(name);
-        } else if (nickname != null) {
-            return searchByNickname(nickname);
-        } else {
-            throw new IllegalArgumentException("검색 조건이 제공되지 않았습니다.");
-        }
+        List<Member> members = MemberRep.searchMembers(email, name, nickname);
+        return members.stream()
+                .map(member -> new MemberDto(member)) // Member 엔티티를 MemberDto로 변환
+                .collect(Collectors.toList());
     }
 
     private List<MemberDto> searchByEmail(String email) {
@@ -49,9 +45,10 @@ public class Manager_SearchService {
         return members.stream().map(MemberDto::new).toList();
     }
 
-    private List<MemberDto> searchByNickname(String nickname) {
-        List<Member> members = MemberRep.findByNickname(nickname);
-        return members.stream().map(MemberDto::new).toList();
+    private MemberDto searchByNickname(String nickname) {
+        Member member = MemberRep.findByNickname(nickname).orElseThrow(()->
+                new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        return new MemberDto(member);
     }
 
 }

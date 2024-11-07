@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 import './BookCount2.css';
 
 const BookCount2 = () => {
@@ -36,21 +37,27 @@ const BookCount2 = () => {
     }
 
     return (
-            <div className="book-grid">
-                {books.map((book) => (
-                    <div key={book.isbn} className="book-card">
-                        <p><b>{book.saveCount}</b> 명의 회원이 읽고 있어요</p>
-                        <img
-                            src={book.image}
-                            alt={book.title}
-                            className="book-cover"
-                        />
-                        <h3>{book.title}</h3>
-                        <p>{book.author}</p>
-                    </div>
-                ))}
-            </div>
-
+        <div className="book-grid">
+            {books.map((book, index) => (
+                <motion.div
+                    key={book.isbn}
+                    className="book-card"
+                    initial={{ x: '100%', opacity: 0 }} // 오른쪽에서 시작
+                    animate={{ x: 0, opacity: 1 }} // 중앙으로 이동하며 나타남
+                    exit={{ x: '100%', opacity: 0 }} // 오른쪽으로 나가며 사라짐
+                    transition={{ type: 'spring', stiffness: 300, damping: 30, delay: index * 0.2 }} // 각 카드에 딜레이 추가
+                >
+                    <p><b>{book.saveCount}</b> 명의 회원이 읽고 있어요</p>
+                    <img
+                        src={book.image}
+                        alt={book.title}
+                        className="book-cover"
+                    />
+                    <h3>{book.title}</h3>
+                    <p>{book.author}</p>
+                </motion.div>
+            ))}
+        </div>
     );
 };
 

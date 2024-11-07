@@ -98,7 +98,7 @@ const SocialingDetails = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                navigate('/socialing2');
+                navigate('/socialing');
             } catch (error) {
                 console.error('게시글을 삭제하는 중 에러 발생:', error);
             }
@@ -218,7 +218,11 @@ const SocialingDetails = () => {
                             </div>
                             <hr/>
                             <div className="post-content">
-                                <div dangerouslySetInnerHTML={{__html: post?.content}}/>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: post?.content.replace(/\n/g, '<br />'),
+                                    }}
+                                />
                             </div>
                             <div style={{margin: '100px 0'}}></div>
                             <div className="text-center my-4">

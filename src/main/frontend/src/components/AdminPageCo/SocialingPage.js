@@ -37,15 +37,23 @@ const SocialingPage = () => {
     }
 
     return (
-        <div className="book-grid">
+        <div className="socialing-grid">
             {socialings.map((socialing) => (
-                <div key={socialing.id} className="book-card">
+                <div key={socialing.id} className="socialing-card">
+
                     <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
-                        <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
-                        <h4>{socialing.title}</h4>
-                        <h3>{socialing.description}</h3>
+
+                        <div style={{ height: '180px', backgroundColor: '#f4e3c1' }}></div>
+
+                        <div className="socialing-card-content">
+                            <h4>{socialing.title}</h4>
+                            <h3>{socialing.description}</h3>
+                            <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
+                        </div>
+                        <div className="socialing-card-footer">
                         <p>{socialing.writer}</p>
-                        <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                            <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                        </div>
                     </Link>
                 </div>
             ))}

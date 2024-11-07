@@ -27,7 +27,7 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false ,unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false ,unique = true)
@@ -45,6 +45,9 @@ public class Member {
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
+
+    @Column
+    private String memo;
 
     // 즐겨찾기한 소셜링 정보를 저장하기 위한 필드
     @ManyToMany

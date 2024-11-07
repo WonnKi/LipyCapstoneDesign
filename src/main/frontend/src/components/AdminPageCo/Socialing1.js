@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './BookCount2.css'; // CSS 파일을 따로 관리
+import './BookCount2.css';
+import {Link} from "react-router-dom";
 
 const Socialing1 = () => {
     const [socialings, setSocialings] = useState([]);
@@ -12,7 +13,7 @@ const Socialing1 = () => {
             try {
                 const response = await axios.get('http://localhost:8080/socialing');
                 const sortedSocialings = response.data.reverse();
-                setSocialings(sortedSocialings.slice(0, 5));
+                setSocialings(sortedSocialings.slice(0, 3));
                 setLoading(false);
             } catch (err) {
                 setError(err.message || 'Error fetching socialings');
@@ -36,14 +37,25 @@ const Socialing1 = () => {
     }
 
     return (
-        <div className="book-grid">
+        <div className="socialing-grid">
             {socialings.map((socialing) => (
-                <div key={socialing.id} className="book-card">
-                    <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
-                    <h4>{socialing.title}</h4>
-                    <h3>{socialing.description}</h3>
-                    <p>{socialing.writer}</p>
-                    <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                <div key={socialing.id} className="socialing-card">
+                    <Link to={`/socialing/${socialing.id}`}
+                          className="text-decoration-none">
+                        <div style={{
+                            height: '180px',
+                            backgroundColor: '#f4e3c1'
+                        }}></div>
+                        <div className="socialing-card-content">
+                            <h4>{socialing.title}</h4>
+                            <h3>{socialing.description}</h3>
+                            <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
+                        </div>
+                        <div className="socialing-card-footer">
+                            <p>{socialing.writer}</p>
+                            <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                        </div>
+                    </Link>
                 </div>
             ))}
         </div>

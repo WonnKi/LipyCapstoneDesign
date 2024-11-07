@@ -128,7 +128,10 @@ const SignUp2 = () => {
         isVerified && isNicknameChecked;
 
     return (
-        <div>
+        <div
+            style={{
+                marginTop:"120px"
+            }}>
             <Container>
                 <div className="d-flex justify-content-center my-5">
                     <div className="col-lg-5 d-none d-lg-block bg-register-image"></div>

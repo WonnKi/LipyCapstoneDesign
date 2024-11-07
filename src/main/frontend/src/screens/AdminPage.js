@@ -1,6 +1,5 @@
 import  React, {useEffect, useState} from "react";
-import Sidebar from "../components/BC/Sidebar";
-import Table from "react-bootstrap/Table";
+
 import {  LineChart, Line, BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
@@ -10,7 +9,11 @@ import Memo from "../components/Log/Memo";
 import EditMember from "../components/Log/EditMember";
 import BookCount from "../components/AdminPageCo/BookCount";
 import {Link} from "react-router-dom";
-import BookDetails from "../components/AdminPageCo/BookDetails";
+import MessageComponent from "../components/AdminPageCo/MessageComponent";
+import ManagerMemo from "../components/AdminPageCo/ManagerMemo";
+import {Dropdown} from "react-bootstrap";
+import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
+
 
 
 const data = [
@@ -34,6 +37,8 @@ const AdminPage = () => {
     const [ageFilter, setAgeFilter] = useState('');
     const [showRecordsModal, setShowRecordsModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [showMemoModal, setShowMemoModal] = useState(false);
 
     const handleOpenRecordsModal = () => {
         setShowRecordsModal(true);
@@ -98,6 +103,22 @@ const AdminPage = () => {
         fetchAllMembers();
     };
 
+    const handleOpenMessageModal = () => {
+        setShowMessageModal(true);
+    };
+
+    const handleCloseMessageModal = () => {
+        setShowMessageModal(false);
+    };
+
+    const handleOpenMemoModal = () => {
+        setShowMemoModal(true);
+    };
+
+    const handleCloseMemoModal = () => {
+        setShowMemoModal(false);
+    };
+
 
     useEffect(() => {
         fetchAllMembers();
@@ -127,57 +148,11 @@ const AdminPage = () => {
 
     return <div>
 
-        <header>
-            <h1 className="site-heading text-center text-faded d-none d-lg-block">
-                <span className="site-heading-upper text-primary mb-3"></span>
-                <span className="site-heading-lower">LIPY</span>
-            </h1>
-        </header>
-
-        <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-            <div className="container">
-                <a className="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mx-auto">
-
-                        <div className="nav-item">
-                            {role === "ADMIN" && (
-                                <Link className="nav-link" to="/AdminPage">
-                                    관리 페이지
-                                </Link>
-                            )}
-                        </div>
-
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="home">Home</a></li>
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="home6">BookCase</a></li>
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="socialing">Socialing</a></li>
-                        <div style={{marginTop: "auto", paddingBottom: "10px"}}>
-                            {!jwtToken && (
-                                <>
-                                    <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                                        href="Login">로그인</a></li>
-                                </>
-                            )}
-                            {jwtToken && (
-                                <li className="nav-item px-lg-4"><a onClick={handleLogout}
-                                                                    className="btn btn-user btn-block nav-link text-uppercase">
-                                    로그아웃
-                                </a></li>
-                            )}
-                        </div>
-
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
+        <Button>
+            <Link className="nav-link" to="/home">
+                홈
+            </Link>
+        </Button>
 
         <section className="page-section cta">
             <div>
@@ -364,7 +339,8 @@ const AdminPage = () => {
                                 {selectedMember && (
                                     <>
                                         {/* 회원 정보 모달 */}
-                                        <Modal show={showMemberModal} onHide={handleCloseMemberModal}>
+                                        <Modal show={showMemberModal} onHide={handleCloseMemberModal}
+                                               centered>
                                             <Modal.Header closeButton>
                                                 <Modal.Title>회원 정보</Modal.Title>
                                             </Modal.Header>
@@ -420,8 +396,29 @@ const AdminPage = () => {
                                                     기록 보기
                                                 </Button>
                                                 <Button variant="primary" onClick={handleOpenEditModal}>정보 수정</Button>
+                                                <Button variant="primary" onClick={handleOpenMessageModal} style={{ margin: 5 }}>
+                                                    쪽지 보내기
+                                                </Button>
+                                                <Button variant="primary" onClick={handleOpenMemoModal} style={{ margin: 5 }}>
+                                                    메모
+                                                </Button>
                                             </Modal.Body>
                                         </Modal>
+
+
+                                        <Modal show={showMessageModal} onHide={handleCloseMessageModal}>
+                                            <Modal.Body>
+                                                <MessageComponent receiverNickname={selectedMember?.nickname} onClose={handleCloseMessageModal} />
+                                            </Modal.Body>
+                                        </Modal>
+
+                                        <Modal show={showMemoModal} onHide={handleCloseMemoModal}>
+
+                                            <Modal.Body>
+                                                <ManagerMemo memberId={selectedMember.id} />
+                                            </Modal.Body>
+                                        </Modal>
+
 
                                         {selectedMember && (
                                             <EditMember
@@ -471,7 +468,6 @@ const AdminPage = () => {
         <footer>
             .
         </footer>
-
 
     </div>
 };

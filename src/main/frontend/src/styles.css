@@ -22587,5 +22587,14 @@ html, body {
     font-size: 19px;
 }
 
+.profile-icon {
+    width: 40px; /* 아이콘 너비 */
+    height: 40px; /* 아이콘 높이 */
+    border-radius: 50%; /* 둥글게 만들기 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* 아이콘 안 글자색 */
 
+}
 

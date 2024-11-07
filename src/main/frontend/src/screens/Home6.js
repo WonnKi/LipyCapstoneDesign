@@ -9,6 +9,8 @@ import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
+import { motion } from 'framer-motion';
+import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
 
 
 const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, setShowModal }) => {
@@ -51,6 +53,14 @@ const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, set
     );
 };
 
+const pageVariants = {
+    initial: { opacity: 0, rotateY: 90 },
+    in: { opacity: 1, rotateY: 0 },
+    out: { opacity: 0, rotateY: -90 },
+};
+
+const transition = { type: 'spring', stiffness: 300, damping: 30 };
+
 const Home6 = () => {
     const [showModal, setShowModal] = useState(false);
     const [showRecordModal, setShowRecordModal] = useState(false);
@@ -63,8 +73,46 @@ const Home6 = () => {
     const [isAddingRecord, setIsAddingRecord] = useState(false);
     const [isEditingRecord, setIsEditingRecord] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState("ALL");
-
+    const [showMessageModal, setShowMessageModal] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [newMessages, setNewMessages] = useState(false);
+    const [receivedMessages, setReceivedMessages] = useState([]);
+
+    const fetchReceivedMessages = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/messages/received', {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            });
+            setReceivedMessages(response.data);
+            return response.data;
+        } catch (error) {
+            console.error("받은 쪽지를 가져오는 중 오류가 발생했습니다.", error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            const messages = await fetchReceivedMessages();
+            if (messages.length > receivedMessages.length) {
+                setNewMessages(true);
+            }
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [receivedMessages.length]);
+
+    const handleShowMessageModal = () => {
+        setShowMessageModal(true);
+    };
+
+    // 모달 닫기
+    const handleCloseMessageModal = () => {
+        setShowMessageModal(false);
+    };
+
 
 
     useEffect(() => {
@@ -321,40 +369,51 @@ const Home6 = () => {
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
                 </button>
+
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto">
+                        {role === "ADMIN" && (
+                            <Link className="nav-link" to="/AdminPage">
+                                관리 페이지
+                            </Link>
+                        )}
+                        <li className="nav-item px-lg-4">
+                            <a className="nav-link text-uppercase" href="home">Home</a>
+                        </li>
+                        {jwtToken ? (
+                            <li className="nav-item px-lg-4">
+                                <a className="nav-link text-uppercase" href="home6">BookCase</a>
+                            </li>
+                        ) : (
+                            <li className="nav-item px-lg-4">
+                                <span className="nav-link text-uppercase text-secondary">BookCase</span>
+                            </li>
+                        )}
+                        <li className="nav-item px-lg-4">
+                            <a className="nav-link text-uppercase" href="socialing">Socialing</a>
+                        </li>
+                        {!jwtToken && (
+                            <li className="nav-item px-lg-4">
+                                <a className="nav-link text-uppercase" href="Login">로그인</a>
+                            </li>
+                        )}
+                        {jwtToken && (
+                            <li className="nav-item px-lg-4">
+                                <Dropdown>
+                                    <Dropdown.Toggle className="profile-icon nav-link" id="dropdown-basic">
+                                        {newMessages ? "회원 🔔" : "회원"}
+                                    </Dropdown.Toggle>
 
-                        <div className="nav-item">
-                            {role === "ADMIN" && (
-                                <Link className="nav-link" to="/AdminPage">
-                                    관리 페이지
-                                </Link>
-                            )}
-                        </div>
-
-
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="home">Home</a></li>
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="home6">BookCase</a></li>
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="socialing">Socialing</a></li>
-                        <div style={{marginTop: "auto", paddingBottom: "10px"}}>
-                            {!jwtToken && (
-                                <>
-                                    <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                                        href="Login">로그인</a></li>
-                                </>
-                            )}
-                            {jwtToken && (
-                                <li className="nav-item px-lg-4"><a onClick={handleLogout}
-                                                                    className="btn btn-user btn-block nav-link text-uppercase">
-                                    로그아웃
-                                </a></li>
-                            )}
-                        </div>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={handleShowMessageModal}>받은 쪽지</Dropdown.Item>
+                                        <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </li>
+                        )}
                     </ul>
                 </div>
+
             </div>
         </nav>
 
@@ -432,7 +491,10 @@ const Home6 = () => {
                                      style={{
                                          backgroundColor: "#F2F1E9"
                                      }}>
-                                    {bookList.map((book, index) => (
+                                    <div className="card2">
+                                        <CaseModal2/>
+                                    </div>
+                                    {bookList.slice().reverse().map((book, index) => (
                                         <Card
                                             key={index}
                                             book={book}
@@ -442,9 +504,7 @@ const Home6 = () => {
                                             setShowModal={setShowModal}
                                         />
                                     ))}
-                                    <div className="card2">
-                                        <CaseModal2/>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -457,7 +517,8 @@ const Home6 = () => {
             .
         </footer>
 
-        <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
+        <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}
+               centered>
             <Modal.Header closeButton
                           style={{
                               backgroundColor: "#EBDDCC"
@@ -478,13 +539,13 @@ const Home6 = () => {
                                     </Button>
                                     <Button variant="danger" onClick={() => handleDeleteRecord(selectedRecord.id)}
                                             style={{marginLeft: 10}}>
-                                    삭제
+                                        삭제
                                     </Button>
                                     <Button variant="info" onClick={() => {
                                         setIsEditingRecord(true);
                                         setRecordTitle(selectedRecord.title);
                                         setRecordContent(selectedRecord.content);
-                                    }} style={{ marginLeft: 10 }}>
+                                    }} style={{marginLeft: 10}}>
                                         수정
                                     </Button>
                                 </div>
@@ -496,7 +557,7 @@ const Home6 = () => {
                                     placeholder="제목"
                                     value={recordTitle}
                                     onChange={(e) => setRecordTitle(e.target.value)}
-                                    style={{ marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px" }}
+                                    style={{marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px"}}
                                 />
                                 <textarea
                                     placeholder="내용"
@@ -510,7 +571,7 @@ const Home6 = () => {
                                         minHeight: "400px"
                                     }}
                                 />
-                                <Button variant="info" onClick={handleEditRecord} style={{ marginRight: "10px" }}>
+                                <Button variant="info" onClick={handleEditRecord} style={{marginRight: "10px"}}>
                                     저장
                                 </Button>
                                 <Button variant="secondary" onClick={() => {
@@ -532,63 +593,82 @@ const Home6 = () => {
 
             <Modal.Footer
                 style={{
-                    backgroundColor:"#EBDDCC"
+                    backgroundColor: "#EBDDCC"
                 }}>
                 <Button variant="secondary" onClick={() => setShowRecordModal(false)}>닫기</Button>
             </Modal.Footer>
         </Modal>
 
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton
-            style={{
-                backgroundColor:"#EBDDCC"
-            }}>
+        <Modal show={showModal} onHide={() => setShowModal(false)}
+               centered>
+            <Modal.Header closeButton style={{backgroundColor: "#EBDDCC"}}>
                 <Modal.Title>{selectedBook && selectedBook.title}</Modal.Title>
             </Modal.Header>
-            <Modal.Body  style={{
+            <Modal.Body style={{
                 overflow: "auto",
                 maxHeight: "80vh",
                 backgroundSize: "100% 30px",
-                backgroundColor:"#F2E3D5",
-                fontWeight:"bold"
-            }}>
-                {selectedBook && !isAddingRecord &&  (
-                    <div>
-                        <Row>
-                            <Col xs lg="5" style={{ marginLeft: '30px' }}>
-                                <img src={selectedBook.image} alt={selectedBook.title} style={{ width: '100%' }} />
-                            </Col>
-                            <Col>
-                                <p>작가: {selectedBook.author}</p>
-                                <p>출판사: {selectedBook.publisher}</p>
-                                <p>독서 상태: {selectedBook.bookStatus === 'WISH' ? '예정' :
-                                    selectedBook.bookStatus === 'READING' ? '독서중' :
-                                        selectedBook.bookStatus === 'DONE' ? '완독' :
-                                            selectedBook.bookStatus}</p>
-                                <p>독서 시작일: {selectedBook.startDate}</p>
-                                <p>전체 페이지: {selectedBook.totPage}</p>
-                            </Col>
-                        </Row>
-                        <div style={{marginTop: '10px', display: 'flex', justifyContent: 'center'}}>
-                            <Button variant="info" onClick={() => setIsAddingRecord(true)}>메모 하기</Button>
-                            <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)}
-                                    style={{marginLeft: '10px'}}>
-                                메모 보기
-                            </Button>
-                        </div>
-                    </div>
+                backgroundColor: "#F2E3D5",
+                fontWeight: "bold",
 
+            }}>
+                {selectedBook && (
+                    <motion.div
+                        initial="initial"
+                        animate={isAddingRecord ? "out" : "in"}
+                        exit="out"
+                        variants={pageVariants}
+                        transition={transition}
+                    >
+                        {!isAddingRecord && (
+                            <div>
+                                <Row>
+                                    <Col xs lg="5" style={{marginLeft: '30px'}}>
+                                        <img src={selectedBook.image} alt={selectedBook.title} style={{width: '100%'}}/>
+                                    </Col>
+                                    <Col>
+                                        <p>작가: {selectedBook.author}</p>
+                                        <p>출판사: {selectedBook.publisher}</p>
+                                        <p>독서 상태: {selectedBook.bookStatus === 'WISH' ? '예정' :
+                                            selectedBook.bookStatus === 'READING' ? '독서중' :
+                                                selectedBook.bookStatus === 'DONE' ? '완독' :
+                                                    selectedBook.bookStatus}</p>
+                                        <p>독서 시작일: {selectedBook.startDate}</p>
+                                        <p>전체 페이지: {selectedBook.totPage}</p>
+                                    </Col>
+                                </Row>
+                                <div style={{marginTop: '10px', display: 'flex', justifyContent: 'center'}}>
+                                    <Button variant="info" onClick={() => setIsAddingRecord(true)}>메모 하기</Button>
+                                    <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)}
+                                            style={{marginLeft: '10px'}}>
+                                        메모 보기
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
                 )}
 
                 {selectedBook && isAddingRecord && (
-                    <div>
+                    <motion.div
+                        initial="initial"
+                        animate="in"
+                        exit="out"
+                        variants={pageVariants}
+                        transition={transition}
+                    >
                         <input
                             type="text"
                             placeholder="제목"
                             value={recordTitle}
                             onChange={(e) => setRecordTitle(e.target.value)}
-                            style={{marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px",
-                                backgroundColor:"#F2F1EB"}}
+                            style={{
+                                marginBottom: "10px",
+                                width: "100%",
+                                padding: "8px",
+                                fontSize: "16px",
+                                backgroundColor: "#F2F1EB"
+                            }}
                         />
                         <textarea
                             placeholder="내용"
@@ -602,21 +682,23 @@ const Home6 = () => {
                                 minHeight: "400px",
                                 lineHeight: "30px",
                                 backgroundSize: "100% 30px",
-                                backgroundColor:"#F2F1EB"
+                                backgroundColor: "#F2F1EB"
                             }}
                         />
-                        <div style={{ display: 'flex', justifyContent: 'center'}}>
-                        <Button variant="info" onClick={handleSaveRecord} style={{marginRight: "10px"}}>
-                            저장
-                        </Button>
-                        <Button variant="secondary" onClick={() => setIsAddingRecord(false)}>
-                            취소
-                        </Button>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <Button variant="info" onClick={handleSaveRecord} style={{marginRight: "10px"}}>
+                                저장
+                            </Button>
+                            <Button variant="secondary" onClick={() => setIsAddingRecord(false)}>
+                                취소
+                            </Button>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
             </Modal.Body>
         </Modal>
+
+        <ReceivedMessageComponent show={showMessageModal} handleClose={handleCloseMessageModal}/>
     </div>
 };
 
