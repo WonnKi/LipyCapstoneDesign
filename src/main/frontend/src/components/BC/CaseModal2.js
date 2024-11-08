@@ -97,7 +97,7 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
             </Button>
 
             <Modal show={show} onHide={handleClose} size="lg" centered>
-                <Modal.Header closeButton style={{ height: 100 }}>
+                <Modal.Header closeButton style={{ height: 100,backgroundColor: "#EBDDCC" }}>
                     <h2>책 검색</h2>
                     <div style={{ position: "absolute", right: "10%", top: "10%", border: '1px solid black' }}>
                         <input type="text" placeholder="책 제목을 입력하세요" value={bookName}
@@ -106,7 +106,7 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
                         <input type="submit" value="검색" onClick={handleSearch} />
                     </div>
                 </Modal.Header>
-                <Modal.Body style={{ overflow: "auto", height: 500 }}>
+                <Modal.Body style={{ overflow: "auto", height: 500,  backgroundColor: "#F2E3D5", }}>
                     <ul style={{ listStyleType: 'none', padding: 0 }}>
                         {searchResult.map((item, index) => (
                             <div key={index}>

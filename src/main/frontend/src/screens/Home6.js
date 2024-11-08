@@ -13,6 +13,8 @@ import { motion } from 'framer-motion';
 import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
 
 
+
+
 const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, setShowModal }) => {
     return (
         <div className="card2">
@@ -354,6 +356,13 @@ const Home6 = () => {
     const jwtToken = localStorage.getItem('jwtToken');
 
     return <div>
+     {role === "ADMIN" && (
+                <Button>
+                    <Link className="nav-link" to="/AdminPage">
+                        관리자 페이지
+                    </Link>
+                </Button>
+            )}
 
         <header>
             <h1 className="site-heading text-center text-faded d-none d-lg-block">
@@ -372,11 +381,7 @@ const Home6 = () => {
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto">
-                        {role === "ADMIN" && (
-                            <Link className="nav-link" to="/AdminPage">
-                                관리 페이지
-                            </Link>
-                        )}
+
                         <li className="nav-item px-lg-4">
                             <a className="nav-link text-uppercase" href="home">Home</a>
                         </li>

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SocialingPage from "../components/AdminPageCo/SocialingPage";
 import {Dropdown} from "react-bootstrap";
 import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
+import Button from "react-bootstrap/Button";
 
 const Socialing = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -75,6 +76,13 @@ const Socialing = () => {
 
     return (
         <div>
+         {role === "ADMIN" && (
+                    <Button>
+                        <Link className="nav-link" to="/AdminPage">
+                            관리자 페이지
+                        </Link>
+                    </Button>
+                )}
             <header>
                 <h1 className="site-heading text-center text-faded d-none d-lg-block">
                     <span className="site-heading-upper text-primary mb-3"></span>
@@ -92,11 +100,7 @@ const Socialing = () => {
 
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mx-auto">
-                            {role === "ADMIN" && (
-                                <Link className="nav-link" to="/AdminPage">
-                                    관리 페이지
-                                </Link>
-                            )}
+
                             <li className="nav-item px-lg-4">
                                 <a className="nav-link text-uppercase" href="home">Home</a>
                             </li>

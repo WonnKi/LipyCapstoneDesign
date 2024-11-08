@@ -7,6 +7,7 @@ import Sidebar from "../components/BC/Sidebar";
 import Footer from "../components/BC/Footer";
 import {Dropdown} from "react-bootstrap";
 import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
+import Button from "react-bootstrap/Button";
 
 const FavoriteSocialing = () => {
     const [favoriteSocialings, setFavoriteSocialings] = useState([]);
@@ -99,6 +100,13 @@ const FavoriteSocialing = () => {
 
     return (
         <div>
+         {role === "ADMIN" && (
+                    <Button>
+                        <Link className="nav-link" to="/AdminPage">
+                            관리자 페이지
+                        </Link>
+                    </Button>
+                )}
             <header>
                 <h1 className="site-heading text-center text-faded d-none d-lg-block">
                     <span className="site-heading-upper text-primary mb-3"></span>
@@ -116,11 +124,7 @@ const FavoriteSocialing = () => {
 
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mx-auto">
-                            {role === "ADMIN" && (
-                                <Link className="nav-link" to="/AdminPage">
-                                    관리 페이지
-                                </Link>
-                            )}
+
                             <li className="nav-item px-lg-4">
                                 <a className="nav-link text-uppercase" href="home">Home</a>
                             </li>
@@ -199,9 +203,12 @@ const FavoriteSocialing = () => {
                                                 <div key={socialing.id} className="socialing-card">
                                                     <Link to={`/socialing/${socialing.id}`}
                                                           className="text-decoration-none">
-                                                        <div
-                                                            style={{height: '180px', backgroundColor: '#f4e3c1'}}></div>
-
+                                                                     <div style={{ height: '180px', backgroundColor: '#f4e3c1' }}>
+                                                                               <div
+                                                                                                                   dangerouslySetInnerHTML={{
+                                                                                                                       __html: socialing?.content.replace(/\n/g, '<br />'),
+                                                                                                                   }}
+                                                                                                               /></div>
                                                         <div className="socialing-card-content">
                                                             <h4>{socialing.title}</h4>
                                                             <h3>{socialing.description}</h3>

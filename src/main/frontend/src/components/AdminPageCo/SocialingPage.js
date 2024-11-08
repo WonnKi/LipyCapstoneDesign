@@ -24,6 +24,11 @@ const SocialingPage = () => {
         fetchSocialings();
     }, []);
 
+    const extractImageUrl = (content) => {
+        const imgTagMatch = content.match(/<img[^>]+src="([^">]+)"/);
+        return imgTagMatch ? imgTagMatch[1] : null;
+    };
+
     if (loading) {
         return <p>Loading socialings...</p>;
     }
@@ -38,25 +43,31 @@ const SocialingPage = () => {
 
     return (
         <div className="socialing-grid">
-            {socialings.map((socialing) => (
-                <div key={socialing.id} className="socialing-card">
-
-                    <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
-
-                        <div style={{ height: '180px', backgroundColor: '#f4e3c1' }}></div>
-
-                        <div className="socialing-card-content">
-                            <h4>{socialing.title}</h4>
-                            <h3>{socialing.description}</h3>
-                            <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
-                        </div>
-                        <div className="socialing-card-footer">
-                        <p>{socialing.writer}</p>
-                            <p>{new Date(socialing.date).toLocaleDateString()}</p>
-                        </div>
-                    </Link>
-                </div>
-            ))}
+            {socialings.map((socialing) => {
+                const imageUrl = extractImageUrl(socialing.content);
+                return (
+                    <div key={socialing.id} className="socialing-card">
+                        <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
+                            <div style={{ height: '180px', backgroundColor: '#f4e3c1' }}>
+                                {imageUrl ? (
+                                    <img src={imageUrl} alt="Socialing Preview" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                                ) : (
+                                    <p>이미지가 없습니다</p>
+                                )}
+                            </div>
+                            <div className="socialing-card-content">
+                                <h4>{socialing.title}</h4>
+                                <h3>{socialing.description}</h3>
+                                <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
+                            </div>
+                            <div className="socialing-card-footer">
+                                <p>{socialing.writer}</p>
+                                <p>{new Date(socialing.date).toLocaleDateString()}</p>
+                            </div>
+                        </Link>
+                    </div>
+                );
+            })}
         </div>
     );
 };
