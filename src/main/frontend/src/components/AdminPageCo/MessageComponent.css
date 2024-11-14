@@ -74,3 +74,74 @@
 .delete-button:hover {
     background-color: #c82333; /* 삭제 버튼 호버 시 색상 변경 */
 }
+
+.message-modal {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-modal-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.member-selection {
+    margin-top: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+.member-checkbox {
+    margin-right: 10px;
+}
+
+.message-input, .member-selection {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.send-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 48%;
+}
+
+.send-button:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 48%;
+}
+
+.cancel-button:hover {
+    background-color: #5a6268;
+}

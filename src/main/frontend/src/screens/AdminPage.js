@@ -13,6 +13,7 @@ import MessageComponent from "../components/AdminPageCo/MessageComponent";
 import ManagerMemo from "../components/AdminPageCo/ManagerMemo";
 import {Dropdown} from "react-bootstrap";
 import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
+import GroupMessageModal from '../components/AdminPageCo/GroupMessageModal';
 
 
 
@@ -37,8 +38,29 @@ const AdminPage = () => {
     const [ageFilter, setAgeFilter] = useState('');
     const [showRecordsModal, setShowRecordsModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showMessageModal, setShowMessageModal] = useState(false);
     const [showMemoModal, setShowMemoModal] = useState(false);
+    const [selectedMembers, setSelectedMembers] = useState([])
+
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [showGroupMessageModal, setShowGroupMessageModal] = useState(false);
+
+
+    const handleSendGroupMessage = async (receiverList, title, content) => {
+        try {
+            await axios.post('http://localhost:8080/messages/send', {
+                receiverList,
+                messageDto: { title, content, senderName: '', receiverName: '' },
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+                }
+            });
+            alert("메시지를 보냈습니다.");
+        } catch (error) {
+            console.error("메시지 전송 실패:", error);
+            alert("메시지 전송에 실패했습니다.");
+        }
+    };
 
     const handleOpenRecordsModal = () => {
         setShowRecordsModal(true);
@@ -110,6 +132,18 @@ const AdminPage = () => {
     const handleCloseMessageModal = () => {
         setShowMessageModal(false);
     };
+
+    const handleOpenGroupMessageModal = () => {
+        setShowGroupMessageModal(true);
+    };
+
+    const handleCloseGroupMessageModal = () => {
+        setShowGroupMessageModal(false);
+    };
+
+
+
+
 
     const handleOpenMemoModal = () => {
         setShowMemoModal(true);
@@ -272,6 +306,16 @@ const AdminPage = () => {
                                         <div className="d-flex align-items-center justify-content-between mb-4">
                                             <h6 className="mb-0">회원 관리</h6>
                                             <form onSubmit={handleSearch}>
+                                                <Button variant="primary" onClick={handleOpenGroupMessageModal} style={{ margin: 5 }}>
+                                                    쪽지 보내기
+                                                </Button>
+
+                                                <Modal show={showGroupMessageModal} onHide={handleCloseGroupMessageModal}>
+                                                    <Modal.Body>
+                                                        <GroupMessageModal  members={members} onClose={handleCloseGroupMessageModal} onSend={handleSendGroupMessage} />
+                                                    </Modal.Body>
+                                                </Modal>
+
                                                 <input
                                                     type="text"
                                                     value={searchTerm}
@@ -396,9 +440,9 @@ const AdminPage = () => {
                                                     기록 보기
                                                 </Button>
                                                 <Button variant="primary" onClick={handleOpenEditModal}>정보 수정</Button>
-                                                <Button variant="primary" onClick={handleOpenMessageModal} style={{ margin: 5 }}>
-                                                    쪽지 보내기
-                                                </Button>
+                                                    <Button variant="primary" onClick={handleOpenMessageModal} style={{ margin: 5 }}>
+                                                        쪽지 보내기
+                                                    </Button>
                                                 <Button variant="primary" onClick={handleOpenMemoModal} style={{ margin: 5 }}>
                                                     메모
                                                 </Button>

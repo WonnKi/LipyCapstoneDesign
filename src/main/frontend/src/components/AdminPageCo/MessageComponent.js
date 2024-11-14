@@ -12,6 +12,11 @@ const MessageComponent = ({ receiverNickname }) => {
 
     // 쪽지 전송
     const handleSendMessage = async () => {
+        const userConfirmed = window.confirm("쪽지를 보내시겠습니까?");
+        if (!userConfirmed) {
+            return;
+        }
+
         try {
             await axios.post('http://localhost:8080/messages/send', {
                 receiverList: [receiverNickname],
