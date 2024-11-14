@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './BookCount2.css';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const Socialing1 = () => {
@@ -44,8 +45,18 @@ const Socialing1 = () => {
 
     return (
         <div className="socialing-grid">
-            {socialings.map((socialing) => (
-                <div key={socialing.id} className="socialing-card">
+            {socialings.map((socialing, index) => (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false }}
+                    transition={{
+                        ease: "easeInOut",
+                        duration: 1,
+                        y: { duration: 1 },
+                        type: 'spring', stiffness: 300, damping: 30, delay: index * 0.2
+                    }}
+                    key={socialing.id} className="socialing-card">
                     <Link to={`/socialing/${socialing.id}`} className="text-decoration-none">
                         <div style={{ height: '180px', backgroundColor: '#f4e3c1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {extractFirstImageUrl(socialing.content) ? (
@@ -69,9 +80,9 @@ const Socialing1 = () => {
                             <p>{new Date(socialing.date).toLocaleDateString()}</p>
                         </div>
                     </Link>
-                </div>
+                </motion.div>
             ))}
-        </div>
+        </div >
     );
 };
 

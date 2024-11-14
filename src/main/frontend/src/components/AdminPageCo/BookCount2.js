@@ -8,6 +8,7 @@ const BookCount2 = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
     useEffect(() => {
         const fetchBooks = async () => {
             try {
@@ -42,10 +43,10 @@ const BookCount2 = () => {
                 <motion.div
                     key={book.isbn}
                     className="book-card"
-                    initial={{ x: '100%', opacity: 0 }} // 오른쪽에서 시작
-                    animate={{ x: 0, opacity: 1 }} // 중앙으로 이동하며 나타남
-                    exit={{ x: '100%', opacity: 0 }} // 오른쪽으로 나가며 사라짐
-                    transition={{ type: 'spring', stiffness: 300, damping: 30, delay: index * 0.2 }} // 각 카드에 딜레이 추가
+                    initial={{ x: '100%', opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    viewport={{ once: false }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30, delay: index * 0.2 }}
                 >
                     <p><b>{book.saveCount}</b> 명의 회원이 읽고 있어요</p>
                     <img

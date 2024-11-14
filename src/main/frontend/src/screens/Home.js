@@ -169,9 +169,6 @@ const Home = () => {
             </div>
         </nav>
 
-        <section className="cta2">
-            
-        </section>
 
             <section className="cta">
 
@@ -231,7 +228,16 @@ const Home = () => {
             <section className="cta">
                 <div className="row">
                     <div className="col-xl-9 mx-auto">
-                        <div className="cta-inner bg-faded text-center rounded card mb-4"
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false }}
+                            transition={{
+                                ease: "easeInOut",
+                                duration: 1,
+                                y: { duration: 1 },
+                            }}
+                            className="cta-inner bg-faded text-center rounded card mb-4"
                              style={{
                                  backgroundColor: "#EBDDCC"
                              }}>
@@ -281,7 +287,7 @@ const Home = () => {
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
@@ -289,7 +295,16 @@ const Home = () => {
             <section className="cta2">
                 <div className="row">
                     <div className="col-xl-9 mx-auto">
-                        <div className="cta-inner bg-faded text-center rounded card mb-4"
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false }}
+                            transition={{
+                                ease: "easeInOut",
+                                duration: 1,
+                                y: { duration: 1 },
+                            }}
+                            className="cta-inner bg-faded text-center rounded card mb-4"
                              style={{
                                  backgroundColor: "#e0b88a",
                              }}>
@@ -342,7 +357,7 @@ const Home = () => {
 
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
