@@ -49,6 +49,7 @@ const ReceivedMessageComponent = ({ show, handleClose }) => {
                 {receivedMessages.length > 0 ? (
                     receivedMessages.map(msg => (
                         <div key={msg.id} className="message-item">
+                            <p><strong>제목:</strong> {msg.title}</p>
                             <p><strong>보낸 사람:</strong> {msg.senderName}</p>
                             <p><strong>내용:</strong> {msg.content}</p>
                             <Button

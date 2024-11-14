@@ -13,7 +13,7 @@ const Socialing1 = () => {
             try {
                 const response = await axios.get('http://localhost:8080/socialing');
                 const sortedSocialings = response.data.reverse();
-                setSocialings(sortedSocialings.slice(0, 3));
+                setSocialings(sortedSocialings.slice(0, 4));
                 setLoading(false);
             } catch (err) {
                 setError(err.message || 'Error fetching socialings');

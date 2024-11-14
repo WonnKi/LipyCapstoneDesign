@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ManagerMemo.css';
+import Modal from "react-bootstrap/Modal";
 
 const ManagerMemo = ({ memberId }) => {
     const [memoContent, setMemoContent] = useState('');
@@ -12,6 +13,7 @@ const ManagerMemo = ({ memberId }) => {
         try {
             const response = await axios.get(`http://localhost:8080/manager/memo/view/${memberId}`);
             setCurrentMemo(response.data);
+            setMemoContent(response.data); // 메모 내용을 입력창에도 미리 표시
             setMessage("메모를 성공적으로 가져왔습니다.");
         } catch (error) {
             setMessage("메모 조회에 실패했습니다.");
@@ -28,8 +30,7 @@ const ManagerMemo = ({ memberId }) => {
                 },
             });
             setMessage("메모가 성공적으로 작성되었습니다.");
-            setMemoContent('');
-            handleViewMemo(); // 메모 작성 후 최신 메모를 다시 가져옵니다.
+            setCurrentMemo(memoContent); // 작성한 내용을 현재 메모로 업데이트
         } catch (error) {
             setMessage("메모 작성에 실패했습니다.");
             console.error(error);
@@ -43,7 +44,9 @@ const ManagerMemo = ({ memberId }) => {
 
     return (
         <div className="memo-container">
-            <h3 className="memo-title">관리자 메모</h3>
+            <Modal.Header closeButton>
+                <h3 className="memo-title">관리자 메모</h3>
+            </Modal.Header>
             <textarea
                 className="memo-input"
                 rows="5"
@@ -53,10 +56,10 @@ const ManagerMemo = ({ memberId }) => {
             />
             <button className="memo-button" onClick={handleWriteMemo}>메모 작성</button>
             {message && <p className="memo-message">{message}</p>}
-            <div className="current-memo">
-                <h4>현재 메모:</h4>
-                <p>{currentMemo || "메모가 없습니다."}</p>
-            </div>
+            {/*<div className="current-memo">*/}
+            {/*    <h4>현재 메모:</h4>*/}
+            {/*    <p>{currentMemo || "메모가 없습니다."}</p>*/}
+            {/*</div>*/}
         </div>
     );
 };

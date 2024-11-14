@@ -45,7 +45,7 @@ const HotSocialing2 = () => {
             if (messages.length > receivedMessages.length) {
                 setNewMessages(true);
             }
-        }, 1000);
+        }, 10);
 
         return () => clearInterval(intervalId);
     }, [receivedMessages.length]);

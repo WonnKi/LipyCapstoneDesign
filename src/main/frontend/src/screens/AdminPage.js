@@ -413,8 +413,7 @@ const AdminPage = () => {
                                         </Modal>
 
                                         <Modal show={showMemoModal} onHide={handleCloseMemoModal}>
-
-                                            <Modal.Body>
+                                            <Modal.Body >
                                                 <ManagerMemo memberId={selectedMember.id} />
                                             </Modal.Body>
                                         </Modal>

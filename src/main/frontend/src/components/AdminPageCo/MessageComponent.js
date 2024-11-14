@@ -5,6 +5,7 @@ import './MessageComponent.css'; // 스타일 시트를 불러옵니다.
 const MessageComponent = ({ receiverNickname }) => {
     const [receiverList, setReceiverList] = useState([]);
     const [messageContent, setMessageContent] = useState('');
+    const [messageTitle, setMessageTitle] = useState('');
     const [receivedMessages, setReceivedMessages] = useState([]);
     const [sentMessages, setSentMessages] = useState([]);
     const [message, setMessage] = useState('');
@@ -15,7 +16,7 @@ const MessageComponent = ({ receiverNickname }) => {
             await axios.post('http://localhost:8080/messages/send', {
                 receiverList: [receiverNickname],
                 messageDto: {
-                    title: '제목',
+                    title: messageTitle,
                     content: messageContent,
                     senderName: '',
                     receiverName: ''
@@ -27,6 +28,7 @@ const MessageComponent = ({ receiverNickname }) => {
             });
             setMessage("쪽지를 보냈습니다.");
             setReceiverList([]);
+            setMessageTitle('');
             setMessageContent('');
             fetchSentMessages();
         } catch (error) {
@@ -106,6 +108,13 @@ const MessageComponent = ({ receiverNickname }) => {
 
             {/* 쪽지 전송 */}
             <div className="message-send">
+                <input
+                    type="text"
+                    className="message-input"
+                    placeholder="쪽지 제목"
+                    value={messageTitle}
+                    onChange={(e) => setMessageTitle(e.target.value)} // 제목 입력
+                />
                 <textarea
                     className="message-input"
                     rows="4"
@@ -139,6 +148,7 @@ const MessageComponent = ({ receiverNickname }) => {
                 {sentMessages.length > 0 ? (
                     sentMessages.map(msg => (
                         <div key={msg.id} className="message-item sent">
+                            <p><strong>제목:</strong> {msg.title}</p> {/* 제목 표시 */}
                             <p><strong>받는 사람:</strong> {msg.receiverName}</p>
                             <p><strong>내용:</strong> {msg.content}</p>
                             <button className="delete-button" onClick={() => handleDeleteSentMessage(msg.id)}>삭제</button>

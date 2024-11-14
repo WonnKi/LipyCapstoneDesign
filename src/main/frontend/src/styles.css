@@ -55,6 +55,7 @@ body {
     color: #858796;
     text-align: left;
     background-color: #0dcaf0;
+
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -22285,6 +22286,11 @@ p {
     padding-bottom: 5rem;
     background-color: #e0b88a
 }
+.cta2 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: #EBDDCC
+}
 .cta .cta-inner {
     position: relative;
     padding: 3rem;
@@ -22597,4 +22603,3 @@ html, body {
     color: white; /* 아이콘 안 글자색 */
 
 }
-

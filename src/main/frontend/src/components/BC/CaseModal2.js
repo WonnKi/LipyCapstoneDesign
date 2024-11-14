@@ -116,24 +116,25 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
                                             <img src={item.image} alt={item.title} style={{ width: '200px', height: '250px' }} />
                                         </div>
                                         <div style={{ width: 500, height: 250 }}>
-                                            <div style={{ width: 500, height: 250 }}>
-                                                <br />
-                                                <h3 style={{ width: '400px' }}>{item.title}</h3>
-                                                <br />
-                                                <p><strong>작가:</strong> {item.author}</p>
-                                                <p><strong>출판사:</strong> {item.publisher}</p>
-                                                <p><strong>ISBN:</strong> {item.isbn}
-                                                    <span style={{ float: 'right' }}>
-                                                        <Button variant="outline-success" onClick={() => handleSaveBookClick(item)}>
+                                            <div style={{width: 500, height: 250}}>
+                                                <br/>
+                                                <span style={{float: 'right'}}>
+                                                        <Button variant="outline-success"
+                                                                onClick={() => handleSaveBookClick(item)}>
                                                             내 서재에 저장
                                                         </Button>
                                                     </span>
-                                                </p>
+                                                <h3 style={{width: '400px'}}>{item.title}</h3>
+                                                <br/>
+                                                <p><strong>작가:</strong> {item.author}</p>
+                                                <p><strong>출판사:</strong> {item.publisher}</p>
+                                                <p><strong>ISBN:</strong> {item.isbn}</p>
+
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <hr />
+                                <hr/>
                             </div>
                         ))}
                     </ul>

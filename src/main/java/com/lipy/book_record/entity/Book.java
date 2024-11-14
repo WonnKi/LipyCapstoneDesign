@@ -34,6 +34,7 @@ public class Book {
     private String publisher;
 
     @Lob
+    @Column(length = 1000)
     private String description;
 
     private Integer totPage;
