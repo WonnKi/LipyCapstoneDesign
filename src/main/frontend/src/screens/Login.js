@@ -30,15 +30,6 @@ const Login = () => {
                 password,
             });
 
-    //         const token = response.data.split(' ')[2];
-    //         localStorage.setItem('jwtToken', token);
-    //         if (window.confirm("로그인 성공.")) {
-    //             navigate('/');
-    //         }
-    //     } catch (error) {
-    //           window.confirm("이메일 또는 비밀번호를 확인하세요.");
-    //     }
-    // };
 
             const token = response.data.split(' ')[2]; // 서버에서 받은 JWT 토큰 추출
             const decodedToken = jwtDecode(token);  // JWT 토큰 디코딩
@@ -49,16 +40,26 @@ const Login = () => {
             localStorage.setItem('userRole', role);  // 역할 저장
             localStorage.setItem('userId', id);      // 사용자 ID 저장
 
-            if (window.confirm("로그인 성공.")) {
-                navigate('../Home');
+            if (role === "ADMIN") {
+                if (window.confirm("관리자로 로그인 되었습니다.")) {
+                    navigate('/AdminPage'); // 관리자라면 AdminPage로 이동
+                }
+            } else {
+                if (window.confirm("로그인 성공.")) {
+                    navigate('/Home'); // 관리자가 아니면 Home으로 이동
+                }
             }
+
         } catch (error) {
             window.alert("로그인 실패: 이메일 또는 비밀번호를 확인하세요.");
         }
     };
 
     return (
-        <div>
+        <div
+        style={{
+            marginTop:"100px"
+        }}>
             <div className="container">
 
                 <div className="row justify-content-center">

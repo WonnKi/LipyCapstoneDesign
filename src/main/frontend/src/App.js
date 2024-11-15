@@ -42,6 +42,9 @@ import Home6 from "./screens/Home6";
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import PasswordReset from "./screens/PasswordReset";
+import AdminPage2 from "./screens/AdminPage2";
+import MessageComponent from "./components/AdminPageCo/MessageComponent";
+import ManagerMemo from "./components/AdminPageCo/ManagerMemo";
 
 function App() {
   return (
@@ -89,6 +92,10 @@ function App() {
             <Route path="PasswordReset" element={<PasswordReset />} />
 
             <Route path="Home" element={<Home/>}/>
+            <Route path="AdminPage2" element={<AdminPage2/>}/>
+            <Route path="BookDetails" element={<BookDetail/>}/>
+            <Route path="MessageComponent" element={<MessageComponent/>}/>
+            <Route path="ManagerMemo" element={<ManagerMemo/>}/>
         </Routes>
       </BrowserRouter>
 

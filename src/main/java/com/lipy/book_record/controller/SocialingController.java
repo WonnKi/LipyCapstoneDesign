@@ -53,7 +53,7 @@ public class SocialingController {
         return ResponseEntity.ok()
                 .body(new SocialingResponse(socialing));
     }
-    
+
     @GetMapping("/socialing") //게시글 목록 조회
     public ResponseEntity<List<SocialingListResponse>> findAllSocialing(){
         List<SocialingListResponse> socialing = socialingService.findAllSocialings()

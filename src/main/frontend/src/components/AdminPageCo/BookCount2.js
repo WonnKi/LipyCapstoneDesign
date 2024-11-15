@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './BookCount2.css'; // CSS 파일을 따로 관리
+import { motion } from 'framer-motion';
+import './BookCount2.css';
 
 const BookCount2 = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -36,21 +38,27 @@ const BookCount2 = () => {
     }
 
     return (
-            <div className="book-grid">
-                {books.map((book) => (
-                    <div key={book.isbn} className="book-card">
-                        <p><b>{book.saveCount}</b> 명의 회원이 읽고 있어요</p>
-                        <img
-                            src={book.image}
-                            alt={book.title}
-                            className="book-cover"
-                        />
-                        <h3>{book.title}</h3>
-                        <p>{book.author}</p>
-                    </div>
-                ))}
-            </div>
-
+        <div className="book-grid">
+            {books.map((book, index) => (
+                <motion.div
+                    key={book.isbn}
+                    className="book-card"
+                    initial={{ x: '100%', opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    viewport={{ once: false }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30, delay: index * 0.2 }}
+                >
+                    <p><b>{book.saveCount}</b> 명의 회원이 읽고 있어요</p>
+                    <img
+                        src={book.image}
+                        alt={book.title}
+                        className="book-cover"
+                    />
+                    <h3>{book.title}</h3>
+                    <p>{book.author}</p>
+                </motion.div>
+            ))}
+        </div>
     );
 };
 

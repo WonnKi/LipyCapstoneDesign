@@ -9,6 +9,10 @@ import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
+import { motion } from 'framer-motion';
+import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
+
+
 
 
 const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, setShowModal }) => {
@@ -51,6 +55,14 @@ const Card = ({ book, handleChangeStatus, handleDeleteBook, setSelectedBook, set
     );
 };
 
+const pageVariants = {
+    initial: { opacity: 0, rotateY: 90 },
+    in: { opacity: 1, rotateY: 0 },
+    out: { opacity: 0, rotateY: -90 },
+};
+
+const transition = { type: 'spring', stiffness: 300, damping: 30 };
+
 const Home6 = () => {
     const [showModal, setShowModal] = useState(false);
     const [showRecordModal, setShowRecordModal] = useState(false);
@@ -63,8 +75,47 @@ const Home6 = () => {
     const [isAddingRecord, setIsAddingRecord] = useState(false);
     const [isEditingRecord, setIsEditingRecord] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState("ALL");
-
+    const [showMessageModal, setShowMessageModal] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [newMessages, setNewMessages] = useState(false);
+    const [receivedMessages, setReceivedMessages] = useState([]);
+
+    const fetchReceivedMessages = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/messages/received', {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            });
+            setReceivedMessages(response.data);
+            return response.data;
+        } catch (error) {
+            console.error("받은 쪽지를 가져오는 중 오류가 발생했습니다.", error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            const messages = await fetchReceivedMessages();
+            if (messages.length > receivedMessages.length) {
+                setNewMessages(true);
+            }
+        }, 10);
+
+        return () => clearInterval(intervalId);
+    }, [receivedMessages.length]);
+
+    const handleShowMessageModal = () => {
+        setShowMessageModal(true);
+    };
+
+    // 모달 닫기
+    const handleCloseMessageModal = () => {
+        setShowMessageModal(false);
+    };
+
+
 
     useEffect(() => {
         const fetchBookList = async () => {
@@ -100,7 +151,7 @@ const Home6 = () => {
     const handleStatusChange = (status) => {
         setSelectedStatus(status);
         if (status === "ALL") {
-            window.location.reload();
+            fetchBookList();
         } else {
             fetchBookListByStatus(status);
         }
@@ -305,6 +356,13 @@ const Home6 = () => {
     const jwtToken = localStorage.getItem('jwtToken');
 
     return <div>
+     {role === "ADMIN" && (
+                <Button>
+                    <Link className="nav-link" to="/AdminPage">
+                        관리자 페이지
+                    </Link>
+                </Button>
+            )}
 
         <header>
             <h1 className="site-heading text-center text-faded d-none d-lg-block">
@@ -320,40 +378,47 @@ const Home6 = () => {
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
                 </button>
+
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto">
 
-                        <div className="nav-item">
-                            {role === "ADMIN" && (
-                                <Link className="nav-link" to="/AdminPage">
-                                    관리 페이지
-                                </Link>
-                            )}
-                        </div>
+                        <li className="nav-item px-lg-4">
+                            <a className="nav-link text-uppercase" href="home">Home</a>
+                        </li>
+                        {jwtToken ? (
+                            <li className="nav-item px-lg-4">
+                                <a className="nav-link text-uppercase" href="home6">BookCase</a>
+                            </li>
+                        ) : (
+                            <li className="nav-item px-lg-4">
+                                <span className="nav-link text-uppercase text-secondary">BookCase</span>
+                            </li>
+                        )}
+                        <li className="nav-item px-lg-4">
+                            <a className="nav-link text-uppercase" href="socialing">Socialing</a>
+                        </li>
+                        {!jwtToken && (
+                            <li className="nav-item px-lg-4">
+                                <a className="nav-link text-uppercase" href="Login">로그인</a>
+                            </li>
+                        )}
+                        {jwtToken && (
+                            <li className="nav-item px-lg-4">
+                                <Dropdown>
+                                    <Dropdown.Toggle className="profile-icon nav-link" id="dropdown-basic">
+                                        {newMessages ? "회원 🔔" : "회원"}
+                                    </Dropdown.Toggle>
 
-
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="home">Home</a></li>
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="home6">BookCase</a></li>
-                        <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                            href="socialing2">Socialing</a></li>
-                        <div style={{marginTop: "auto", paddingBottom: "10px"}}>
-                            {!jwtToken && (
-                                <>
-                                    <li className="nav-item px-lg-4"><a className="nav-link text-uppercase"
-                                                                        href="Login">로그인</a></li>
-                                </>
-                            )}
-                            {jwtToken && (
-                                <li className="nav-item px-lg-4"><a onClick={handleLogout}
-                                                                    className="btn btn-user btn-block nav-link text-uppercase">
-                                    로그아웃
-                                </a></li>
-                            )}
-                        </div>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={handleShowMessageModal}>받은 쪽지</Dropdown.Item>
+                                        <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </li>
+                        )}
                     </ul>
                 </div>
+
             </div>
         </nav>
 
@@ -362,13 +427,79 @@ const Home6 = () => {
                 <div className="row">
                     <div className="col-xl-9 mx-auto">
                         <div className="cta-inner bg-faded text-center rounded">
-                        <h2 className="section-heading mb-4">
+                            <h2 className="section-heading mb-4">
                                 <span className="section-heading-upper"></span>
                                 <span className="section-heading-lower">BookCase</span>
                             </h2>
+
+                            <div style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}>
+                                <button
+                                    onClick={() => handleStatusChange("ALL")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'ALL' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    전체
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange("WISH")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'WISH' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    예정
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange("READING")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'READING' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    독서중
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange("DONE")}
+                                    style={{
+                                        backgroundColor: selectedStatus === 'DONE' ? '#D9AE89' : 'transparent',
+                                        border: '1px solid black',
+                                        color: 'black',
+                                        padding: '10px 20px',
+                                        margin: '0 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    완독
+                                </button>
+                            </div>
+
                             <div>
-                                <div className="grid">
-                                    {bookList.map((book, index) => (
+                                <div className="grid"
+                                     style={{
+                                         backgroundColor: "#F2F1E9"
+                                     }}>
+                                    <div className="card2">
+                                        <CaseModal2/>
+                                    </div>
+                                    {bookList.slice().reverse().map((book, index) => (
                                         <Card
                                             key={index}
                                             book={book}
@@ -378,9 +509,7 @@ const Home6 = () => {
                                             setShowModal={setShowModal}
                                         />
                                     ))}
-                                    <div className="card2">
-                                        <CaseModal2/>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -393,30 +522,35 @@ const Home6 = () => {
             .
         </footer>
 
-        <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}>
-            <Modal.Header closeButton>
+        <Modal show={showRecordModal} onHide={() => setShowRecordModal(false)}
+               centered>
+            <Modal.Header closeButton
+                          style={{
+                              backgroundColor: "#EBDDCC"
+                          }}>
                 <Modal.Title>내 메모</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
+            <Modal.Body style={{overflow: "auto", maxHeight: "80vh", backgroundColor: "#F2E3D5"}}>
                 {selectedRecord ? (
-                    <div style={{ textAlign: "center" }}>
+                    <div style={{textAlign: "center"}}>
                         {!isEditingRecord ? (
                             <div>
                                 <h5>{selectedRecord.title}</h5>
                                 <hr/>
-                                <p style={{ whiteSpace: "pre-wrap" }}>{selectedRecord.content}</p>
-                                <div style={{ textAlign: "left" }}>
+                                <p style={{whiteSpace: "pre-wrap"}}>{selectedRecord.content}</p>
+                                <div style={{textAlign: "left"}}>
                                     <Button variant="outline-primary" onClick={() => setSelectedRecord(null)}>
                                         뒤로가기
                                     </Button>
-                                    <Button variant="danger" onClick={() => handleDeleteRecord(selectedRecord.id)} style={{ marginLeft: 10 }}>
+                                    <Button variant="danger" onClick={() => handleDeleteRecord(selectedRecord.id)}
+                                            style={{marginLeft: 10}}>
                                         삭제
                                     </Button>
                                     <Button variant="info" onClick={() => {
                                         setIsEditingRecord(true);
                                         setRecordTitle(selectedRecord.title);
                                         setRecordContent(selectedRecord.content);
-                                    }} style={{ marginLeft: 10 }}>
+                                    }} style={{marginLeft: 10}}>
                                         수정
                                     </Button>
                                 </div>
@@ -428,7 +562,7 @@ const Home6 = () => {
                                     placeholder="제목"
                                     value={recordTitle}
                                     onChange={(e) => setRecordTitle(e.target.value)}
-                                    style={{ marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px" }}
+                                    style={{marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px"}}
                                 />
                                 <textarea
                                     placeholder="내용"
@@ -442,7 +576,7 @@ const Home6 = () => {
                                         minHeight: "400px"
                                     }}
                                 />
-                                <Button variant="info" onClick={handleEditRecord} style={{ marginRight: "10px" }}>
+                                <Button variant="info" onClick={handleEditRecord} style={{marginRight: "10px"}}>
                                     저장
                                 </Button>
                                 <Button variant="secondary" onClick={() => {
@@ -462,49 +596,84 @@ const Home6 = () => {
                 )}
             </Modal.Body>
 
-            <Modal.Footer>
+            <Modal.Footer
+                style={{
+                    backgroundColor: "#EBDDCC"
+                }}>
                 <Button variant="secondary" onClick={() => setShowRecordModal(false)}>닫기</Button>
             </Modal.Footer>
         </Modal>
 
-
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton>
+        <Modal show={showModal} onHide={() => setShowModal(false)}
+               centered>
+            <Modal.Header closeButton style={{backgroundColor: "#EBDDCC"}}>
                 <Modal.Title>{selectedBook && selectedBook.title}</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ overflow: "auto", maxHeight: "80vh" }}>
-                {selectedBook && !isAddingRecord &&  (
-                    <div>
-                        <Row>
-                            <Col xs lg="5">
-                                <img src={selectedBook.image} alt={selectedBook.title} style={{width: '100%'}}/>
-                            </Col>
-                            <Col>
-                                <p>작가: {selectedBook.author}</p>
-                                <p>출판사: {selectedBook.publisher}</p>
-                                <p>독서 상태: {selectedBook.bookStatus}</p>
-                                <p>독서 시작일: {selectedBook.startDate}</p>
-                                <p>전체 페이지: {selectedBook.totPage}</p>
-                            </Col>
-                        </Row>
-                        <div style={{marginTop: '10px'}}>
-                            <Button variant="info" onClick={() => setIsAddingRecord(true)}>메모 하기</Button>
-                            <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)}
-                                    style={{marginLeft: '10px'}}>
-                                메모 보기
-                            </Button>
-                        </div>
-                    </div>
+            <Modal.Body style={{
+                overflow: "auto",
+                maxHeight: "80vh",
+                backgroundSize: "100% 30px",
+                backgroundColor: "#F2E3D5",
+                fontWeight: "bold",
+
+            }}>
+                {selectedBook && (
+                    <motion.div
+                        initial="initial"
+                        animate={isAddingRecord ? "out" : "in"}
+                        exit="out"
+                        variants={pageVariants}
+                        transition={transition}
+                    >
+                        {!isAddingRecord && (
+                            <div>
+                                <Row>
+                                    <Col xs lg="5" style={{marginLeft: '30px'}}>
+                                        <img src={selectedBook.image} alt={selectedBook.title} style={{width: '100%'}}/>
+                                    </Col>
+                                    <Col>
+                                        <p>작가: {selectedBook.author}</p>
+                                        <p>출판사: {selectedBook.publisher}</p>
+                                        <p>독서 상태: {selectedBook.bookStatus === 'WISH' ? '예정' :
+                                            selectedBook.bookStatus === 'READING' ? '독서중' :
+                                                selectedBook.bookStatus === 'DONE' ? '완독' :
+                                                    selectedBook.bookStatus}</p>
+                                        <p>독서 시작일: {selectedBook.startDate}</p>
+                                        <p>전체 페이지: {selectedBook.totPage}</p>
+                                    </Col>
+                                </Row>
+                                <div style={{marginTop: '10px', display: 'flex', justifyContent: 'center'}}>
+                                    <Button variant="info" onClick={() => setIsAddingRecord(true)}>메모 하기</Button>
+                                    <Button variant="info" onClick={() => handleViewRecords(selectedBook.isbn)}
+                                            style={{marginLeft: '10px'}}>
+                                        메모 보기
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
                 )}
 
                 {selectedBook && isAddingRecord && (
-                    <div>
+                    <motion.div
+                        initial="initial"
+                        animate="in"
+                        exit="out"
+                        variants={pageVariants}
+                        transition={transition}
+                    >
                         <input
                             type="text"
                             placeholder="제목"
                             value={recordTitle}
                             onChange={(e) => setRecordTitle(e.target.value)}
-                            style={{marginBottom: "10px", width: "100%", padding: "8px", fontSize: "16px"}}
+                            style={{
+                                marginBottom: "10px",
+                                width: "100%",
+                                padding: "8px",
+                                fontSize: "16px",
+                                backgroundColor: "#F2F1EB"
+                            }}
                         />
                         <textarea
                             placeholder="내용"
@@ -513,23 +682,28 @@ const Home6 = () => {
                             style={{
                                 marginBottom: "10px",
                                 width: "100%",
-                                padding: "8px",
-                                fontSize: "16px",
-                                minHeight: "400px"
+                                padding: "5px",
+                                fontSize: "17px",
+                                minHeight: "400px",
+                                lineHeight: "30px",
+                                backgroundSize: "100% 30px",
+                                backgroundColor: "#F2F1EB"
                             }}
                         />
-                        <Button variant="info" onClick={handleSaveRecord} style={{marginRight: "10px"}}>
-                            저장
-                        </Button>
-                        <Button variant="secondary" onClick={() => setIsAddingRecord(false)}>
-                            취소
-                        </Button>
-                    </div>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <Button variant="info" onClick={handleSaveRecord} style={{marginRight: "10px"}}>
+                                저장
+                            </Button>
+                            <Button variant="secondary" onClick={() => setIsAddingRecord(false)}>
+                                취소
+                            </Button>
+                        </div>
+                    </motion.div>
                 )}
             </Modal.Body>
         </Modal>
 
-
+        <ReceivedMessageComponent show={showMessageModal} handleClose={handleCloseMessageModal}/>
     </div>
 };
 

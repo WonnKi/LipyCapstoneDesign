@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, Link} from 'react-router-dom';
 import { Container, Card, Button, Modal, Spinner, Alert } from 'react-bootstrap'
 import Sidebar from "../components/BC/Sidebar";
 
@@ -98,7 +98,7 @@ const SocialingDetails = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                navigate('/socialing2');
+                navigate('/socialing');
             } catch (error) {
                 console.error('게시글을 삭제하는 중 에러 발생:', error);
             }
@@ -189,8 +189,9 @@ const SocialingDetails = () => {
     return (
         <div>
             <div id="wrapper">
-                <Sidebar/>
+
                 <Container>
+
                     <div
                         style={{
                             padding: 130,
@@ -217,7 +218,11 @@ const SocialingDetails = () => {
                             </div>
                             <hr/>
                             <div className="post-content">
-                                <div dangerouslySetInnerHTML={{__html: post?.content}}/>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: post?.content.replace(/\n/g, '<br />'),
+                                    }}
+                                />
                             </div>
                             <div style={{margin: '100px 0'}}></div>
                             <div className="text-center my-4">
@@ -245,6 +250,7 @@ const SocialingDetails = () => {
                                             )}
                                         </>
                                     )}
+                                    {' '}<Button onClick={() => navigate('/socialing')}>소셜링으로</Button>
                                 </div>
                             </div>
                             {message && <Alert variant="info" className="mt-3">{message}</Alert>}

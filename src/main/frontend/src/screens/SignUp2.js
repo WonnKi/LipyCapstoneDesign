@@ -123,8 +123,15 @@ const SignUp2 = () => {
         }
     };
 
+    const isFormValid = formData.username && formData.password && formData.nickname &&
+        formData.email && formData.gender && formData.phonenumber && formData.age &&
+        isVerified && isNicknameChecked;
+
     return (
-        <div>
+        <div
+            style={{
+                marginTop:"120px"
+            }}>
             <Container>
                 <div className="d-flex justify-content-center my-5">
                     <div className="col-lg-5 d-none d-lg-block bg-register-image"></div>
@@ -147,10 +154,11 @@ const SignUp2 = () => {
                                         />
                                         <button type="button" onClick={handleCheckNickname}
                                                 className="btn btn-primary"
-                                                style={{ width: 100 }}>
+                                                style={{width: 150}}>
                                             닉네임 확인
                                         </button>
                                     </div>
+
                                     {nicknameMessage && <p className="text-success mt-1">{nicknameMessage}</p>}
 
                                     <div className="form-group d-flex">
@@ -165,51 +173,58 @@ const SignUp2 = () => {
                                         />
                                         <button type="button" onClick={handleCheckEmail}
                                                 className="btn btn-primary"
-                                                style={{ width: 100 }}>
+                                                style={{width: 150}}>
                                             이메일 확인
                                         </button>
                                     </div>
-                                    {emailMessage && <p className="text-success mt-1">{emailMessage}</p>}
 
-                                    {isEmailChecked && !isVerificationSent && (
-                                        <button type="button" onClick={handleSendVerificationCode}
-                                                className="btn btn-secondary mt-2">
-                                            인증코드 보내기
-                                        </button>
-                                    )}
+                                    <div>
+                                        {emailMessage && <p className="text-success mt-1">{emailMessage}</p>}
 
-                                    {isVerificationSent && !isVerified && (
-                                        <div>
-                                            <div className="form-group d-flex mt-2">
-                                                <input
-                                                    type="text"
-                                                    className="form-control me-2"
-                                                    placeholder="인증 코드 입력"
-                                                    value={inputCode}
-                                                    onChange={(e) => setInputCode(e.target.value)}
-                                                />
-                                                <button type="button" onClick={handleVerifyCode}
-                                                        className="btn btn-primary"
-                                                        style={{ width: 70 }}>인증</button>
+                                        {isEmailChecked && !isVerificationSent && (
+                                            <button type="button" onClick={handleSendVerificationCode}
+                                                    className="btn btn-secondary"
+                                                    style={{
+                                                        marginBottom: 8
+                                                    }}>
+                                                인증코드 보내기
+                                            </button>
+                                        )}
+
+                                        {isVerificationSent && !isVerified && (
+                                            <div>
+                                                <div className="form-group d-flex mt-2">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control me-2"
+                                                        placeholder="인증 코드 입력"
+                                                        value={inputCode}
+                                                        onChange={(e) => setInputCode(e.target.value)}
+                                                    />
+                                                    <button type="button" onClick={handleVerifyCode}
+                                                            className="btn btn-primary"
+                                                            style={{width: 70}}>인증
+                                                    </button>
+                                                </div>
+                                                {message && <p className="text-success mt-1">{message}</p>}
                                             </div>
-                                            {message && <p>{message}</p>}
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
 
                                     <div className="form-group">
                                         <input type="text" className="form-control" name="username"
                                                placeholder="이름" value={formData.username} onChange={handleChange}
-                                               required />
+                                               required/>
                                     </div>
                                     <div className="form-group">
                                         <input type="password" className="form-control" name="password"
                                                placeholder="비밀번호" value={formData.password} onChange={handleChange}
-                                               required />
+                                               required/>
                                     </div>
                                     <div className="form-group">
                                         <input type="text" className="form-control" name="phonenumber"
                                                placeholder="전화번호" value={formData.phonenumber}
-                                               onChange={handleChange} required />
+                                               onChange={handleChange} required/>
                                     </div>
                                     <div className="form-group">
                                         <select className="form-control" name="gender"
@@ -222,15 +237,16 @@ const SignUp2 = () => {
                                     <div className="form-group">
                                         <input type="number" className="form-control" name="age"
                                                placeholder="나이" value={formData.age} onChange={handleChange}
-                                               required />
+                                               required/>
                                     </div>
-                                    <button type="submit" className="btn btn-primary btn-user btn-block">
+                                    <button type="submit" className="btn btn-primary btn-user btn-block"
+                                            disabled={!isFormValid}>
                                         계정 등록
                                     </button>
                                 </form>
-                                <hr />
+                                <hr/>
                                 <div className="text-center">
-                                    <a className="small" href="Login">로그인</a>
+                                <a className="small" href="Login">로그인</a>
                                     <a> | </a>
                                     <a className="small" href="PasswordReset">비밀번호 찾기</a>
                                 </div>

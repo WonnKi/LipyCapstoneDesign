@@ -55,6 +55,7 @@ body {
     color: #858796;
     text-align: left;
     background-color: #0dcaf0;
+
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -1969,7 +1970,7 @@ textarea.form-control {
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 8px;
 }
 
 .form-text {
@@ -4019,7 +4020,16 @@ input[type="button"].btn-block {
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
+
 }
+
+.nav-link-So {
+    display: block;
+    padding: 0.5rem 1rem;
+
+}
+
+
 
 .nav-link:hover, .nav-link:focus {
     text-decoration: none;
@@ -4067,6 +4077,8 @@ input[type="button"].btn-block {
 
 .nav-pills .nav-link {
     border-radius: 0.35rem;
+    color: black;
+
 }
 
 .nav-pills .nav-link.active,
@@ -7710,6 +7722,7 @@ button.bg-dark:focus {
 .mt-1,
 .my-1 {
     margin-top: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
 }
 
 .mr-1,
@@ -10904,7 +10917,7 @@ a:focus {
 }
 
 .bg-register-image {
-    background: url("./img/SignUpImg.jpg");
+    background: url("./img/SingUpImg_2.png");
     background-position: center;
     background-size: cover;
 }
@@ -22273,6 +22286,11 @@ p {
     padding-bottom: 5rem;
     background-color: #e0b88a
 }
+.cta2 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: #EBDDCC
+}
 .cta .cta-inner {
     position: relative;
     padding: 3rem;
@@ -22508,7 +22526,7 @@ html, body {
     height: 300px;
     margin: 15px 12px 30px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-    background-color: gray;
+    background-color: #f4e3c1;
 }
 
 .card2:hover .overlay {
@@ -22575,5 +22593,13 @@ html, body {
     font-size: 19px;
 }
 
+.profile-icon {
+    width: 40px; /* 아이콘 너비 */
+    height: 40px; /* 아이콘 높이 */
+    border-radius: 50%; /* 둥글게 만들기 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* 아이콘 안 글자색 */
 
-
+}

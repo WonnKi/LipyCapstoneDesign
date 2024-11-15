@@ -47,6 +47,7 @@ public class MemberService  {
                 socialing.getTitle(),
                 socialing.getDescription(),
                 socialing.getWriter(),
+                socialing.getContent(),
                 socialing.getCurrentparticipants(),
                 socialing.getMaxparticipants(),
                 socialing.getDate()
