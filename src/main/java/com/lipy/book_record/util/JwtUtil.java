@@ -41,7 +41,8 @@ public class JwtUtil {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final UUID userId = getIdFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && userId != null);
     }
 
     public String getUsernameFromToken(String token) {
@@ -53,9 +54,13 @@ public class JwtUtil {
     }
 
     public UUID getIdFromToken(String token) {
-        // JWT에서 id 값을 String으로 추출한 후, UUID로 변환
-        String id = getClaimFromToken(token, claims -> claims.get("id", String.class));  // String으로 추출
-        return UUID.fromString(id);  // String을 UUID로 변환
+        try {
+            String id = getClaimFromToken(token, claims -> claims.get("id", String.class));
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid UUID format in JWT Token: " + e.getMessage());
+            return null;
+        }
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
