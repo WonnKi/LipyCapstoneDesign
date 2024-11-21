@@ -56,19 +56,33 @@ public class MessageController {
     }
 
     @GetMapping("/received")
-    public List<MessageDto> getReceivedMessage() {
-        // JWT 토큰에서 이메일 가져오기
+    public ResponseEntity<?> getReceivedMessage() {
+        // SecurityContext에서 Authentication 객체 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
 
-        // 이메일로 발신자 조회
+        // 인증 객체가 null인지, 익명 사용자인지, 인증되지 않은 사용자인지 확인
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 사용자입니다.");
+        }
+
+        // 인증된 사용자인 경우 principal 확인
+        String email;
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+            email = userDetails.getUsername(); // 인증된 사용자 이메일 추출
+        } else if (authentication.getPrincipal() instanceof String principalString) {
+            email = principalString; // principal이 String 타입인 경우 처리
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("알 수 없는 인증 정보 형식입니다.");
+        }
+
+        // 이메일로 사용자 정보 조회
         Member member = Optional.ofNullable(memberService.findByEmail(email))
                 .orElseThrow(() -> new IllegalArgumentException(email + " 유저를 찾을 수 없습니다."));
 
         // 받은 메시지 반환
-        return messageService.receivedMessage(member);
+        return ResponseEntity.ok(messageService.receivedMessage(member));
     }
+
 
     @GetMapping("/sent")
     public List<MessageDto> getSentMessage() {
