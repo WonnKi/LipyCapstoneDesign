@@ -52,7 +52,7 @@ public class MemberController {
             UUID memberId = member.getId();
             String role = member.getRole().name();
 
-            String jwtToken = jwtUtil.generateToken(userDetails, memberId, role);
+            String jwtToken = jwtUtil.generateToken(userDetails, memberId, role, member.getNickname());
 
             // IP 주소 정보 가져오기
             String ipAddress = request.getRemoteAddr();

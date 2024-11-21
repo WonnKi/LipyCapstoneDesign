@@ -11,6 +11,7 @@ import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
 import { motion } from 'framer-motion';
 import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
+import {jwtDecode} from "jwt-decode";
 
 
 
@@ -79,6 +80,7 @@ const Home6 = () => {
     const [userId, setUserId] = useState(null);
     const [newMessages, setNewMessages] = useState(false);
     const [receivedMessages, setReceivedMessages] = useState([]);
+    const [nickname, setNickname] = useState(null);
 
     const fetchReceivedMessages = async () => {
         try {
@@ -355,6 +357,19 @@ const Home6 = () => {
 
     const jwtToken = localStorage.getItem('jwtToken');
 
+    useEffect(() => {
+        if (jwtToken) {
+            try {
+                // JWT 디코딩으로 닉네임 추출
+                const decodedToken = jwtDecode(jwtToken);
+                setNickname(decodedToken.nickname);
+
+            } catch (error) {
+                console.error("닉네임을 가져오는 중 오류 발생:", error);
+            }
+        }
+    }, [jwtToken]);
+
     return <div>
      {role === "ADMIN" && (
                 <Button>
@@ -406,7 +421,7 @@ const Home6 = () => {
                             <li className="nav-item px-lg-4">
                                 <Dropdown>
                                     <Dropdown.Toggle className="profile-icon nav-link" id="dropdown-basic">
-                                        {newMessages ? "회원 🔔" : "회원"}
+                                        {newMessages ? `${nickname}님 🔔` : `${nickname}님` || "회원"}
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>

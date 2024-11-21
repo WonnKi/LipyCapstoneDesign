@@ -200,7 +200,7 @@ const AdminPage = () => {
                                     <div className="row g-4">
                                         <div className="col-sm-6 col-xl-3">
                                             <div
-                                                className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                                                className="BackColor rounded d-flex align-items-center justify-content-between p-4">
                                                 <i className="fa fa-chart-line fa-3x text-primary"></i>
                                                 <div className="ms-3">
                                                     <p className="mb-2">Today Sale</p>
@@ -210,7 +210,7 @@ const AdminPage = () => {
                                         </div>
                                         <div className="col-sm-6 col-xl-3">
                                             <div
-                                                className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                                                className="BackColor rounded d-flex align-items-center justify-content-between p-4">
                                                 <i className="fa fa-chart-bar fa-3x text-primary"></i>
                                                 <div className="ms-3">
                                                     <p className="mb-2">Total Sale</p>
@@ -220,7 +220,7 @@ const AdminPage = () => {
                                         </div>
                                         <div className="col-sm-6 col-xl-3">
                                             <div
-                                                className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                                                className="BackColor rounded d-flex align-items-center justify-content-between p-4">
                                                 <i className="fa fa-chart-area fa-3x text-primary"></i>
                                                 <div className="ms-3">
                                                     <p className="mb-2">Today Revenue</p>
@@ -230,7 +230,7 @@ const AdminPage = () => {
                                         </div>
                                         <div className="col-sm-6 col-xl-3">
                                             <div
-                                                className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                                                className="BackColor rounded d-flex align-items-center justify-content-between p-4">
                                                 <i className="fa fa-chart-pie fa-3x text-primary"></i>
                                                 <div className="ms-3">
                                                     <p className="mb-2">Total Revenue</p>
@@ -301,16 +301,19 @@ const AdminPage = () => {
 
 
                                 <div className="container-fluid pt-4 px-4">
-                                    <div className="bg-secondary text-center rounded p-4">
+                                    <div className="BackColor text-center rounded p-4">
 
                                         <div className="d-flex align-items-center justify-content-between mb-4">
                                             <h6 className="mb-0">회원 관리</h6>
                                             <form onSubmit={handleSearch}>
                                                 <Button variant="primary" onClick={handleOpenGroupMessageModal} style={{ margin: 5 }}>
-                                                    쪽지 보내기
+                                                    단체 쪽지 보내기
                                                 </Button>
 
                                                 <Modal show={showGroupMessageModal} onHide={handleCloseGroupMessageModal}>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>단체 쪽지</Modal.Title>
+                                                    </Modal.Header>
                                                     <Modal.Body>
                                                         <GroupMessageModal  members={members} onClose={handleCloseGroupMessageModal} onSend={handleSendGroupMessage} />
                                                     </Modal.Body>
@@ -345,7 +348,6 @@ const AdminPage = () => {
                                                     style={{
                                                         position: 'sticky',
                                                         top: 0,
-                                                        backgroundColor: '#343a40',
                                                         zIndex: 1
                                                     }}>
 
@@ -440,6 +442,7 @@ const AdminPage = () => {
                                                     기록 보기
                                                 </Button>
                                                 <Button variant="primary" onClick={handleOpenEditModal}>정보 수정</Button>
+
                                                     <Button variant="primary" onClick={handleOpenMessageModal} style={{ margin: 5 }}>
                                                         쪽지 보내기
                                                     </Button>
@@ -451,6 +454,9 @@ const AdminPage = () => {
 
 
                                         <Modal show={showMessageModal} onHide={handleCloseMessageModal}>
+                                            <Modal.Header closeButton>
+                                                <Modal.Title>쪽지 보내기</Modal.Title>
+                                            </Modal.Header>
                                             <Modal.Body>
                                                 <MessageComponent receiverNickname={selectedMember?.nickname} onClose={handleCloseMessageModal} />
                                             </Modal.Body>

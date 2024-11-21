@@ -22,10 +22,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(UserDetails userDetails, UUID memberId, String role) {
+    public String generateToken(UserDetails userDetails, UUID memberId, String role, String nickname) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", memberId.toString());  // UUID를 String으로 변환하여 저장
         claims.put("role", role);
+        claims.put("nickname", nickname);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 

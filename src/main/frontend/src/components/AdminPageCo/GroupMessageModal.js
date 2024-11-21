@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Table } from 'react-bootstrap';
 
 const GroupMessageModal = ({ members, show, onClose, onSend }) => {
     const [selectedMembers, setSelectedMembers] = useState([]);
@@ -19,46 +19,60 @@ const GroupMessageModal = ({ members, show, onClose, onSend }) => {
         onClose();
     };
 
-    return(
-    <div className="message-container">
-        <div className="message-send">
-            <input
-                type="text"
-                className="message-input"
-                placeholder="쪽지 제목"
-                value={messageTitle}
-                onChange={(e) => setMessageTitle(e.target.value)} // 제목 입력
-            />
-            <textarea
-                className="message-input"
-                rows="4"
-                placeholder="쪽지 내용"
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-            />
-            <button className="message-button" onClick={handleSend}>쪽지 보내기</button>
-        </div>
-        <div className="message-list">
-            <h3>닉네임</h3>
-            <div
-                style={{
-                    display:"flex",
-                    flexDirection:"column",
-                    alignItems:"flex-start"
-                }}>
-
-            {members.map((member) => (
-                <Form.Check
-                    key={member.id}
-                    type="checkbox"
-                    label={member.nickname}
-                    checked={selectedMembers.includes(member.nickname)}
-                    onChange={() => handleMemberSelection(member.nickname)}
+    return (
+        <div>
+            <div className="message-send">
+                <input
+                    type="text"
+                    className="message-input"
+                    placeholder="쪽지 제목"
+                    value={messageTitle}
+                    onChange={(e) => setMessageTitle(e.target.value)}
                 />
-            ))}
+                <textarea
+                    className="message-input"
+                    rows="4"
+                    placeholder="쪽지 내용"
+                    value={messageContent}
+                    onChange={(e) => setMessageContent(e.target.value)}
+                />
+                <button className="message-button" onClick={handleSend}>
+                    쪽지 보내기
+                </button>
+            </div>
+            <div className="message-list" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                <Table className="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead style={{position: 'sticky', top: 0,  zIndex: 1}}>
+                        <tr>
+                           <th style={{textAlign: 'center', width: '20%'}}>선택</th>
+                           <th style={{textAlign: 'center'}}>닉네임</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {members.map((member) => (
+                        <tr key={member.id}>
+                            <td style={{textAlign: 'center'}}>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedMembers.includes(member.nickname)}
+                                    onChange={() => handleMemberSelection(member.nickname)}
+                                    style={{
+                                        position: 'static',
+                                    }}
+                                />
+                            </td>
+                            <td
+                                style={{textAlign: 'center', cursor: 'pointer'}}
+                                onClick={() => handleMemberSelection(member.nickname)}
+                            >
+                                {member.nickname}
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </Table>
             </div>
         </div>
-    </div>
     );
 };
 

@@ -17,6 +17,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../font/font.css"
+import { jwtDecode } from "jwt-decode";
+
 
 
 const Home = () => {
@@ -24,6 +26,7 @@ const Home = () => {
     const [newMessages, setNewMessages] = useState(false);
     const [receivedMessages, setReceivedMessages] = useState([]);
     const [slideIndex, setSlideIndex] = useState(0);
+    const [nickname, setNickname] = useState(null);
 
     const fetchReceivedMessages = async () => {
         try {
@@ -51,6 +54,20 @@ const Home = () => {
         return () => clearInterval(intervalId);
     }, [receivedMessages.length]);
 
+    const jwtToken = localStorage.getItem('jwtToken');
+
+    useEffect(() => {
+        if (jwtToken) {
+            try {
+                // JWT 디코딩으로 닉네임 추출
+                const decodedToken = jwtDecode(jwtToken);
+                setNickname(decodedToken.nickname);
+
+            } catch (error) {
+                console.error("닉네임을 가져오는 중 오류 발생:", error);
+            }
+        }
+    }, [jwtToken]);
 
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
@@ -58,7 +75,6 @@ const Home = () => {
         window.location.reload();
     };
 
-    const jwtToken = localStorage.getItem('jwtToken');
 
     const [role, setRole] = useState(null);
 
@@ -111,18 +127,18 @@ const Home = () => {
         )}
 
         <header>
-            <h1 className="site-heading text-center text-faded d-none d-lg-block">
-                <span className="site-heading-upper text-primary mb-3"></span>
-                <span className="site-heading-lower">LIPY</span>
-            </h1>
-        </header>
+                    <h1 className="site-heading text-center text-faded d-none d-lg-block">
+                        <span className="site-heading-upper text-primary mb-3"></span>
+                        <span className="site-heading-lower">LIPY</span>
+                    </h1>
+                </header>
 
-        <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav"
-             style={{
-                 marginBottom: '5rem'
-             }}>
-            <div className="container">
-                <a className="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
+                <nav className="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav"
+                     style={{
+                         marginBottom: '5rem'
+                     }}>
+                    <div className="container">
+                    <a className="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"/>
@@ -154,7 +170,7 @@ const Home = () => {
                             <li className="nav-item px-lg-4">
                                 <Dropdown>
                                     <Dropdown.Toggle className="profile-icon nav-link" id="dropdown-basic">
-                                        {newMessages ? "회원 🔔" : "회원"}
+                                        {newMessages ? `${nickname}님 🔔` : `${nickname}님` || "회원"}
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
