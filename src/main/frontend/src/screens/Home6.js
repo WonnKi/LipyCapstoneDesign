@@ -98,15 +98,16 @@ const Home6 = () => {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
+        const fetchMessagesOnce = async () => {
             const messages = await fetchReceivedMessages();
             if (messages.length > receivedMessages.length) {
                 setNewMessages(true);
             }
-        }, 10);
+        };
 
-        return () => clearInterval(intervalId);
-    }, [receivedMessages.length]);
+        fetchMessagesOnce();
+
+    }, []);
 
     const handleShowMessageModal = () => {
         setShowMessageModal(true);

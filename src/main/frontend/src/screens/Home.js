@@ -44,22 +44,22 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
+        const fetchMessagesOnce = async () => {
             const messages = await fetchReceivedMessages();
             if (messages.length > receivedMessages.length) {
                 setNewMessages(true);
             }
-        }, 10);
+        };
 
-        return () => clearInterval(intervalId);
-    }, [receivedMessages.length]);
+        fetchMessagesOnce();
+
+    }, []);
 
     const jwtToken = localStorage.getItem('jwtToken');
 
     useEffect(() => {
         if (jwtToken) {
             try {
-                // JWT 디코딩으로 닉네임 추출
                 const decodedToken = jwtDecode(jwtToken);
                 setNickname(decodedToken.nickname);
 

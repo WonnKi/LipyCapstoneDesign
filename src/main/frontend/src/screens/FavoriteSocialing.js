@@ -49,17 +49,24 @@ const FavoriteSocialing = () => {
         }
     }, [jwtToken]);
 
+    const extractFirstImageUrl = (content) => {
+        const imgTagRegex = /<img.*?src=['"](.*?)['"].*?>/;
+        const match = content.match(imgTagRegex);
+        return match ? match[1] : null;
+    };
+
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
+        const fetchMessagesOnce = async () => {
             const messages = await fetchReceivedMessages();
             if (messages.length > receivedMessages.length) {
                 setNewMessages(true);
             }
-        }, 10);
+        };
 
-        return () => clearInterval(intervalId);
-    }, [receivedMessages.length]);
+        fetchMessagesOnce();
+
+    }, []);
 
     const handleShowMessageModal = () => {
         setShowMessageModal(true);
@@ -219,12 +226,23 @@ const FavoriteSocialing = () => {
                                                 <div key={socialing.id} className="socialing-card">
                                                     <Link to={`/socialing/${socialing.id}`}
                                                           className="text-decoration-none">
-                                                                     <div style={{ height: '180px', backgroundColor: '#f4e3c1' }}>
-                                                                               <div
-                                                                                                                   dangerouslySetInnerHTML={{
-                                                                                                                       __html: socialing?.content.replace(/\n/g, '<br />'),
-                                                                                                                   }}
-                                                                                                               /></div>
+                                                        <div style={{
+                                                            height: '180px',
+                                                            backgroundColor: '#f4e3c1',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            {extractFirstImageUrl(socialing.content) ? (
+                                                                <img
+                                                                    src={extractFirstImageUrl(socialing.content)}
+                                                                    alt="socialing preview"
+                                                                    style={{maxWidth: '100%', maxHeight: '100%'}}
+                                                                />
+                                                            ) : (
+                                                                <p>이미지가 없습니다.</p>
+                                                            )}
+                                                        </div>
                                                         <div className="socialing-card-content">
                                                             <h4>{socialing.title}</h4>
                                                             <h3>{socialing.description}</h3>
