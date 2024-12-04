@@ -5,6 +5,7 @@ import SocialingPage from "../components/AdminPageCo/SocialingPage";
 import {Dropdown} from "react-bootstrap";
 import ReceivedMessageComponent from "../components/AdminPageCo/ReceivedMessageComponent";
 import Button from "react-bootstrap/Button";
+import { jwtDecode } from "jwt-decode";
 
 const Socialing = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -14,6 +15,7 @@ const Socialing = () => {
     const [showMessageModal, setShowMessageModal] = useState(false);
     const [newMessages, setNewMessages] = useState(false);
     const [receivedMessages, setReceivedMessages] = useState([]);
+    const [nickname, setNickname] = useState(null);
 
     const fetchReceivedMessages = async () => {
         try {
@@ -31,15 +33,22 @@ const Socialing = () => {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
+        const fetchMessagesOnce = async () => {
             const messages = await fetchReceivedMessages();
             if (messages.length > receivedMessages.length) {
                 setNewMessages(true);
             }
-        }, 10);
+        };
 
-        return () => clearInterval(intervalId);
-    }, [receivedMessages.length]);
+        fetchMessagesOnce();
+
+    }, [])
+
+    const extractFirstImageUrl = (content) => {
+        const imgTagRegex = /<img.*?src=['"](.*?)['"].*?>/;
+        const match = content.match(imgTagRegex);
+        return match ? match[1] : null;
+    };
 
     const jwtToken = localStorage.getItem('jwtToken');
 
@@ -73,6 +82,19 @@ const Socialing = () => {
         const userRole = localStorage.getItem('userRole');
         setRole(userRole);
     }, []);
+
+    useEffect(() => {
+        if (jwtToken) {
+            try {
+                // JWT 디코딩으로 닉네임 추출
+                const decodedToken = jwtDecode(jwtToken);
+                setNickname(decodedToken.nickname);
+
+            } catch (error) {
+                console.error("닉네임을 가져오는 중 오류 발생:", error);
+            }
+        }
+    }, [jwtToken]);
 
     return (
         <div>
@@ -125,7 +147,7 @@ const Socialing = () => {
                                 <li className="nav-item px-lg-4">
                                     <Dropdown>
                                         <Dropdown.Toggle className="profile-icon nav-link" id="dropdown-basic">
-                                            {newMessages ? "회원 🔔" : "회원"}
+                                            {newMessages ? `${nickname}님 🔔` : `${nickname}님` || "회원"}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
@@ -201,12 +223,30 @@ const Socialing = () => {
                                                                           className="text-decoration-none">
                                                                         <div style={{
                                                                             height: '180px',
-                                                                            backgroundColor: '#f4e3c1'
-                                                                        }}></div>
+                                                                            backgroundColor: '#f4e3c1',
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center'
+                                                                        }}>
+                                                                            {extractFirstImageUrl(socialing.content) ? (
+                                                                                <img
+                                                                                    src={extractFirstImageUrl(socialing.content)}
+                                                                                    alt="socialing preview"
+                                                                                    style={{
+                                                                                        maxWidth: '100%',
+                                                                                        maxHeight: '100%'
+                                                                                    }}
+                                                                                />
+                                                                            ) : (
+                                                                                <p>이미지가 없습니다.</p>
+                                                                            )}
+                                                                        </div>
                                                                         <div className="socialing-card-content">
                                                                             <h4>{socialing.title}</h4>
                                                                             <h3>{socialing.description}</h3>
-                                                                            <p><b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의 회원이 신청했어요</p>
+                                                                            <p>
+                                                                                <b>{socialing.currentparticipants}/{socialing.maxparticipants}</b> 명의
+                                                                                회원이 신청했어요</p>
                                                                         </div>
                                                                         <div className="socialing-card-footer">
                                                                             <p>{socialing.writer}</p>

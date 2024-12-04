@@ -108,8 +108,7 @@ const MessageComponent = ({ receiverNickname }) => {
     }, []);
 
     return (
-        <div className="message-container">
-            <h2>쪽지 관리</h2>
+        <div >
 
             {/* 쪽지 전송 */}
             <div className="message-send">
