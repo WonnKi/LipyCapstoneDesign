@@ -6,11 +6,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService {
 
+
+public class EmailService {
+    
     @Autowired
     private JavaMailSender emailSender;
-
+    
     public void sendVerificationCode(String to, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);

@@ -1,8 +1,6 @@
 package com.lipy.book_record.service;
 
-import com.lipy.book_record.dto.BookDto;
-import com.lipy.book_record.dto.SearchDto;
-import com.lipy.book_record.dto.MemberDto;
+import com.lipy.book_record.dto.*;
 import com.lipy.book_record.entity.Book;
 import com.lipy.book_record.entity.BookStatus;
 import com.lipy.book_record.entity.Member;
@@ -14,7 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +26,9 @@ public class BookService {
     private final BookRepository bookRep;
     private final MemberRepository userRep;
 
-    public ResponseEntity<String> saveBook(Long userId, SearchDto info, int page) {
+    public ResponseEntity<String> saveBook(UUID userId, SearchDto info, int page) {
         try{
-            Member userInfo = userRep.findById(userId)
+            Member userInfo = (Member) userRep.findById(userId)
                     .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."));
 
             MemberDto user = new MemberDto(userInfo);
@@ -58,7 +60,7 @@ public class BookService {
 
     }
 
-    public ResponseEntity<String> deleteBook(Long userId, String isbn){
+    public ResponseEntity<String> deleteBook(UUID userId, String isbn){
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -70,7 +72,7 @@ public class BookService {
         }
     }
 
-    public List<BookDto> ViewBookList(Long userId){
+    public List<BookDto> ViewBookList(UUID userId){
         return userRep
                 .findById(userId)
                 .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))
@@ -80,7 +82,7 @@ public class BookService {
                 .toList();
     }
 
-    public ResponseEntity<String>  changeStatus(Long userId, String isbn, String status) {
+    public ResponseEntity<String>  changeStatus(UUID userId, String isbn, String status) {
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -94,10 +96,9 @@ public class BookService {
         }catch (Exception e) {
             return ResponseEntity.internalServerError().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "의 책을 삭제하는 중 오류가 발생했습니다.");
         }
-
     }
 
-    public List<BookDto> ViewBookList(Long userId, BookStatus status) {
+    public List<BookDto> ViewBookList(UUID userId, BookStatus status) {
         return userRep
                 .findById(userId)
                 .orElseThrow(() -> new RuntimeException("ID : " + userId + " 를 찾을 수 없습니다."))
@@ -108,5 +109,29 @@ public class BookService {
                 .toList();
     }
 
+    public List<BookCountDto> getAllBooksAndCount() {
+        List<Object[]> results = bookRep.findAllBooksWithCount();
+        return results.stream()
+                .map(result -> new BookCountDto(
+                        (String) result[0],  // isbn
+                        (String) result[1],  // title
+                        (String) result[2],  // author
+                        (String) result[3],  // publisher
+                        (String) result[4],  // image
+                        ((Number) result[5]).longValue()  // saveCount
+                ))
+                .collect(Collectors.toList());
+    }
 
+    public List<BookUserStatusDto> getBookStatusByUsers(String isbn) {
+        List<Object[]> results = bookRep.findBookStatusByUsers(isbn);
+        return results.stream()
+                .map(result -> new BookUserStatusDto(
+                        (String) result[0],  // username
+                        (String) result[1],  // nickname
+                        (String) result[2],  // email
+                        (BookStatus) result[3] // bookStatus
+                ))
+                .collect(Collectors.toList());
+    }
 }

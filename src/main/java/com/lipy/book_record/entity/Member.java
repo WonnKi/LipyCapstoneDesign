@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
 @Entity
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -24,15 +27,27 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false ,unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false ,unique = true)
     private String nickname;
 
+    @Column(nullable = false)
+    private String gender;
+
+    @Column(nullable = false)
+    private int age;
+
+    @Column(nullable = false)
+    private String phonenumber;
+
     @Column(name = "books")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
+
+    @Column
+    private String memo;
 
     // 즐겨찾기한 소셜링 정보를 저장하기 위한 필드
     @ManyToMany
@@ -53,12 +68,15 @@ public class Member {
     }
 
     @Builder
-    public Member(Long id, String email, String password, String userName, String nickName, List<Book> books) {
+    public Member(UUID id, String email, String password, String userName, String nickName,String gender,int age,String phonenumber, List<Book> books) {
         this.id=id;
         this.email = email;
         this.password = password;
         this.username = userName;
         this.nickname = nickName;
+        this.gender = gender;
+        this.age = age;
+        this.phonenumber = phonenumber;
         this.books = books;
     }
 

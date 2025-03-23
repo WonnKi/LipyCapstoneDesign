@@ -10,31 +10,28 @@ function Write() {
     const [maxParticipants, setMaxParticipants] = useState(0);
     const [date, setDate] = useState('');
     const [message, setMessage] = useState('');
+    const [imageUrls, setImageUrls] = useState([]); // 여러 이미지 URL 저장
     const navigate = useNavigate();
 
     const handleCreatePost = async (event) => {
         event.preventDefault();
+
+        if (!title || !description || !content || !maxParticipants || !date) {
+            setMessage('모든 필드를 채워주세요.');
+            return;
+        }
+
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await axios.post(
                 'http://localhost:8080/socialing/post',
-                {
-                    title,
-                    description,
-                    content,
-                    maxparticipants: maxParticipants,
-                    date,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+                { title, description, content, maxparticipants: maxParticipants, date },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
             const postId = response.data.id;
             navigate(`/socialing/${postId}`);
         } catch (error) {
-            setMessage('Post creation failed: ' + error.response.data);
+            setMessage('글 작성에 실패했습니다: ' + error.response.data);
         }
     };
 
@@ -55,11 +52,14 @@ function Write() {
                 }
             );
             const imageUrl = response.data;
-            setContent(content + `<img src="${imageUrl}" alt="uploaded image" />`);
+            setImageUrls([...imageUrls, imageUrl]);
+            setContent((prevContent) => prevContent + `<img src="${imageUrl}" alt="uploaded image" />`);
         } catch (error) {
-            console.error('Image upload failed:', error);
+            console.error('이미지 업로드 실패:', error);
         }
     };
+
+    const isFormValid = title && description && content && maxParticipants > 0 && date;
 
     return (
         <Container>
@@ -83,6 +83,21 @@ function Write() {
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </Form.Group>
+
+
+                        {imageUrls.length > 0 && (
+                            <div className="mt-3">
+                                {imageUrls.map((url, index) => (
+                                    <img
+                                        key={index}
+                                        src={url}
+                                        alt={`uploaded preview ${index}`}
+                                        style={{ maxWidth: "100%", height: "auto", marginBottom: "10px" }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
                         <Form.Group controlId="formContent" className="mt-3">
                             <Form.Label>내용</Form.Label>
                             <Form.Control
@@ -90,6 +105,7 @@ function Write() {
                                 rows={5}
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
+                                style={{ height: "400px" }}
                             />
                         </Form.Group>
                         <Form.Group controlId="formMaxParticipants" className="mt-3">
@@ -116,7 +132,15 @@ function Write() {
                                 onChange={handleImageUpload}
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit" className="mt-3">작성하기</Button>
+
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            className="mt-3"
+                            disabled={!isFormValid}
+                        >
+                            작성하기
+                        </Button>
                     </Form>
                     {message && <Alert variant="danger" className="mt-3">{message}</Alert>}
                 </Card.Body>

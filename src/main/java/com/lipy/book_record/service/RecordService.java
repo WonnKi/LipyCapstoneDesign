@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class RecordService {
     private final BookRepository bookRep;
     private final RecordRepository recordRep;
 
-    public ResponseEntity<String> saveRecord(Long userId, String isbn,@RequestBody RecordDto recordDto) {
+    public ResponseEntity<String> saveRecord(UUID userId, String isbn, @RequestBody RecordDto recordDto) {
         try {
             if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
                 return ResponseEntity.badRequest().body("사용자 ID: " + userId + "와 ISBN: " + isbn + "에 해당하는 책을 찾을 수 없습니다.");
@@ -44,7 +46,7 @@ public class RecordService {
         }
     }
 
-    public List<RecordDto> FindRecordList(Long userId, String isbn){
+    public List<RecordDto> FindRecordList(UUID userId, String isbn){
         if (!bookRep.existsByUserIdAndIsbn(userId, isbn)) {
             return null;
         }
@@ -56,7 +58,7 @@ public class RecordService {
                 .toList();
     }
 
-    public ResponseEntity<String> DeleteRecord(Long userId,String isbn, String rId) {
+    public ResponseEntity<String> DeleteRecord(UUID userId,String isbn, String rId) {
         if (bookRep.existsByUserIdAndIsbn(userId, isbn)) {
             Optional<Record> record = recordRep.findById(rId);
             if(record.isPresent()){
@@ -70,7 +72,7 @@ public class RecordService {
         return ResponseEntity.badRequest().body("심각한 오류입니다. 개발자에게 문의하세요");
     }
 
-    public ResponseEntity<String> PutRecord(Long userId, String isbn, String rId, RecordDto changeRecord){
+    public ResponseEntity<String> PutRecord(UUID userId, String isbn, String rId, RecordDto changeRecord){
         if (bookRep.existsByUserIdAndIsbn(userId, isbn)) {
             Optional<Record> record = recordRep.findById(rId);
             if(record.isPresent()){
@@ -85,5 +87,10 @@ public class RecordService {
         }else return ResponseEntity.badRequest().body(userId + "유저에" + isbn + "책이 없습니다.");
 
         return ResponseEntity.badRequest().body("심각한 오류입니다. 개발자에게 문의하세요");
+    }
+
+    public List<RecordDto> getRecordsByUserId(UUID userId) {
+        List<Record> records = recordRep.findByBooksUserId(userId);
+        return records.stream().map(RecordDto::new).collect(Collectors.toList());
     }
 }

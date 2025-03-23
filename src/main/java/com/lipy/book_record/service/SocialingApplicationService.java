@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class SocialingApplicationService {
     private final SocialingRepository socialingRepository;
 
 
-    public Long applyForSocialing(Long userId, Long socialingId) {
-        Member user = memberRepository.findById(userId)
+    public Long applyForSocialing(UUID userId, Long socialingId) {
+        Member user = (Member) memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         Socialing socialing = socialingRepository.findById(socialingId)
                 .orElseThrow(() -> new RuntimeException("소셜링을 찾을 수 없습니다."));
@@ -49,23 +50,25 @@ public class SocialingApplicationService {
         return socialingApplication.getId();
     }
 
-    public List<ApplicantInfo> findApplicantInfoBySocialingId(Long socialingId) {
+    public List<String> findApplicantInfoBySocialingId(Long socialingId) {
         List<SocialingApplication> applications = socialingApplicationRepository.findBySocialingId(socialingId);
-        List<ApplicantInfo> applicantInfos = new ArrayList<>();
-        for (SocialingApplication application : applications) {
-            Member member = memberRepository.findById(application.getMember().getId()).orElse(null);
-            if (member != null) {
-                ApplicantInfo info = new ApplicantInfo();
-                info.setName(member.getUsername());
-                info.setEmail(member.getEmail());
-                applicantInfos.add(info);
-            }
-        }
-        return applicantInfos;
+        return applications.stream().map(app -> app.getMember().getEmail() + " (" + app.getMember().getNickname() + ")").collect(Collectors.toList());
     }
+
+
     private boolean userAlreadyApplied(Member user, Socialing socialing) {
         return socialing.getApplications().stream()
                 .anyMatch(application -> application.getMember().getId().equals(user.getId()));
+    }
+
+    public SocialingApplication findByMemberAndSocialing(UUID memberId, Long socialingId) {
+        return socialingApplicationRepository.findByMemberIdAndSocialingId(memberId, socialingId)
+                .orElse(null);
+    }
+
+    public SocialingApplication findById(Long applicationId) {
+        return socialingApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
     }
 
     public void cancelSocialingApplication(Long applicationId) {
@@ -79,15 +82,5 @@ public class SocialingApplicationService {
 
         // 소셜링 신청 삭제
         socialingApplicationRepository.delete(socialingApplication);
-    }
-
-    public SocialingApplication findById(Long applicationId) {
-        return socialingApplicationRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
-    }
-
-    public SocialingApplication findByMemberAndSocialing(Long memberId, Long socialingId) {
-        return socialingApplicationRepository.findByMemberIdAndSocialingId(memberId, socialingId)
-                .orElse(null);
     }
 }

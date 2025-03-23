@@ -13,6 +13,7 @@ public class SocialingListResponse {
     private String title;
     private String description;
     private String writer;
+    private String content;
     private int currentparticipants;
     private int maxparticipants;
     private Date date;
@@ -22,18 +23,24 @@ public class SocialingListResponse {
         this.title = socialing.getTitle();
         this.description = socialing.getDescription();
         this.writer = socialing.getWriter();
+        this.content = socialing.getContent();
         this.currentparticipants = socialing.getCurrentparticipants();
         this.maxparticipants = socialing.getMaxparticipants();
         this.date = socialing.getDate();
     }
 
-    public SocialingListResponse() {
-
+    public SocialingListResponse(Long id, String title, String description, String writer,String content, int currentparticipants, int maxparticipants, Date date) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.writer = writer;
+        this.content = content;
+        this.currentparticipants = currentparticipants;
+        this.maxparticipants = maxparticipants;
+        this.date = date;
     }
 
-
-    public SocialingListResponse(Long id, String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
-        this.id = id;
+    public SocialingListResponse(String title, String description, String writer, int currentparticipants, int maxparticipants, Date date) {
         this.title = title;
         this.description = description;
         this.writer = writer;
@@ -42,4 +49,3 @@ public class SocialingListResponse {
         this.date = date;
     }
 }
-

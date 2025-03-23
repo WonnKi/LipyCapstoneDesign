@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -21,10 +22,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(UserDetails userDetails,Long memberId,String role) {
+    public String generateToken(UserDetails userDetails, UUID memberId, String role, String nickname) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", memberId);
+        claims.put("id", memberId.toString());  // UUID를 String으로 변환하여 저장
         claims.put("role", role);
+        claims.put("nickname", nickname);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -40,7 +42,8 @@ public class JwtUtil {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final UUID userId = getIdFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && userId != null);
     }
 
     public String getUsernameFromToken(String token) {
@@ -49,6 +52,16 @@ public class JwtUtil {
 
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public UUID getIdFromToken(String token) {
+        try {
+            String id = getClaimFromToken(token, claims -> claims.get("id", String.class));
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid UUID format in JWT Token: " + e.getMessage());
+            return null;
+        }
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -66,9 +79,5 @@ public class JwtUtil {
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
-    }
-
-    public Long getIdFromToken(String token) {
-        return getClaimFromToken(token, claims -> claims.get("id", Long.class));
     }
 }

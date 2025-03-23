@@ -87,12 +87,17 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
 
     return (
         <div>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={handleShow}
+            style={{
+                backgroundColor:"white",
+                color:"black",
+                borderColor:"#F2F1E9"
+            }}>
                 +
             </Button>
 
-            <Modal show={show} onHide={handleClose} size="lg">
-                <Modal.Header closeButton style={{ height: 100 }}>
+            <Modal show={show} onHide={handleClose} size="lg" centered>
+                <Modal.Header closeButton style={{ height: 100,backgroundColor: "#EBDDCC" }}>
                     <h2>책 검색</h2>
                     <div style={{ position: "absolute", right: "10%", top: "10%", border: '1px solid black' }}>
                         <input type="text" placeholder="책 제목을 입력하세요" value={bookName}
@@ -101,7 +106,7 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
                         <input type="submit" value="검색" onClick={handleSearch} />
                     </div>
                 </Modal.Header>
-                <Modal.Body style={{ overflow: "auto", height: 500 }}>
+                <Modal.Body style={{ overflow: "auto", height: 500,  backgroundColor: "#F2E3D5", }}>
                     <ul style={{ listStyleType: 'none', padding: 0 }}>
                         {searchResult.map((item, index) => (
                             <div key={index}>
@@ -111,24 +116,25 @@ function CaseModal2({ type, onAddToFirstBookCase, onAddToSecondBookCase, onAddTo
                                             <img src={item.image} alt={item.title} style={{ width: '200px', height: '250px' }} />
                                         </div>
                                         <div style={{ width: 500, height: 250 }}>
-                                            <div style={{ width: 500, height: 250 }}>
-                                                <br />
-                                                <h3 style={{ width: '400px' }}>{item.title}</h3>
-                                                <br />
-                                                <p><strong>작가:</strong> {item.author}</p>
-                                                <p><strong>출판사:</strong> {item.publisher}</p>
-                                                <p><strong>ISBN:</strong> {item.isbn}
-                                                    <span style={{ float: 'right' }}>
-                                                        <Button variant="outline-success" onClick={() => handleSaveBookClick(item)}>
+                                            <div style={{width: 500, height: 250}}>
+                                                <br/>
+                                                <span style={{float: 'right'}}>
+                                                        <Button variant="outline-success"
+                                                                onClick={() => handleSaveBookClick(item)}>
                                                             내 서재에 저장
                                                         </Button>
                                                     </span>
-                                                </p>
+                                                <h3 style={{width: '400px'}}>{item.title}</h3>
+                                                <br/>
+                                                <p><strong>작가:</strong> {item.author}</p>
+                                                <p><strong>출판사:</strong> {item.publisher}</p>
+                                                <p><strong>ISBN:</strong> {item.isbn}</p>
+
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <hr />
+                                <hr/>
                             </div>
                         ))}
                     </ul>

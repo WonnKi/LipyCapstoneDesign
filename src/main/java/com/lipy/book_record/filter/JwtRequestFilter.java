@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -41,33 +42,48 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
+        // JWT 토큰이 "Bearer "로 시작하는지 확인
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
+                // 토큰에서 사용자 이름 추출
                 username = jwtUtil.getUsernameFromToken(jwtToken);
-                Long id = jwtUtil.getIdFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+                logger.error("Unable to get JWT Token", e);
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                logger.warn("JWT Token has expired");
+            } catch (Exception e) {
+                logger.error("Error parsing JWT Token", e);
             }
-        } else {
+        } else if (requestTokenHeader != null) {
             logger.warn("JWT Token does not begin with Bearer String");
         }
 
+        // 사용자 이름이 null이 아니고 SecurityContext에 인증 정보가 없는 경우
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
+            // 사용자 세부 정보를 로드
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
+            // 토큰 유효성 검증
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // SecurityContext에 인증 정보 설정
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+
+        // JWT 토큰이 없는 경우 요청을 다음 필터로 전달
+        if (jwtToken == null || username == null) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         chain.doFilter(request, response);
     }
 }

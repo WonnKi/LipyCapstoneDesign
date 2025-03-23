@@ -36,6 +36,16 @@ import Register from "./screens/Register";
 import BookSaveComponent from "./screens/BookSearchComponent";
 import BookListComponent from "./screens/BookListComponent";
 import AdminPage from "./screens/AdminPage";
+import Home4 from "./screens/Home4";
+import Home5 from "./screens/Home5";
+import Home6 from "./screens/Home6";
+
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import PasswordReset from "./screens/PasswordReset";
+import AdminPage2 from "./screens/AdminPage2";
+import MessageComponent from "./components/AdminPageCo/MessageComponent";
+import ManagerMemo from "./components/AdminPageCo/ManagerMemo";
+
 function App() {
   return (
       <BrowserRouter>
@@ -76,6 +86,16 @@ function App() {
             <Route path="BookSaveComponent" element={<BookSaveComponent />} />
             <Route path="BookListComponent" element={<BookListComponent />} />
             <Route path="AdminPage" element={<AdminPage />} />
+            <Route path="Home4" element={<Home4 />} />
+            <Route path="Home5" element={<Home5 />} />
+            <Route path="Home6" element={<Home6 />} />
+            <Route path="PasswordReset" element={<PasswordReset />} />
+
+            <Route path="Home" element={<Home/>}/>
+            <Route path="AdminPage2" element={<AdminPage2/>}/>
+            <Route path="BookDetails" element={<BookDetail/>}/>
+            <Route path="MessageComponent" element={<MessageComponent/>}/>
+            <Route path="ManagerMemo" element={<ManagerMemo/>}/>
         </Routes>
       </BrowserRouter>
 

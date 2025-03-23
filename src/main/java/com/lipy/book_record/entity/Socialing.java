@@ -21,7 +21,10 @@ public class Socialing {
     private String title;
     private String description;
     private String writer;
+
+    @Lob
     private String content;
+
     private int maxparticipants; // 최대 참여자 수
     private int currentparticipants; // 현재 참여자 수
     private Date date;
